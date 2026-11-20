@@ -1,0 +1,13 @@
+{
+  "name":"Night Flow",
+  "short_name":"Night Flow",
+  "description":"夜のルーティン、基本情報技術者試験の学習、動く浮遊島の開拓をひとつにつなぐ個人用PWA",
+  "lang":"ja",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "orientation":"portrait",
+  "theme_color":"#10192c",
+  "background_color":"#0d1424",
+  "icons":[{"src":"assets/icons/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
