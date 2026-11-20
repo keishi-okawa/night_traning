@@ -287,7 +287,7 @@ function getDefaultNotes(classId,topic){
   return [`「${topic}」の定義と目的を説明できるようにする。`,`代表的な用語・仕組み・特徴を整理する。`,`過去問の選択肢で、似た概念との違いを確認する。`];
 }
 function renderBuildingArt(id, extraClass=''){
-  const asset={researchLab:'facility-research.webp',explorationDock:'facility-dock.webp',habitat:'facility-habitat.webp'}[id]||'facility-research.webp';
+  const asset={researchLab:'facility-research.svg',explorationDock:'facility-dock.svg',habitat:'facility-habitat.svg'}[id]||'facility-research.svg';
   const alt={researchLab:'石造りの天文観測塔と青く光るドーム',explorationDock:'飛行船と木造の浮遊島探索港',habitat:'ガラス温室と光る水晶の生息地'}[id]||'開拓施設';
   return `<img class="structure-card-art ${extraClass}" src="assets/game/${asset}" alt="${alt}" loading="eager">`;
 }
