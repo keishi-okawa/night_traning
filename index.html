@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#10192c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<meta name="description" content="夜のルーティンと基本情報技術者試験の学習、浮遊島の開拓をひとつにつなぐ個人用PWA。">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+<title>Night Flow</title>
+<style>
+:root{--bg:#0d1424;--bg2:#131f35;--panel:rgba(24,38,61,.88);--panel2:#1b2b45;--line:rgba(187,210,245,.14);--text:#edf4ff;--muted:#9fb0ca;--blue:#7fb5ff;--cyan:#78d9e8;--green:#78d6a2;--gold:#efc878;--rose:#ff9f9f;--shadow:0 18px 50px rgba(0,0,0,.25);--radius:20px;--max:1040px}
+*{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",Meiryo,sans-serif;background:radial-gradient(ellipse at 15% 0%,#1e3554 0%,transparent 38%),radial-gradient(ellipse at 90% 16%,#202d50 0%,transparent 34%),linear-gradient(180deg,#0d1628,#0b1220 65%,#0c1423);min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}a{color:inherit}.app{max-width:var(--max);margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 16px calc(94px + env(safe-area-inset-bottom));min-height:100vh}.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.02em}.brand-mark{width:38px;height:38px;border-radius:13px;background:linear-gradient(145deg,#89c9ff,#4e78c6);display:grid;place-items:center;color:#09152b;box-shadow:0 8px 24px #3e78bd55;font-size:20px}.brand small{display:block;color:var(--muted);font-weight:500;font-size:10px;letter-spacing:.1em;margin-top:1px}.top-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#1a2b45b8;border-radius:999px;padding:7px 11px;color:#dbe8fc;font-size:12px;white-space:nowrap}.pill.gold{border-color:#dfbd7255;color:#ffe2a0;background:#5a472333}.pill.green{border-color:#7ad6a255;color:#a5efc2;background:#244c3c55}.pill.blue{border-color:#86bfff55;color:#b9d9ff;background:#294a7355}.page{animation:fade .22s ease both}@keyframes fade{from{opacity:.4;transform:translateY(5px)}to{opacity:1;transform:none}}.eyebrow{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:700}.h1{font-size:clamp(25px,5vw,36px);line-height:1.2;margin:7px 0 9px;font-weight:800;letter-spacing:-.03em}.h2{font-size:21px;margin:0 0 8px;letter-spacing:-.02em}.h3{font-size:16px;margin:0;font-weight:750}.lead{color:#bfcee3;line-height:1.7;margin:0;font-size:14px}.muted{color:var(--muted)}.small{font-size:12px;color:var(--muted);line-height:1.55}.tiny{font-size:10px;color:var(--muted)}.section{margin:20px 0}.section-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin-bottom:10px}.card{background:linear-gradient(150deg,rgba(30,47,74,.92),rgba(17,29,49,.96));border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}.card.soft{background:rgba(21,35,56,.72);box-shadow:none}.card.flat{box-shadow:none}.grid{display:grid;gap:12px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.row{display:flex;align-items:center;gap:10px}.between{display:flex;align-items:center;justify-content:space-between;gap:10px}.stack{display:flex;flex-direction:column;gap:10px}.divider{height:1px;background:var(--line);margin:12px 0}.btn{border:1px solid transparent;border-radius:14px;padding:12px 15px;background:linear-gradient(135deg,#6daeff,#4f7fd3);color:#07152b;font-weight:800;box-shadow:0 8px 22px #2862b255;min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}.btn.secondary{background:#253a58;color:#e8f1ff;border-color:#55749c66;box-shadow:none}.btn.ghost{background:transparent;color:#d5e4fb;border-color:var(--line);box-shadow:none}.btn.gold{background:linear-gradient(135deg,#f2d48f,#c89543);color:#30200a;box-shadow:0 8px 20px #c28c3f33}.btn.danger{background:#4b2732;color:#ffd8df;border-color:#aa566a66;box-shadow:none}.btn.smallbtn{min-height:36px;padding:8px 11px;border-radius:11px;font-size:12px}.btn.block{width:100%}.iconbtn{height:40px;width:40px;border:1px solid var(--line);border-radius:13px;background:#1c2c45;color:var(--text);display:grid;place-items:center}.badge{font-size:10px;font-weight:800;letter-spacing:.04em;border-radius:999px;padding:5px 8px;border:1px solid var(--line);color:#dceaff;background:#263a56;white-space:nowrap}.badge.success{color:#a6f0c5;background:#204d3b77;border-color:#6bd49d55}.badge.warn{color:#ffdfa0;background:#59472877;border-color:#e6bd6655}.badge.locked{color:#bac7d8;background:#34425477}.metric{font-size:26px;font-weight:850;letter-spacing:-.04em}.progress{height:9px;border-radius:99px;background:#34455d;overflow:hidden}.progress>span{height:100%;display:block;border-radius:99px;background:linear-gradient(90deg,#60c6b3,#83d6a0);transition:width .35s}.progress.blue>span{background:linear-gradient(90deg,#70adff,#8cbbff)}.progress.gold>span{background:linear-gradient(90deg,#d6a34d,#f3d28c)}.input,.select,.textarea{width:100%;border:1px solid #5a729355;background:#0f1d31;color:var(--text);border-radius:12px;padding:12px 13px;outline:none}.input:focus,.select:focus,.textarea:focus{border-color:#8dc1ff;box-shadow:0 0 0 3px #6daeff22}.textarea{min-height:82px;resize:vertical;line-height:1.6}.field{display:flex;flex-direction:column;gap:6px}.field label{font-size:12px;color:#c3d2e7;font-weight:700}.field-help{font-size:11px;color:var(--muted)}.notice{border:1px solid #83baff44;background:#1d3c5c66;border-radius:14px;padding:12px 13px;color:#d5e8ff;font-size:12px;line-height:1.65}.notice.warn{border-color:#e9bd6b55;background:#4a382655;color:#ffe1a6}.notice.success{border-color:#78d6a255;background:#1f493966;color:#c9f4dc}.hero{border-radius:24px;overflow:hidden;border:1px solid #a8caff33;box-shadow:0 24px 55px #0005;position:relative;background:#15233b;min-height:250px}.hero-img{width:100%;height:260px;object-fit:cover;display:block;opacity:.9}.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,#08142b08 0%,#08142b15 45%,#091526eF 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:18px}.hero-title{font-size:24px;font-weight:850;text-shadow:0 2px 12px #0008}.hero-sub{font-size:12px;color:#d4e3f6;margin-top:4px}.hero-stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.statbox{background:#0b1a2dbb;border:1px solid #d2e6ff33;border-radius:12px;padding:7px 10px;font-size:11px;backdrop-filter:blur(8px)}.statbox strong{font-size:13px;color:#fff}.feature-card{display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--line);background:#192a43;border-radius:16px}.feature-icon{width:44px;height:44px;border-radius:14px;background:#314967;display:grid;place-items:center;font-size:22px;flex:none}.feature-card .body{min-width:0;flex:1}.taskline{display:flex;gap:10px;align-items:start;padding:9px 0;border-bottom:1px solid var(--line)}.taskline:last-child{border-bottom:0}.dot{width:8px;height:8px;border-radius:50%;background:var(--green);margin-top:6px;flex:none}.nav{position:fixed;z-index:20;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));width:min(520px,calc(100% - 24px));display:flex;justify-content:space-around;gap:4px;padding:8px;background:#101c30ed;border:1px solid #93b5e733;border-radius:20px;box-shadow:0 14px 40px #0008;backdrop-filter:blur(18px)}.nav button{flex:1;background:transparent;border:0;border-radius:13px;min-height:48px;color:#94a9c5;font-size:10px;font-weight:700;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}.nav button span:first-child{font-size:18px}.nav button.active{background:#294c75;color:#e7f3ff}.routine-shell{max-width:620px;margin:3vh auto 0}.routine-shell .card{padding:22px}.routine-time{font-size:clamp(48px,14vw,76px);font-weight:850;letter-spacing:-.06em;line-height:1}.mono{filter:grayscale(1);--blue:#ddd;--cyan:#ddd;--green:#ddd}.mono .btn{background:#e1e1e1;color:#151515;box-shadow:none}.mono .btn.secondary,.mono .btn.ghost{background:#262626;color:#fff;border-color:#555}.timer-ring{width:190px;height:190px;border-radius:50%;border:7px solid #354c69;display:grid;place-items:center;margin:14px auto;background:radial-gradient(circle,#1b2e49 0%,#102038 70%);box-shadow:inset 0 0 30px #0005,0 12px 35px #0003}.timer-ring strong{font-size:42px;letter-spacing:-.04em}.routine-message{text-align:center;font-size:clamp(23px,6vw,30px);font-weight:850;margin:14px 0 8px}.routine-sub{text-align:center;color:var(--muted);font-size:13px;line-height:1.7}.mini-action{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:20px}.screen-title{margin-bottom:16px}.screen-title h1{margin:5px 0 6px}.island-scene{position:relative;border-radius:22px;overflow:hidden;border:1px solid #a8caff44;box-shadow:var(--shadow);background:#1c3454}.island-scene img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;transition:filter .3s}.island-scene::after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,#0b1629d9);pointer-events:none}.island-label{position:absolute;left:15px;bottom:14px;z-index:2;text-shadow:0 2px 12px #000}.island-label strong{font-size:21px}.island-label small{display:block;color:#d0e2f8;margin-top:4px}.building-marker{position:absolute;z-index:2;border:1px solid #e3efff77;background:#11243acc;backdrop-filter:blur(8px);border-radius:12px;padding:7px 9px;font-size:11px;color:#eff7ff;box-shadow:0 6px 18px #0005}.building-marker.lab{top:33%;right:25%}.building-marker.dock{bottom:24%;left:6%}.building-marker.habitat{top:48%;left:44%}.building-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.building-card{background:#192b43;border:1px solid var(--line);border-radius:16px;padding:12px 9px;min-width:0;text-align:left;color:var(--text)}.building-card .art{height:58px;display:grid;place-items:center;font-size:34px;background:linear-gradient(135deg,#2b4766,#182943);border-radius:12px;margin-bottom:9px}.building-card strong{display:block;font-size:12px}.building-card small{display:block;color:var(--muted);font-size:10px;margin-top:4px}.building-card.selected{border-color:#8ec4ff;box-shadow:0 0 0 2px #7cb7ff22}.building-card.built{border-color:#70d6a377}.choice{display:flex;align-items:start;gap:11px;padding:13px;border:1px solid var(--line);border-radius:15px;background:#172840;text-align:left;color:var(--text);width:100%}.choice.selected{border-color:#8ec4ff;background:#213b5b}.choice .symbol{font-size:24px}.choice .choice-body{flex:1}.choice p{font-size:12px;color:var(--muted);margin:4px 0 0;line-height:1.5}.choice input{accent-color:#7fb5ff}.tag{display:inline-flex;border-radius:8px;padding:4px 7px;background:#2a4564;color:#bcdcff;font-size:10px;font-weight:700}.levelbar{display:flex;align-items:center;gap:10px}.level-circle{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#ffe0a0,#c58c42);color:#2f210b;font-weight:900;flex:none}.achievement{display:flex;align-items:center;gap:10px;padding:11px;background:#172940;border:1px solid var(--line);border-radius:13px}.achievement .medal{width:36px;height:36px;border-radius:11px;background:#3b4050;display:grid;place-items:center;font-size:19px;flex:none}.achievement.unlocked .medal{background:#534329}.modal-backdrop{position:fixed;inset:0;background:#050a13c9;z-index:50;display:grid;place-items:center;padding:16px;backdrop-filter:blur(6px)}.modal{width:min(480px,100%);max-height:88vh;overflow:auto;background:#14243a;border:1px solid #9cbce744;border-radius:22px;padding:19px;box-shadow:0 25px 90px #000a}.modal h2{margin:0 0 8px}.modal-actions{display:flex;gap:8px;margin-top:16px}.modal-actions>*{flex:1}.hidden{display:none!important}.empty{text-align:center;padding:25px 14px;color:var(--muted)}.callout-title{font-weight:800;font-size:14px;margin-bottom:5px}.kpi{display:flex;gap:8px;flex-wrap:wrap}.kpi .pill{flex:1;justify-content:center}.list-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.list-row:last-child{border-bottom:0}.topic-pill{font-size:11px;color:#d3e7ff;background:#203a59;border-radius:8px;padding:5px 8px}.switch{accent-color:#6eaefa;width:18px;height:18px}.footer-note{text-align:center;color:#7e92ad;font-size:10px;margin:26px 0 5px}.construction{position:relative;overflow:hidden;border-radius:16px}.construction img{width:100%;display:block;filter:saturate(.72)}.construction .stage-label{position:absolute;bottom:0;left:0;right:0;padding:13px;background:linear-gradient(transparent,#091425dd);font-weight:800}.construction.building img{animation:buildPulse 1.3s ease-in-out infinite alternate}@keyframes buildPulse{from{filter:brightness(.85) saturate(.8)}to{filter:brightness(1.2) saturate(1.15)}}.toast{position:fixed;z-index:80;left:50%;transform:translateX(-50%);bottom:calc(82px + env(safe-area-inset-bottom));background:#e6f3ff;color:#14243a;padding:11px 15px;border-radius:14px;font-weight:750;font-size:12px;box-shadow:var(--shadow);max-width:calc(100% - 28px);animation:fade .2s}.xp-float{font-weight:900;color:#ffe19c}.notice-list{display:grid;gap:8px}.mobile-only{display:none}
+@media(max-width:650px){.app{padding-left:13px;padding-right:13px}.topbar{margin-bottom:13px}.grid.two,.grid.three{grid-template-columns:1fr}.building-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.building-card{padding:9px 7px}.building-card .art{height:48px;font-size:27px}.hero-img{height:238px}.routine-shell{margin-top:1vh}.routine-shell .card{padding:18px}.routine-time{font-size:58px}.timer-ring{width:164px;height:164px}.timer-ring strong{font-size:36px}.section{margin:16px 0}.mobile-only{display:block}}
+@media(min-width:760px){.home-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:14px;align-items:start}.hero-img{height:350px}.home-aside{display:grid;gap:12px}.wide-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Change set 001: always-on 2.5D animated island and real facility illustrations */
+.island-scene.animated-island{position:relative;isolation:isolate;aspect-ratio:16/9;min-height:250px;max-height:560px;background:#172b4b;perspective:1100px;transform-style:preserve-3d}
+.island-scene.animated-island:after{z-index:4;inset:56% 0 0;background:linear-gradient(transparent,#081426c9);}
+.island-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transform:translateZ(-12px) scale(1.035);animation:sceneCameraFloat 13s ease-in-out infinite;}
+@keyframes sceneCameraFloat{0%,100%{transform:translate3d(0,0,-12px) scale(1.035)}50%{transform:translate3d(0,-4px,-12px) scale(1.055)}}
+.scene-structure{position:absolute;z-index:3;display:block;filter:drop-shadow(0 13px 12px #09142699);transform-style:preserve-3d;animation:structureHover 5s ease-in-out infinite;}
+.scene-structure img{display:block;width:100%;height:auto;overflow:visible;}
+.scene-structure.lab{left:61%;top:22%;width:22%;max-width:210px;animation-delay:-1s}
+.scene-structure.dock{left:7%;top:43%;width:25%;max-width:240px;animation-delay:-2.2s}
+.scene-structure.habitat{left:39%;top:48%;width:23%;max-width:220px;animation-delay:-3.1s}
+@keyframes structureHover{0%,100%{transform:translateY(0) rotate(-.4deg)}50%{transform:translateY(-5px) rotate(.5deg)}}
+.scene-structure-label{position:absolute;left:50%;bottom:-7px;transform:translate(-50%,100%);white-space:nowrap;padding:4px 8px;border-radius:999px;background:#10243bdc;border:1px solid #d8edff55;color:#f4f8ff;font-size:10px;box-shadow:0 4px 12px #0006}
+.scene-ruin{position:absolute;z-index:2;width:16%;min-width:65px;text-align:center;color:#d8e6f7;font-size:10px;text-shadow:0 2px 8px #06152b;}
+.scene-ruin.lab{left:64%;top:35%}.scene-ruin.dock{left:11%;top:55%}.scene-ruin.habitat{left:43%;top:62%}
+.ruin-plinth{position:relative;height:28px;margin:0 auto 3px;width:90%;transform:perspective(70px) rotateX(20deg);background:linear-gradient(145deg,#9ba9b8,#52667f 55%,#293e5a);clip-path:polygon(20% 0,100% 42%,78% 100%,0 54%);box-shadow:0 7px 8px #07142688}
+.ruin-plinth:before{content:"";position:absolute;left:35%;top:-17px;width:30%;height:22px;background:linear-gradient(90deg,#8898ab,#d1d9d9,#63798e);clip-path:polygon(15% 0,100% 32%,80% 100%,0 65%)}
+.ruin-plinth:after{content:"";position:absolute;left:47%;top:-22px;width:6px;height:14px;background:#9cdcf0;box-shadow:0 0 13px #8feaff;opacity:.55}
+.island-label{z-index:5}.island-label small{max-width:60vw}
+.structure-card-art{display:block;width:100%;height:112px;object-fit:contain;filter:drop-shadow(0 8px 9px #06132677);}
+.building-card .art{height:120px;padding:4px;background:linear-gradient(145deg,#294766,#152b45);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.building-card .art img{height:100%;width:100%;object-fit:contain}
+.building-card.unbuilt .art img{filter:saturate(.62) brightness(.76)}
+.building-card.built .art img{filter:drop-shadow(0 0 8px #7edcf655)}
+.facility-preview{border-radius:18px;overflow:hidden;background:radial-gradient(ellipse at 50% 25%,#35587c,#12233b 72%);padding:10px;border:1px solid #c6e5ff23;margin:12px 0}
+.facility-preview img{width:100%;height:210px;object-fit:contain;filter:drop-shadow(0 15px 14px #06132688)}
+.build-cinematic{position:relative;overflow:hidden;border-radius:18px;min-height:210px;background:radial-gradient(ellipse at 50% 35%,#476f93,#132744 70%);border:1px solid #bde8ff44;display:grid;place-items:center;perspective:900px}
+.build-cinematic img{width:82%;max-height:210px;object-fit:contain;filter:drop-shadow(0 20px 14px #06132699);animation:buildRise 2s cubic-bezier(.18,.7,.2,1) both}
+.build-cinematic:before{content:"";position:absolute;left:12%;right:12%;bottom:15%;height:20px;border-radius:50%;background:#75d9f855;filter:blur(16px);animation:buildGlow 1.4s ease-in-out infinite alternate}
+.build-cinematic.stage-2:after{content:"";position:absolute;inset:10% 22%;border-left:2px dashed #dbe9fa88;border-right:2px dashed #dbe9fa88;border-top:2px dashed #dbe9fa66;animation:scaffold 1s ease-in-out infinite alternate;pointer-events:none}
+.build-cinematic.stage-3 img{animation:buildFinish .55s ease-out both;filter:drop-shadow(0 0 16px #9beaffaa)}
+@keyframes buildRise{0%{opacity:.2;transform:translateY(48px) scale(.68) rotateX(18deg)}70%{opacity:1;transform:translateY(-4px) scale(1.03) rotateX(0)}100%{transform:translateY(0) scale(1)}}
+@keyframes buildGlow{from{opacity:.25;transform:scaleX(.8)}to{opacity:.9;transform:scaleX(1.1)}}
+@keyframes scaffold{from{opacity:.2;transform:scaleY(.82)}to{opacity:.85;transform:scaleY(1)}}
+@keyframes buildFinish{from{transform:scale(.88);filter:brightness(1.4)}to{transform:scale(1);filter:drop-shadow(0 0 16px #9beaffaa)}}
+.construction-caption{position:absolute;z-index:3;bottom:10px;left:12px;right:12px;text-align:center;font-size:12px;font-weight:800;text-shadow:0 2px 8px #000;background:#0a1a2dbb;padding:9px;border-radius:12px}
+/* Change set 002: guided first-run tutorial */
+.tutorial-modal{width:min(620px,100%);padding:0;max-height:min(90vh,780px);overflow:hidden;background:linear-gradient(150deg,#1a3150,#101d32);}
+.tutorial-scroll{max-height:min(76vh,660px);overflow:auto;padding:22px 22px 14px;}
+.tutorial-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+.tutorial-progress{height:5px;border-radius:99px;background:#ffffff17;overflow:hidden;margin:10px 0 18px}.tutorial-progress span{display:block;height:100%;background:linear-gradient(90deg,#7ecbff,#8de3d0);transition:width .25s}
+.tutorial-step-mark{font-size:11px;color:#b3c9e4;letter-spacing:.12em;font-weight:800}
+.tutorial-hero{border-radius:18px;background:linear-gradient(135deg,#294c71,#1c3352);padding:18px;margin:14px 0;min-height:110px;display:flex;align-items:center;gap:14px;border:1px solid #d4eaff22}
+.tutorial-hero .big{font-size:48px;filter:drop-shadow(0 7px 9px #08152888)}
+.tutorial-step h2{font-size:24px;margin:4px 0 9px}.tutorial-step p{font-size:13px;line-height:1.8;color:#c4d4e9;margin:0}
+.tutorial-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}
+.tutorial-tile{background:#203a59;border:1px solid #c5e2ff22;border-radius:13px;padding:9px;text-align:center;min-width:0}.tutorial-tile img{width:100%;height:74px;object-fit:contain}.tutorial-tile strong{display:block;font-size:11px;margin-top:5px}.tutorial-tile small{font-size:10px;color:#adbed5}
+.tutorial-timeline{display:grid;gap:8px;margin:14px 0}.tutorial-time{display:grid;grid-template-columns:74px 1fr;gap:10px;align-items:center;background:#1d3451;border-radius:12px;padding:10px}.tutorial-time strong{color:#9dd7ff;font-variant-numeric:tabular-nums}.tutorial-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid #ffffff18;padding:14px 18px calc(14px + env(safe-area-inset-bottom));background:#0f2036}
+.tutorial-footer .actions{display:flex;gap:8px}.tutorial-tip{border:1px solid #9ccfff33;background:#1e3b5b88;border-radius:13px;padding:12px;color:#d7e7f9;font-size:12px;line-height:1.7;margin:12px 0}
+/* Change set 003: meaningful choices, guaranteed expedition floor and positive surprise rewards */
+.expedition-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.expedition-card{border:1px solid #c6e4ff25;background:linear-gradient(145deg,#203c5b,#142740);border-radius:16px;padding:13px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.expedition-card .route-art{font-size:28px}.expedition-card h3{font-size:14px;margin:0}.expedition-card p{font-size:11px;color:#b3c6df;line-height:1.55;margin:0;flex:1}
+.expedition-guarantee{background:#0e2239;border:1px solid #78d9b644;border-radius:10px;padding:8px;font-size:11px;line-height:1.55;color:#d8ffed}
+.expedition-card .btn{font-size:11px;padding:9px 8px;min-height:40px}
+.reward-result{border:1px solid #e7d09355;border-radius:16px;background:linear-gradient(145deg,#4a3b2b,#1d2e46);padding:16px;margin:12px 0}
+.reward-result .reward-big{font-size:30px;font-weight:900;color:#ffdf9a;letter-spacing:-.04em}
+.reward-result .surprise{margin-top:10px;padding:10px;background:#7b5b2b66;border-radius:11px;color:#ffe7af;font-weight:750}
+.world-resource-row{display:flex;gap:8px;flex-wrap:wrap}.world-resource-row .pill{flex:1;justify-content:center}
+@media(max-width:650px){.scene-structure.lab{left:61%;top:23%;width:27%}.scene-structure.dock{left:3%;top:47%;width:31%}.scene-structure.habitat{left:37%;top:51%;width:27%}.scene-ruin.lab{left:65%;top:38%}.scene-ruin.dock{left:6%;top:61%}.scene-ruin.habitat{left:42%;top:66%}.building-card .art{height:90px}.building-card .art img{height:100%}.expedition-grid{grid-template-columns:1fr}.tutorial-tiles{gap:5px}.tutorial-tile{padding:7px 5px}.tutorial-tile img{height:58px}.tutorial-scroll{padding:17px 16px 10px}.tutorial-step h2{font-size:21px}}
+@media(prefers-reduced-motion:reduce){.island-bg,.scene-structure,.build-cinematic:before,.build-cinematic img{animation:none!important}.tutorial-progress span{transition:none!important}}
+
+
+.island-home-hero{min-height:330px}.island-home-hero .animated-island{position:absolute;inset:0;width:100%;height:100%;min-height:0;max-height:none;aspect-ratio:auto;border:0;border-radius:0;box-shadow:none}.island-home-hero .hero-overlay{z-index:10;background:linear-gradient(180deg,#08142b00 0%,#08142b12 35%,#091526ed 100%)}.scene-weather-pill{position:absolute;z-index:5;right:12px;top:12px;padding:6px 9px;border-radius:99px;background:#102a44bb;border:1px solid #d3eaff55;color:#e3f4ff;font-size:10px;backdrop-filter:blur(7px)}.island-scene.animated-island .island-label{bottom:10px;left:12px;opacity:.9}.scene-ruin span{display:inline-block;background:#142741bc;padding:3px 6px;border-radius:99px}.island-home-hero .island-label{display:none}
+@media(max-width:650px){.island-home-hero{min-height:300px}.island-home-hero .hero-title{font-size:21px}.island-home-hero .hero-overlay{padding:13px}.island-home-hero .hero-stats{margin-top:8px}.scene-weather-pill{font-size:9px;top:8px;right:8px}}
+</style>
+</head>
+<body>
+<div class="app" id="appRoot">
+  <header class="topbar" id="topbar">
+    <div class="brand"><div class="brand-mark">✦</div><div>Night Flow<small>STUDY • ROUTINE • DEVELOP</small></div></div>
+    <div class="top-meta" id="topMeta"></div>
+  </header>
+  <main id="main" aria-live="polite"></main>
+  <nav class="nav hidden" id="bottomNav" aria-label="メインナビゲーション">
+    <button data-action="nav" data-screen="home" id="nav-home"><span>⌂</span>ホーム</button>
+    <button data-action="nav" data-screen="plan" id="nav-plan"><span>▤</span>学習計画</button>
+    <button data-action="nav" data-screen="world" id="nav-world"><span>✧</span>開拓</button>
+    <button data-action="nav" data-screen="settings" id="nav-settings"><span>⚙</span>設定</button>
+  </nav>
+</div>
+<div id="modalRoot"></div>
+<div id="toastRoot"></div>
+<script>
+'use strict';
+
+const STORAGE_PREFIX = 'nightflow:v1:';
+const DOJO_URLS = {
+  A: 'https://www.fe-siken.com/s/fekakomon.php',
+  B: 'https://www.fe-siken.com/fekakomon_b.php'
+};
+const APP_DEFAULTS = {
+  locale: 'ja',
+  schedule: {routineStart:'21:45',studyStart:'21:50',closingStart:'22:30',bedTime:'23:20'},
+  timers: {brushingSeconds:180},
+  study: {defaultTargetQuestions:20},
+  guard: {enabled:true,returnThresholdSeconds:15,guardSeconds:5,exemptionExpiryHours:2},
+  display: {monochromeEnabled:true,reduceAnimation:true}
+};
+
+// IPA FE syllabus Ver.9.2 table-of-contents hierarchy (titles only).
+// The detailed learning notes remain editable; official problem text is not copied.
+const CURRICULUM = [
+  {id:'A',name:'科目A',groups:[
+    {id:'technology',name:'テクノロジ系',classes:[
+      {id:'foundation',code:'大分類1 / 中分類1',name:'基礎理論',topics:['離散数学','応用数学','情報に関する理論','通信に関する理論','計測・制御に関する理論']},
+      {id:'algorithm-programming',code:'大分類1 / 中分類2',name:'アルゴリズムとプログラミング',topics:['データ構造','アルゴリズム','プログラミング','プログラム言語','その他の言語']},
+      {id:'computer-components',code:'大分類2 / 中分類3',name:'コンピュータ構成要素',topics:['プロセッサ','メモリ','バス','入出力デバイス','入出力装置']},
+      {id:'system-components',code:'大分類2 / 中分類4',name:'システム構成要素',topics:['システムの構成','システムの評価指標']},
+      {id:'software',code:'大分類2 / 中分類5',name:'ソフトウェア',topics:['オペレーティングシステム','ミドルウェア','ファイルシステム','開発ツール','オープンソースソフトウェア']},
+      {id:'hardware',code:'大分類2 / 中分類6',name:'ハードウェア',topics:['ハードウェア']},
+      {id:'ui',code:'大分類3 / 中分類7',name:'ユーザーインタフェース',topics:['ユーザーインタフェース技術','UX/UIデザイン']},
+      {id:'media',code:'大分類3 / 中分類8',name:'情報メディア',topics:['マルチメディア技術','マルチメディア応用']},
+      {id:'database',code:'大分類3 / 中分類9',name:'データベース',topics:['データベース方式','データベース設計','データ操作','トランザクション処理','データベース応用']},
+      {id:'network',code:'大分類3 / 中分類10',name:'ネットワーク',topics:['ネットワーク方式','データ通信と制御','通信プロトコル','ネットワーク管理','ネットワーク応用']},
+      {id:'security',code:'大分類3 / 中分類11',name:'セキュリティ',topics:['情報セキュリティ','情報セキュリティ管理','セキュリティ技術評価','情報セキュリティ対策','セキュリティ実装技術']},
+      {id:'system-development',code:'大分類4 / 中分類12',name:'システム開発技術',topics:['システム要件定義・ソフトウェア要件定義','設計','実装・構築','統合・テスト','導入・受入れ支援','保守・廃棄']},
+      {id:'software-management',code:'大分類4 / 中分類13',name:'ソフトウェア開発管理技術',topics:['開発プロセス・手法','知的財産適用管理','開発環境管理','構成管理・変更管理']}
+    ]},
+    {id:'management',name:'マネジメント系',classes:[
+      {id:'project-management',code:'大分類5 / 中分類14',name:'プロジェクトマネジメント',topics:['プロジェクトマネジメント','プロジェクトの統合','プロジェクトのステークホルダ','プロジェクトのスコープ','プロジェクトの資源','プロジェクトの時間','プロジェクトのコスト','プロジェクトのリスク','プロジェクトの品質','プロジェクトの調達','プロジェクトのコミュニケーション']},
+      {id:'service-management',code:'大分類6 / 中分類15',name:'サービスマネジメント',topics:['サービスマネジメント','サービスマネジメントシステムの計画及び運用','パフォーマンス評価及び改善','サービスの運用','ファシリティマネジメント']},
+      {id:'system-audit',code:'大分類6 / 中分類16',name:'システム監査',topics:['システム監査','内部統制']}
+    ]},
+    {id:'strategy',name:'ストラテジ系',classes:[
+      {id:'system-strategy',code:'大分類7 / 中分類17',name:'システム戦略',topics:['情報システム戦略','業務プロセス','ソリューションビジネス','システム活用促進・評価']},
+      {id:'system-planning',code:'大分類7 / 中分類18',name:'システム企画',topics:['システム化計画','要件定義','調達計画・実施']},
+      {id:'management-strategy',code:'大分類8 / 中分類19',name:'経営戦略マネジメント',topics:['経営戦略手法','マーケティング','ビジネス戦略と目標・評価','経営管理システム']},
+      {id:'technology-strategy',code:'大分類8 / 中分類20',name:'技術戦略マネジメント',topics:['技術開発戦略の立案','技術開発計画']},
+      {id:'business-industry',code:'大分類8 / 中分類21',name:'ビジネスインダストリ',topics:['ビジネスシステム','エンジニアリングシステム','e-ビジネス','民生機器','産業機器']},
+      {id:'corporate-activities',code:'大分類9 / 中分類22',name:'企業活動',topics:['経営・組織論','業務分析・データ利活用','会計・財務']},
+      {id:'law',code:'大分類9 / 中分類23',name:'法務',topics:['知的財産権','セキュリティ関連法規','労働関連・取引関連法規','その他の法律・ガイドライン・技術者倫理','標準化関連']}
+    ]}
+  ]},
+  {id:'B',name:'科目B',groups:[
+    {id:'b-core',name:'プログラミング・アルゴリズム',classes:[
+      {id:'b-basic',code:'科目B 分野',name:'プログラムの基本要素',topics:['型・変数・配列・代入','算術演算・比較演算・論理演算','選択処理・繰返し処理','手続・関数の呼出し']},
+      {id:'b-data-algo',code:'科目B 分野',name:'データ構造及びアルゴリズム',topics:['再帰','スタック・キュー','木構造・グラフ','連結リスト','整列・探索','文字列処理']},
+      {id:'b-application',code:'科目B 分野',name:'プログラミングの諸分野への適用',topics:['数理・データサイエンス','AIなどの分野を題材としたプログラム','プログラムの読解・追跡・修正']},
+      {id:'b-security',code:'科目B 分野',name:'情報セキュリティ',topics:['情報セキュリティ要求事項','マルウェア対策・バックアップ','ログ取得・監視・脆弱性管理','利用者アクセス管理','運用状況の点検']}
+    ]}
+  ]}
+];
+
+const SAMPLE_NOTES = {
+  'database|データベース設計':['データの重複や更新時の不整合を避ける目的で正規化を行う。','関数従属性と候補キーを確認して、表の分解を考える。','分解後も情報が失われないこと、必要な従属性を保てることを確認する。'],
+  'database|データベース方式':['関係データベースは表（リレーション）を基本単位としてデータを管理する。','主キーは行を一意に識別し、外部キーは表同士の関連付けに使う。','DBMSの役割とデータ独立性を整理する。'],
+  'network|通信プロトコル':['通信プロトコルは、機器間でデータをやり取りするための規則である。','階層モデルごとの役割と代表的なプロトコルを対応付ける。','TCPとUDPの特徴、IPアドレスとポート番号の役割を区別する。'],
+  'security|情報セキュリティ':['機密性・完全性・可用性の3要素を整理する。','脅威・脆弱性・リスク・対策の関係を説明できるようにする。','認証・認可・暗号化・アクセス制御の役割を区別する。'],
+  'b-data-algo|データ構造及びアルゴリズム':['入力・出力・処理の流れを図やトレース表に整理する。','配列・スタック・キュー・木構造などの特徴を区別する。','ループ回数や再帰の変化を追跡し、計算量の見通しを立てる。'],
+  'b-basic|プログラムの基本要素':['変数・配列・型と代入の意味を追跡する。','選択処理と繰返し処理の条件・終了条件を確認する。','関数呼出し時の引数・戻り値・ローカル変数を追跡する。']
+};
+
+const $ = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const uid = prefix => `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,7)}`;
+const localDateKey = (date=new Date()) => `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+const toMinutes = hhmm => {const [h,m]=String(hhmm||'0:0').split(':').map(Number);return h*60+m;};
+const minutesNow = date => date.getHours()*60+date.getMinutes();
+const fmtTime = date => `${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+const fmtDuration = seconds => {const s=Math.max(0,Math.floor(seconds||0));return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;};
+const percent = (a,b) => b>0?Math.round(a/b*100):0;
+
+const Store = {
+  read(key, fallback=null){try{const raw=localStorage.getItem(STORAGE_PREFIX+key);return raw===null?fallback:JSON.parse(raw);}catch(e){console.warn('Storage read error',key,e);return fallback;}},
+  write(key,value){try{localStorage.setItem(STORAGE_PREFIX+key,JSON.stringify(value));return true;}catch(e){console.error('Storage write error',key,e);toast('保存できませんでした。ブラウザの空き容量を確認してください。','error');return false;}},
+  remove(key){try{localStorage.removeItem(STORAGE_PREFIX+key);}catch(e){console.warn(e);}},
+  all(){const out={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith(STORAGE_PREFIX)){try{out[k.slice(STORAGE_PREFIX.length)]=JSON.parse(localStorage.getItem(k));}catch{}}}return out;}
+};
+
+let settings = Store.read('settings', structuredCloneSafe(APP_DEFAULTS));
+let screen = 'home';
+let previewMode = null;
+let timerTick = null;
+let installPrompt = null;
+let pendingBuildTimer = null;
+let gameWorld = Store.read('game-world', null);
+let curriculumProgress = Store.read('curriculum-progress', {});
+let roadmap = Store.read('roadmap', null);
+let currentPlan = null;
+let currentSession = null;
+let selectedBuilding = null;
+let selectedUnit = null;
+let modalCallback = null;
+let currentMode = 'FREE';
+let tutorialActive = false;
+let tutorialStep = 0;
+let pendingBuildTimers = [];
+
+function structuredCloneSafe(obj){return JSON.parse(JSON.stringify(obj));}
+function getTodayPlanKey(){return `plan:${localDateKey()}`;}
+function getTodaySessionKey(){return `session:${localDateKey()}`;}
+function ensureGameWorld(){
+  if(!gameWorld){gameWorld={schemaVersion:4,world:{worldId:'floating_archipelago',name:'はじまりの島',visualStage:0,currentAreaId:'home_island',unlockedAreas:['home_island'],pendingProjectNotice:false},resources:{developmentMaterials:10,totalXp:0,expeditionTickets:0},buildings:{researchLab:{level:0,status:'locked'},explorationDock:{level:0,status:'locked'},habitat:{level:0,status:'locked'}},strategy:{initialFocus:null,currentFocus:null},companion:{speciesId:null,growthStage:0,growthPoints:0,evolutionPath:null},decisions:[],projects:{},achievements:[],dailyRewards:{},expeditionHistory:[],discoveries:[],features:{}};Store.write('game-world',gameWorld);}
+  gameWorld.schemaVersion=4;
+  gameWorld.world=gameWorld.world||{worldId:'floating_archipelago',name:'はじまりの島',visualStage:0,currentAreaId:'home_island',unlockedAreas:['home_island']};
+  gameWorld.resources=gameWorld.resources||{developmentMaterials:10,totalXp:0};
+  if(typeof gameWorld.resources.expeditionTickets!=='number')gameWorld.resources.expeditionTickets=0;
+  if(typeof gameWorld.resources.totalXp!=='number')gameWorld.resources.totalXp=0;
+  if(typeof gameWorld.resources.developmentMaterials!=='number')gameWorld.resources.developmentMaterials=10;
+  gameWorld.buildings=gameWorld.buildings||{researchLab:{level:0,status:'locked'},explorationDock:{level:0,status:'locked'},habitat:{level:0,status:'locked'}};
+  ['researchLab','explorationDock','habitat'].forEach(id=>{if(!gameWorld.buildings[id])gameWorld.buildings[id]={level:0,status:'locked'};});
+  gameWorld.projects=gameWorld.projects||{};gameWorld.strategy=gameWorld.strategy||{initialFocus:null,currentFocus:null};gameWorld.companion=gameWorld.companion||{speciesId:null,growthStage:0,growthPoints:0,evolutionPath:null};
+  if(typeof gameWorld.companion.growthPoints!=='number')gameWorld.companion.growthPoints=0;
+  gameWorld.achievements=gameWorld.achievements||[];gameWorld.dailyRewards=gameWorld.dailyRewards||{};gameWorld.expeditionHistory=gameWorld.expeditionHistory||[];gameWorld.discoveries=gameWorld.discoveries||[];gameWorld.features=gameWorld.features||{};
+  gameWorld.world.unlockedAreas=gameWorld.world.unlockedAreas||['home_island'];
+  if(!gameWorld.world.name)gameWorld.world.name='はじまりの島';
+  Object.values(gameWorld.buildings||{}).forEach(b=>{if(b.status==='building'){b.status='built';b.level=Math.max(1,b.level||1);}});
+  return gameWorld;
+}
+function getSession(){
+  const key=getTodaySessionKey();
+  let s=Store.read(key,null);
+  if(!s){s={schemaVersion:1,date:localDateKey(),phaseStatuses:{phonePutAway:'pending',brushing:'pending',study:'pending',closing:'pending',windDown:'pending'},events:{},reflection:{content:'',saved:false,skipped:false},study:{startedAt:null,externalRuns:[],totalElapsedSeconds:0,attemptedCount:0,correctCount:0,resultStatus:'pending',targetQuestions:settings.study.defaultTargetQuestions},gamification:{xpEarned:0,materialsEarned:0,rewardsGranted:false,targetReached:false},guard:{manualCount:0,resumeCount:0,lastTriggeredAt:null},visibility:{hiddenAt:null}};Store.write(key,s);}
+  s.study=s.study||{startedAt:null,externalRuns:[],totalElapsedSeconds:0,attemptedCount:0,correctCount:0,resultStatus:'pending',targetQuestions:settings.study.defaultTargetQuestions};
+  s.study.externalRuns=s.study.externalRuns||[];
+  s.reflection=s.reflection||{content:'',saved:false,skipped:false};
+  s.gamification=s.gamification||{xpEarned:0,materialsEarned:0,rewardsGranted:false,targetReached:false};
+  return s;
+}
+function saveSession(){Store.write(getTodaySessionKey(),currentSession);}
+function ensurePlan(){
+  currentPlan=Store.read(getTodayPlanKey(),null);
+  if(!currentPlan){
+    const next=nextRoadmapUnit();
+    currentPlan={schemaVersion:1,date:localDateKey(),examCode:'FE',systemId:'current',curriculumVersion:'9.2',subjectId:next?.subjectId||'A',unitId:next?.unitId||'foundation',classId:next?.classId||'foundation',topic:next?.topic||'離散数学',title:next?.title||'基礎理論',points:getDefaultNotes(next?.classId||'foundation',next?.topic||'離散数学'),targetQuestions:settings.study.defaultTargetQuestions,source:'roadmap',modifiedByUser:false,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+    Store.write(getTodayPlanKey(),currentPlan);
+  } else if(!currentPlan.targetQuestions){currentPlan.targetQuestions=settings.study.defaultTargetQuestions;}
+  currentSession=getSession();
+  currentSession.study.targetQuestions=currentPlan.targetQuestions||settings.study.defaultTargetQuestions;
+  if(!currentSession.study.startedAt && !currentSession.study.targetQuestions){currentSession.study.targetQuestions=currentPlan.targetQuestions;}
+  return currentPlan;
+}
+function getAllUnits(){
+  const out=[];
+  CURRICULUM.forEach(subject => {
+    subject.groups.forEach(group => {
+      group.classes.forEach(cls => {
+        cls.topics.forEach((topic,idx) => {
+          out.push({subjectId:subject.id,subjectName:subject.name,groupId:group.id,groupName:group.name,classId:cls.id,className:cls.name,code:cls.code,topic,topicIndex:idx,unitId:`${cls.id}_${idx+1}`,title:cls.name});
+        });
+      });
+    });
+  });
+  return out;
+}
+const ALL_UNITS=getAllUnits();
+function nextRoadmapUnit(){
+  const review=ALL_UNITS.find(u=>{const p=curriculumProgress[u.unitId];return p&&p.status==='REVIEW_REQUIRED';});
+  if(review)return review;
+  const aCleared=ALL_UNITS.filter(u=>u.subjectId==='A'&&['CLEARED','MASTERED'].includes(curriculumProgress[u.unitId]?.status)).length;
+  const bAttempted=ALL_UNITS.filter(u=>u.subjectId==='B').map(u=>curriculumProgress[u.unitId]?.lastAttemptAt).filter(Boolean).sort().reverse()[0];
+  const daysSinceB=bAttempted?Math.floor((Date.now()-new Date(bAttempted).getTime())/86400000):Infinity;
+  // Roadmap policy: A remains the default priority; B is inserted after early A progress and then revisited when it has gone stale.
+  if(aCleared>=3&&daysSinceB>=7){
+    const bUnit=ALL_UNITS.find(u=>u.subjectId==='B'&&curriculumProgress[u.unitId]?.status!=='MASTERED');
+    if(bUnit)return bUnit;
+  }
+  const firstA=ALL_UNITS.find(u=>u.subjectId==='A'&&curriculumProgress[u.unitId]?.status!=='MASTERED');
+  if(firstA)return firstA;
+  return ALL_UNITS.find(u=>!curriculumProgress[u.unitId]||curriculumProgress[u.unitId].status!=='MASTERED')||ALL_UNITS[0];
+}
+function findUnit(unitId){return ALL_UNITS.find(u=>u.unitId===unitId)||ALL_UNITS[0];}
+function getDefaultNotes(classId,topic){
+  const custom=SAMPLE_NOTES[`${classId}|${topic}`];
+  if(custom)return [...custom];
+  return [`「${topic}」の定義と目的を説明できるようにする。`,`代表的な用語・仕組み・特徴を整理する。`,`過去問の選択肢で、似た概念との違いを確認する。`];
+}
+function renderBuildingArt(id, extraClass=''){
+  const asset={researchLab:'facility-research.svg',explorationDock:'facility-dock.svg',habitat:'facility-habitat.svg'}[id]||'facility-research.svg';
+  const alt={researchLab:'石造りの天文観測塔と青く光るドーム',explorationDock:'飛行船と木造の浮遊島探索港',habitat:'ガラス温室と光る水晶の生息地'}[id]||'開拓施設';
+  return `<img class="structure-card-art ${extraClass}" src="assets/game/${asset}" alt="${alt}" loading="eager">`;
+}
+function renderIslandScene(w,compact=false){
+  const defs=[['researchLab','lab','研究施設'],['explorationDock','dock','探索港'],['habitat','habitat','生息地']];
+  const structures=defs.map(([id,pos,name])=>{
+    const b=w.buildings[id]||{status:'locked'};
+    if(b.status==='built')return `<div class="scene-structure ${pos}">${renderBuildingArt(id)}<span class="scene-structure-label">${name} · Lv.${b.level||1}</span></div>`;
+    return `<div class="scene-ruin ${pos}" aria-label="${name}・未修復"><div class="ruin-plinth"></div><span>${name} · 未修復</span></div>`;
+  }).join('');
+  const stage=Math.max(0,Math.min(3,w.world.visualStage||0));
+  return `<div class="island-scene animated-island ${compact?'compact':''} stage-${stage}"><img class="island-bg" src="assets/game/island-scene.svg" alt="風に揺れる木々、流れる滝、雲海に浮かぶ島" loading="eager">${structures}<div class="island-label"><strong>${escapeHTML(w.world.name||'はじまりの島')}</strong><small>開拓段階 ${stage} · 風が吹き抜ける浮遊島</small></div><div class="scene-weather-pill">☁ 雲海の風</div></div>`;
+}
+function tutorialStepHtml(index){
+  const steps=[
+    {title:'Night Flowへようこそ',eyebrow:'WELCOME',hero:'🌙',body:'夜のルーティン、基本情報技術者試験の学習、浮遊島の開拓をひとつにつなぐアプリです。毎晩は迷わず行動し、日中は自分の世界を育てましょう。',extra:'<div class="tutorial-tip">このチュートリアルは初回だけ表示されます。あとから設定画面でいつでも見直せます。</div>'},
+    {title:'夜は一本道で進みます',eyebrow:'NIGHT ROUTINE',hero:'⏱️',body:'時刻になると次の行動を案内します。完了ボタンは自分で押す方式なので、遅れても未完了の記録を残したまま次へ進めます。',extra:'<div class="tutorial-timeline"><div class="tutorial-time"><strong>21:45</strong><span>スマホを置く・歯磨き</span></div><div class="tutorial-time"><strong>21:50</strong><span>今日の要点を確認して過去問演習</span></div><div class="tutorial-time"><strong>22:30</strong><span>演習記録・1行振り返り</span></div><div class="tutorial-time"><strong>23:20</strong><span>ルーティン終了・就寝</span></div></div>'},
+    {title:'勉強は「準備済み」から始めます',eyebrow:'STUDY FLOW',hero:'📘',body:'学習計画は現行シラバスを基準に科目A・Bを提案します。科目Aを優先しつつ、計画は自由に修正できます。今日の要点を見たら、ボタンから過去問道場へ移動します。',extra:'<div class="tutorial-tip">過去問道場のアカウントで問題履歴を保存できます。Night Flowは演習時間を自動計測し、解答数・正解数は記録カードから入力します。結果は演習直後か22:30に保存できます。</div><div class="tutorial-tip">目標問題数は目安です。達成しても22:30までは演習を続けられます。</div>'},
+    {title:'浮遊島は選択で発展します',eyebrow:'YOUR WORLD',hero:'🏝️',body:'最初は3つの施設から修復先を選びます。研究・探索・育成のどれを先に進めるかで、次に解放される施設や機能の順番が変わります。ルート変更も資材を使えば可能で、既存の施設は失われません。',extra:`<div class="tutorial-tiles"><div class="tutorial-tile">${renderBuildingArt('researchLab')}<strong>研究施設</strong><small>研究記録・図書館</small></div><div class="tutorial-tile">${renderBuildingArt('explorationDock')}<strong>探索港</strong><small>遠征・新しい島</small></div><div class="tutorial-tile">${renderBuildingArt('habitat')}<strong>生息地</strong><small>仲間・自然環境</small></div></div>`},
+    {title:'報酬は最低保証＋幸運の上乗せ',eyebrow:'REWARDS & LUCK',hero:'✨',body:'学習でXPと開拓資材を獲得し、施設・遠征・育成に使います。探索遠征には選択と運の要素がありますが、表示された最低保証は必ず受け取れます。運の結果で資材が減ったり、遠征に失敗したりすることはありません。',extra:'<div class="tutorial-tip reward-rule"><strong>最低保証は必ず受け取れます。</strong><br>遠征では確定報酬に追加資源や珍しい遺物が上乗せされることがあります。まれなサプライズも、すべてプラスの報酬です。</div><div class="tutorial-tip">ゲームは21:45〜23:20の間は自動で隠れます。開拓はルーティンの前後に、自分のペースで楽しめます。</div>'},
+    {title:'準備はできました',eyebrow:'READY',hero:'🚀',body:'設定・学習計画・開拓状況はこの端末のブラウザに保存されます。設定画面からJSONバックアップを作成できます。では、はじまりの島を自分の手で育てていきましょう。',extra:'<div class="tutorial-tip">最初の開拓先は、ホーム画面の「開拓拠点を見る」からいつでも選べます。施設の修復には資材が必要ですが、学習報酬と遠征で確実に補充できます。</div>'}
+  ];
+  const step=steps[index];
+  return `<div class="tutorial-scroll"><div class="tutorial-head"><div class="brand"><div class="brand-mark">✦</div><div>Night Flow<small>FIRST ADVENTURE</small></div></div><button class="btn ghost smallbtn" data-action="tutorial-skip">スキップ</button></div><div class="tutorial-step-mark">STEP ${index+1} / ${steps.length} · ${step.eyebrow}</div><div class="tutorial-progress"><span style="width:${((index+1)/steps.length)*100}%"></span></div><div class="tutorial-step"><div class="tutorial-hero"><div class="big">${step.hero}</div><div><h2>${step.title}</h2><p>${step.body}</p></div></div>${step.extra}</div></div><div class="tutorial-footer"><button class="btn ghost smallbtn" data-action="tutorial-prev" ${index===0?'disabled':''}>戻る</button><div class="actions">${index===steps.length-1?'<button class="btn gold" data-action="tutorial-finish">Night Flowを始める</button>':'<button class="btn" data-action="tutorial-next">次へ →</button>'}</div></div>`;
+}
+function showTutorial(force=false){
+  if(!force&&Store.read('onboarding-complete',false))return;
+  tutorialActive=true;tutorialStep=0;
+  $('#modalRoot').innerHTML=`<div class="modal-backdrop tutorial-backdrop"><div class="modal tutorial-modal" role="dialog" aria-modal="true" aria-label="Night Flowの使い方">${tutorialStepHtml(tutorialStep)}</div></div>`;
+}
+function moveTutorial(delta){tutorialStep=Math.max(0,Math.min(5,tutorialStep+delta));const modal=$('#modalRoot .tutorial-modal');if(modal)modal.innerHTML=tutorialStepHtml(tutorialStep);}
+function finishTutorial(){Store.write('onboarding-complete',true);tutorialActive=false;closeModal();render();toast('チュートリアルが完了しました。');}
+
+function getPhase(date=new Date()){
+  if(previewMode){return previewMode;}
+  const m=minutesNow(date),s=settings.schedule;
+  if(m>=toMinutes(s.routineStart)&&m<toMinutes(s.studyStart))return 'BRUSHING';
+  if(m>=toMinutes(s.studyStart)&&m<toMinutes(s.closingStart))return 'STUDY';
+  if(m>=toMinutes(s.closingStart)&&m<toMinutes(s.bedTime)){
+    if(currentSession && !currentSession.reflection.saved && !currentSession.reflection.skipped)return 'CLOSING';
+    return 'WIND_DOWN';
+  }
+  if(m>=toMinutes(s.bedTime))return 'COMPLETED';
+  return 'FREE';
+}
+function getAppMode(){const p=getPhase();return ['BRUSHING','STUDY','CLOSING','WIND_DOWN'].includes(p)?'ROUTINE':p==='COMPLETED'?'COMPLETED':'FREE';}
+function syncMode(){
+  const phase=getPhase();currentMode=getAppMode();
+  if(!previewMode&&currentMode==='COMPLETED')finalizeDailySession();
+  const nav=$('#bottomNav');
+  nav.classList.toggle('hidden',currentMode!=='FREE');
+  $('#topbar').classList.toggle('hidden',currentMode==='ROUTINE'||currentMode==='COMPLETED');
+  if(currentMode==='ROUTINE'||currentMode==='COMPLETED'){
+    if(screen!==phase.toLowerCase())screen=phase.toLowerCase();
+  } else if(['brushing','study','closing','wind_down','completed'].includes(screen)) screen='home';
+  render();
+}
+function persistSettings(){Store.write('settings',settings);}
+function updateTopMeta(){
+  const w=ensureGameWorld();const xp=w.resources.totalXp||0;const level=Math.floor(xp/100)+1;
+  $('#topMeta').innerHTML=`<span class="pill gold">✦ Lv.${level}</span><span class="pill">🪵 ${w.resources.developmentMaterials}</span><button class="iconbtn" data-action="nav" data-screen="settings" aria-label="設定">⚙</button>`;
+}
+function updateNav(){
+  $$('#bottomNav button').forEach(b=>b.classList.toggle('active',b.dataset.screen===screen || (screen==='world'&&b.dataset.screen==='world')));
+}
+function render(){
+  updateTopMeta();updateNav();
+  const main=$('#main');
+  if(currentMode==='ROUTINE'){
+    main.classList.add('mono');
+    const p=getPhase();
+    if(p==='BRUSHING')main.innerHTML=renderBrushing();
+    else if(p==='STUDY')main.innerHTML=renderStudy();
+    else if(p==='CLOSING')main.innerHTML=renderClosing();
+    else if(p==='WIND_DOWN')main.innerHTML=renderWindDown();
+    else main.innerHTML=renderCompleted();
+    return;
+  }
+  main.classList.remove('mono');
+  if(currentMode==='COMPLETED'){main.innerHTML=renderCompleted();return;}
+  const pages={home:renderHome,plan:renderPlan,world:renderWorld,facility:renderFacility,project:renderProjects,progress:renderProgress,settings:renderSettings};
+  main.innerHTML=(pages[screen]||renderHome)();
+}
+function renderHome(){
+  const w=ensureGameWorld(),p=currentPlan||ensurePlan();
+  const level=Math.floor((w.resources.totalXp||0)/100)+1,xp=(w.resources.totalXp||0)%100;
+  const totalA=ALL_UNITS.filter(x=>x.subjectId==='A').length,totalB=ALL_UNITS.filter(x=>x.subjectId==='B').length;
+  const aClear=ALL_UNITS.filter(x=>x.subjectId==='A'&&['CLEARED','MASTERED'].includes(curriculumProgress[x.unitId]?.status)).length;
+  const bClear=ALL_UNITS.filter(x=>x.subjectId==='B'&&['CLEARED','MASTERED'].includes(curriculumProgress[x.unitId]?.status)).length;
+  const available=availableProjects();
+  const notice=available.length?`<div class="notice success"><div class="callout-title">✦ 新しい開拓が可能です</div>${escapeHTML(available[0].name)}の条件を満たしています。拠点で内容を確認できます。</div>`:'';
+  return `<div class="page">
+    <div class="between screen-title"><div><div class="eyebrow">FREE MODE · ${escapeHTML(new Date().toLocaleDateString(settings.locale==='ja'?'ja-JP':'en-US',{month:'long',day:'numeric',weekday:'short'}))}</div><h1 class="h1">おかえりなさい。</h1><p class="lead">今日も自分のペースで進めましょう。</p></div><div class="pill">${fmtTime(new Date())}</div></div>
+    <div class="home-grid">
+      <div class="stack">
+        <section class="hero island-home-hero">${renderIslandScene(w,true)}<div class="hero-overlay"><div class="eyebrow">YOUR FLOATING ISLAND</div><div class="hero-title">${escapeHTML(w.world.name||'はじまりの島')}</div><div class="hero-sub">施設を選び、世界の発展を自分の戦略で変えていきましょう。</div><div class="hero-stats"><span class="statbox">✦ <strong>Lv.${level}</strong></span><span class="statbox">🪵 <strong>${w.resources.developmentMaterials}</strong> 資材</span><span class="statbox">🧭 <strong>${w.resources.expeditionTickets||0}</strong> 遠征券</span></div><button class="btn gold block" data-action="nav" data-screen="world">開拓拠点を見る →</button></div></section>
+        ${notice}
+      </div>
+      <div class="home-aside">
+        <section class="card"><div class="between"><div><div class="eyebrow">TODAY'S STUDY</div><h2 class="h2" style="margin-top:5px">今日の学習</h2></div><span class="badge ${p.subjectId==='A'?'blue':'success'}">${p.subjectId==='A'?'科目A':'科目B'}</span></div><div style="font-size:17px;font-weight:800;margin:8px 0 4px">${escapeHTML(p.title||'学習単元')}</div><div class="small">${escapeHTML(p.topic||'')}</div><div class="divider"></div><div class="between small"><span>要点 ${p.points.length}項目</span><span>演習目標 ${p.targetQuestions}問</span></div><button class="btn block" style="margin-top:12px" data-action="nav" data-screen="plan">学習計画を確認する</button></section>
+        <section class="card soft"><div class="eyebrow">PLAYER DEVELOPMENT</div><div class="between" style="margin:8px 0"><div><div class="metric">LEVEL ${level}</div><div class="small">累計 ${w.resources.totalXp||0} XP</div></div><div class="level-circle">✦</div></div><div class="progress gold"><span style="width:${xp}%"></span></div><div class="between small" style="margin-top:6px"><span>${xp} / 100 XP</span><span>次のレベルまで ${100-xp} XP</span></div></section>
+        <section class="card"><div class="eyebrow">TONIGHT'S ROUTINE</div><div class="between" style="margin:8px 0"><div class="metric">${escapeHTML(settings.schedule.routineStart)}</div><span class="badge">夜の開始</span></div><div class="small">歯磨き → 勉強 → クロージング → ${escapeHTML(settings.schedule.bedTime)}就寝</div><div class="divider"></div><button class="btn secondary block" data-action="preview" data-mode="BRUSHING">ルーティンをプレビュー</button></section>
+      </div>
+    </div>
+    <section class="section"><div class="section-head"><div><div class="eyebrow">LEARNING MAP</div><h2 class="h2">学習の進捗</h2></div><button class="btn ghost smallbtn" data-action="nav" data-screen="progress">詳しく見る</button></div><div class="grid two"><div class="card soft"><div class="between"><strong>科目A</strong><strong>${percent(aClear,totalA)}%</strong></div><div class="progress blue" style="margin:10px 0 7px"><span style="width:${percent(aClear,totalA)}%"></span></div><div class="small">攻略済み ${aClear} / ${totalA}小分類</div></div><div class="card soft"><div class="between"><strong>科目B</strong><strong>${percent(bClear,totalB)}%</strong></div><div class="progress" style="margin:10px 0 7px"><span style="width:${percent(bClear,totalB)}%"></span></div><div class="small">攻略済み ${bClear} / ${totalB}分野</div></div></div></section>
+    <div class="footer-note">Night Flow · 学習と夜の時間を、無理なく整える。</div>
+  </div>`;
+}
+function renderBrushing(){
+  const s=currentSession;const timer=s.timer?.brushStart?Math.max(0,settings.timers.brushingSeconds-Math.floor((Date.now()-new Date(s.timer.brushStart).getTime())/1000)):settings.timers.brushingSeconds;
+  return `<div class="routine-shell page"><div class="between"><span class="pill">ROUTINE MODE</span><span class="pill">${fmtTime(new Date())}</span></div><div class="card" style="margin-top:14px;text-align:center"><div class="eyebrow">21:45 · AFTER MEAL</div><div class="routine-message">スマホを置きましょう。</div><p class="routine-sub">洗面所へ向かい、歯磨きを始めましょう。<br>次の行動は、終わってからで大丈夫です。</p><div class="timer-ring"><div><strong id="brushTimer">${fmtDuration(timer)}</strong><div class="tiny">BRUSHING TIMER</div></div></div>${s.phaseStatuses.brushing==='completed'?'<div class="notice success">歯磨きは完了として記録されています。</div>':`<button class="btn block" data-action="brush-start">${s.timer?.brushStart?'タイマーをやり直す':'洗面所へ向かう · タイマー開始'}</button>`}<button class="btn secondary block" style="margin-top:9px" data-action="brush-complete">歯磨き完了</button><div class="mini-action"><button class="btn ghost smallbtn" data-action="guard">5秒ガード</button></div><div class="small" style="margin-top:14px">21:50になると、勉強画面へ自動で切り替わります。</div></div></div>`;
+}
+function renderStudy(){
+  const p=currentPlan||ensurePlan(),s=currentSession,remaining=Math.max(0,toMinutes(settings.schedule.closingStart)-minutesNow(new Date()));
+  const progress=Math.min(100,percent(s.study.attemptedCount,p.targetQuestions));
+  return `<div class="routine-shell page"><div class="between"><span class="pill">ROUTINE MODE</span><span class="pill">${fmtTime(new Date())}</span></div><div class="card" style="margin-top:14px"><div class="between"><div class="eyebrow">STUDY SESSION</div><span class="badge ${p.subjectId==='A'?'blue':'success'}">${p.subjectId==='A'?'科目A':'科目B'}</span></div><div class="routine-message" style="text-align:left;margin-top:7px">今日の学習</div><h2 class="h2">${escapeHTML(p.title)}</h2><p class="lead">${escapeHTML(p.topic)}</p><div class="divider"></div><div class="between"><strong>今日覚える要点</strong><span class="small">${p.points.length}項目</span></div><div style="margin-top:8px">${p.points.map((pt,i)=>`<div class="taskline"><span class="topic-pill">${String(i+1).padStart(2,'0')}</span><span style="font-size:13px;line-height:1.6">${escapeHTML(pt)}</span></div>`).join('')}</div><div class="divider"></div><div class="between"><strong>今日の演習目標</strong><strong>${s.study.attemptedCount} / ${p.targetQuestions}問</strong></div><div class="progress" style="margin:8px 0"><span style="width:${progress}%"></span></div>${s.gamification.targetReached?'<div class="notice success">✦ 目標達成！このまま22:30まで続けても大丈夫です。</div>':''}<div class="grid two" style="margin-top:12px"><div class="card soft"><div class="small">解答数</div><div class="metric">${s.study.attemptedCount}</div></div><div class="card soft"><div class="small">正解数</div><div class="metric">${s.study.correctCount}</div></div></div><div class="between small" style="margin-top:12px"><span>クロージングまで</span><strong id="studyRemaining">${Math.floor(remaining/60)}分</strong></div><button class="btn block" style="margin-top:12px" data-action="dojo" data-subject="${p.subjectId}">過去問道場で演習する ↗</button><div class="grid two" style="margin-top:9px"><button class="btn secondary" data-action="result">演習結果を記録</button><button class="btn ghost" data-action="plan-edit">計画を変更</button></div><div class="mini-action"><button class="btn ghost smallbtn" data-action="guard">5秒ガード</button></div></div></div>`;
+}
+function renderClosing(){
+  const s=currentSession,p=currentPlan;const hasPending=s.study.resultStatus!=='saved'&&(s.study.attemptedCount===0||s.study.resultStatus==='pending');
+  return `<div class="routine-shell page"><div class="between"><span class="pill">CLOSING · MONOCHROME</span><span class="pill">${fmtTime(new Date())}</span></div><div class="card" style="margin-top:14px"><div class="eyebrow">22:30 · STUDY COMPLETE</div><div class="routine-message">今日の勉強はここまで。</div><p class="routine-sub">今日できたことを残して、夜の操作を終わりにしましょう。</p><div class="divider"></div><div class="between"><strong>今日の演習結果</strong><span class="badge">${p.subjectId==='A'?'科目A':'科目B'}</span></div><div class="grid three" style="margin-top:10px"><div class="card soft"><div class="small">解答数</div><div class="metric">${s.study.attemptedCount}</div></div><div class="card soft"><div class="small">正解数</div><div class="metric">${s.study.correctCount}</div></div><div class="card soft"><div class="small">正答率</div><div class="metric">${s.study.attemptedCount?percent(s.study.correctCount,s.study.attemptedCount)+'%':'—'}</div></div></div><button class="btn secondary block" style="margin-top:10px" data-action="result">${s.study.resultStatus==='saved'?'演習結果を修正':'演習結果を入力する'}</button><div class="divider"></div><div class="field"><label for="reflection">今日できたこと・明日やること（任意）</label><textarea id="reflection" class="textarea" maxlength="120" placeholder="例：正規化の違いを整理できた">${escapeHTML(s.reflection.content)}</textarea></div><div class="small" style="margin-top:7px">入力内容は自動保存されます。</div><div class="divider"></div><div class="notice">今日の学習報酬はこのあと自動で保存されます。ゲームの操作は必要ありません。</div><button class="btn block" style="margin-top:13px" data-action="closing-save">保存して就寝準備へ</button><button class="btn ghost block" style="margin-top:8px" data-action="closing-skip">記録せず次へ</button></div></div>`;
+}
+function renderWindDown(){
+  const mins=Math.max(0,toMinutes(settings.schedule.bedTime)-minutesNow(new Date()));
+  return `<div class="routine-shell page"><div class="between"><span class="pill">WIND DOWN · LOW STIMULATION</span><span class="pill">${fmtTime(new Date())}</span></div><div class="card" style="margin-top:14px;text-align:center"><div class="eyebrow">BEDTIME MODE</div><div class="routine-message">あとは、ゆっくり。</div><p class="routine-sub">必要な電話・連絡だけにしましょう。<br>SNSや動画は明日に回して大丈夫です。</p><div class="timer-ring"><div><strong id="bedTimer">${String(Math.floor(mins/60)).padStart(2,'0')}:${String(mins%60).padStart(2,'0')}</strong><div class="tiny">UNTIL BEDTIME</div></div></div><div class="routine-time">${escapeHTML(settings.schedule.bedTime)}</div><div class="small">就寝予定時刻</div><button class="btn block" style="margin-top:18px" data-action="phone">☎ 必要な電話をする</button><button class="btn ghost block" style="margin-top:9px" data-action="guard">5秒ガード</button><div class="small" style="margin-top:14px">23:20になると今日のルーティンを終了します。</div></div></div>`;
+}
+function renderCompleted(){
+  return `<div class="routine-shell page"><div class="card" style="margin-top:9vh;text-align:center;padding:30px 22px"><div style="font-size:42px">☾</div><div class="eyebrow">DAY COMPLETED</div><div class="routine-message">今日のルーティン終了。</div><p class="routine-sub">お疲れさまでした。<br>今日の記録は保存されています。</p><div class="divider"></div><div class="routine-time">${escapeHTML(settings.schedule.bedTime)}</div><div class="small">おやすみなさい。</div><div class="notice" style="margin-top:18px">ゲームや学習の追加操作は、次の時間にしましょう。</div><button class="btn ghost block" style="margin-top:14px" data-action="preview" data-mode="FREE">通常画面をプレビュー（動作確認用）</button></div></div>`;
+}
+function renderPlan(){
+  const p=currentPlan||ensurePlan();
+  const subject=CURRICULUM.find(x=>x.id===p.subjectId)||CURRICULUM[0];
+  const opts=subject.groups.flatMap(g=>g.classes.map(c=>`<option value="${c.id}" ${c.id===p.classId?'selected':''}>${escapeHTML(g.name)} · ${escapeHTML(c.name)}</option>`)).join('');
+  return `<div class="page"><div class="screen-title"><div class="eyebrow">STUDY ROADMAP · CURRENT SYLLABUS 9.2</div><h1 class="h1">学習計画</h1><p class="lead">IPAシラバスの分類をもとに、今日の単元を決めます。科目Aを優先しつつ、科目Bもロードマップに含めます。</p></div><div class="card"><div class="grid two"><div class="field"><label for="planSubject">試験科目</label><select class="select" id="planSubject"><option value="A" ${p.subjectId==='A'?'selected':''}>科目A</option><option value="B" ${p.subjectId==='B'?'selected':''}>科目B</option></select></div><div class="field"><label for="planClass">中分類・分野</label><select class="select" id="planClass">${opts}</select></div></div><div class="field" style="margin-top:12px"><label for="planTopic">今日の小分類・テーマ</label><select class="select" id="planTopic">${renderTopicOptions(p.classId,p.topic)}</select></div><div class="field" style="margin-top:12px"><label for="planTarget">今日の演習目標（1〜100問）</label><input class="input" type="number" min="1" max="100" id="planTarget" value="${p.targetQuestions}"></div><div class="divider"></div><div class="between"><strong>今日覚える要点</strong><button class="btn ghost smallbtn" data-action="add-point">＋ 要点を追加</button></div><div id="pointEditor" class="stack" style="margin-top:10px">${p.points.map((x,i)=>`<div class="field"><label>要点 ${i+1}</label><textarea class="textarea plan-point" data-index="${i}" maxlength="200">${escapeHTML(x)}</textarea></div>`).join('')}</div><div class="grid two" style="margin-top:15px"><button class="btn secondary" data-action="suggest-plan">次の単元を提案</button><button class="btn" data-action="save-plan">今日の計画を保存</button></div></div><section class="section"><div class="section-head"><div><div class="eyebrow">CURRICULUM</div><h2 class="h2">シラバス全分類</h2></div><span class="badge">${ALL_UNITS.length}小分類</span></div><div class="notice">現行シラバスVer.9.2の大分類・中分類・小分類の名称を学習カタログに収録しています。詳細な要点は単元ごとに追加・編集できます。過去問道場の分野指定は外部サイト側で選択してください。</div><div class="grid two" style="margin-top:10px">${CURRICULUM.map(s=>`<div class="card soft"><div class="between"><strong>${s.name}</strong><span class="badge">${s.groups.reduce((n,g)=>n+g.classes.length,0)}分類</span></div><div class="small" style="margin-top:7px">${s.groups.map(g=>`${g.name}：${g.classes.length}`).join(' / ')}</div></div>`).join('')}</div><div class="small" style="margin-top:9px">出典：IPA「基本情報技術者試験シラバス Ver.9.2」。科目Bの分野名は過去問道場の現行分類に合わせています。</div></section></div>`;
+}
+function renderTopicOptions(classId,selected){const cls=ALL_UNITS.filter(u=>u.classId===classId);return cls.map(u=>`<option value="${escapeHTML(u.topic)}" ${u.topic===selected?'selected':''}>${escapeHTML(u.topic)}</option>`).join('');}
+function renderWorld(){
+  const w=ensureGameWorld();
+  const buildings=[['researchLab','研究施設','研究ルート'],['explorationDock','探索港','探索ルート'],['habitat','生息地','育成ルート']];
+  const builtCount=Object.values(w.buildings).filter(b=>b.status==='built').length;
+  const projects=availableProjects();
+  const buildCards=buildings.map(([id,name,route])=>{const b=w.buildings[id];return `<button class="building-card ${b.status==='built'?'built':'unbuilt'}" data-action="building-detail" data-building="${id}"><div class="art">${renderBuildingArt(id)}</div><strong>${name}</strong><small>${b.status==='built'?`Lv.${b.level||1} · 修復済み`:'未修復 · '+route}</small></button>`;}).join('');
+  return `<div class="page"><div class="screen-title"><div class="eyebrow">YOUR FLOATING ISLAND · LIVE WORLD</div><div class="between"><div><h1 class="h1">${escapeHTML(w.world.name)}</h1><p class="lead">風が流れ、施設が息づくあなたの開拓拠点。</p></div><button class="btn ghost smallbtn" data-action="rename-island">✎ 名前変更</button></div></div>
+    ${renderIslandScene(w,false)}
+    <div class="world-resource-row" style="margin-top:12px"><span class="pill gold">✦ Lv.${Math.floor((w.resources.totalXp||0)/100)+1}</span><span class="pill">🪵 ${w.resources.developmentMaterials} 資材</span><span class="pill blue">🧭 遠征券 ${w.resources.expeditionTickets||0}</span></div>
+    ${projects.length?`<div class="notice success" style="margin-top:12px"><div class="callout-title">✦ 新しい開拓が可能です</div>${projects.map(p=>escapeHTML(p.name)).join(' / ')}<div style="margin-top:7px"><button class="btn secondary smallbtn" data-action="nav" data-screen="project">開拓内容を確認する</button></div></div>`:''}
+    <section class="section"><div class="section-head"><div><div class="eyebrow">FACILITIES</div><h2 class="h2">島の施設</h2></div><span class="small">建設後に島の景観が変化</span></div><div class="building-grid">${buildCards}</div></section>
+    <section class="section"><div class="card"><div class="between"><div><div class="eyebrow">CURRENT STRATEGY</div><h2 class="h2" style="margin-top:5px">${routeLabel(w.strategy.currentFocus)||'開拓方針未選択'}</h2><p class="small">${w.strategy.initialFocus?'方針は資材を使って変更できます。建設済み施設や解放済み地域は失われません。':'最初の施設を3つから自由に選び、最初の開拓方針を決めましょう。'}</p></div><span style="font-size:28px">🧭</span></div>${w.strategy.initialFocus?'<button class="btn secondary block" data-action="change-route">開拓方針を変更する</button>':'<div class="notice">最初の修復先によって、次に優先される開拓プロジェクトが変わります。</div>'}</div></section>
+    <div class="grid two"><button class="btn secondary" data-action="nav" data-screen="project">遠征・開拓プロジェクト</button><button class="btn ghost" data-action="nav" data-screen="progress">成長・学習進捗</button></div><div class="footer-note">島の風・雲・草木・滝・施設は自動で動きます。再生ボタンは不要です。</div></div>`;
+}
+function routeLabel(id){return ({research:'研究ルート',exploration:'探索ルート',habitat:'育成ルート'})[id]||'';}
+function buildingDefs(){return {
+ researchLab:{name:'研究施設',icon:'🔭',asset:'facility-research.svg',route:'research',cost:8,desc:'古い天文観測塔を修復し、研究記録と知識アーカイブへの道を開きます。新しい研究プロジェクトが解放されます。',reward:'研究アーカイブ・研究関連プロジェクト',benefit:'初回攻略した単元の研究記録が島のアーカイブに蓄積されます。'},
+ explorationDock:{name:'探索港',icon:'🛩️',asset:'facility-dock.svg',route:'exploration',cost:8,desc:'飛行船の発着場を修復し、雲海の向こうへ遠征できるようにします。学習成果で遠征券を獲得できます。',reward:'遠征・追加報酬・未知の島',benefit:'遠征では最低保証報酬に加え、運による追加資源や珍しい遺物を発見できます。'},
+ habitat:{name:'生息地',icon:'🌱',asset:'facility-habitat.svg',route:'habitat',cost:8,desc:'ガラス温室と生態系を修復し、島の仲間となる不思議な生き物を迎えられるようにします。',reward:'仲間の育成・生息地プロジェクト',benefit:'単元の初回攻略に合わせて仲間が成長します。世話を忘れても弱ったり、いなくなったりしません。'}
+};}
+function renderFacility(){
+  const w=ensureGameWorld(),id=selectedBuilding||'researchLab',d=buildingDefs()[id],b=w.buildings[id];
+  const wrongRoute=!!(w.strategy.currentFocus&&w.strategy.currentFocus!==d.route);
+  const canBuild=b.status!=='built'&&!wrongRoute&&w.resources.developmentMaterials>=d.cost;
+  return `<div class="page"><div class="between screen-title"><button class="btn ghost smallbtn" data-action="nav" data-screen="world">← 拠点へ戻る</button><span class="pill">🪵 ${w.resources.developmentMaterials} 資材</span></div><div class="card"><div class="facility-preview">${renderBuildingArt(id)}</div><div class="eyebrow">FACILITY · 3D STRUCTURE</div><h1 class="h1">${d.name}</h1><p class="lead">${d.desc}</p><div class="divider"></div><div class="list-row"><span class="small">開拓ルート</span><strong>${routeLabel(d.route)}</strong></div><div class="list-row"><span class="small">必要資材</span><strong>🪵 ${d.cost}</strong></div><div class="list-row"><span class="small">現在の状態</span><strong>${b.status==='built'?`修復済み Lv.${b.level||1}`:'未修復'}</strong></div><div class="notice success" style="margin-top:12px"><strong>修復で得られるもの</strong><br>${d.reward}<br><span class="small">${d.benefit}</span></div>${b.status==='built'?`<div class="notice success" style="margin-top:12px">この施設は修復済みです。島の景観にも反映されています。</div><button class="btn secondary block" style="margin-top:12px" data-action="nav" data-screen="world">拠点に戻る</button>`:`<button class="btn block" style="margin-top:14px" data-action="build" data-building="${id}" ${canBuild?'':'disabled'}>🛠️ この施設を修復する</button>${wrongRoute?`<div class="notice warn" style="margin-top:9px">現在は${routeLabel(w.strategy.currentFocus)}を優先しています。別ルートの建設には、先に方針変更が必要です。</div><button class="btn secondary block" style="margin-top:9px" data-action="change-route">開拓方針を変更する</button>`:canBuild?'':`<div class="small" style="margin-top:8px">資材が${d.cost-w.resources.developmentMaterials}個不足しています。学習報酬や遠征で資材を集められます。</div>`}`}</div></div>`;
+}
+function availableProjects(){
+  const w=ensureGameWorld(),defs=[
+    {id:'library_restoration',name:'図書館の修復',building:'researchLab',cost:6,desc:'研究記録を保管する知識アーカイブを修復する。',unlock:'knowledge_archive'},
+    {id:'outer_island_scout',name:'周辺島の調査',building:'explorationDock',cost:6,desc:'探索港から見える周辺島の調査準備を進める。',unlock:'outer_island'},
+    {id:'habitat_garden',name:'生息地の整備',building:'habitat',cost:6,desc:'島の仲間が暮らせる生態系を整える。',unlock:'companion'}
+  ];
+  return defs.filter(d=>w.buildings[d.building].status==='built'&&!w.projects[d.id]?.completed);
+}
+function expeditionDefs(){return {
+  cloudline:{name:'雲海の安全航路',art:'☁️',cost:2,guaranteed:5,bonusChance:.32,bonusMaterials:3,rareChance:.035,rareId:'cloud_compass',rareName:'雲海の羅針盤',rareIcon:'🧭',rareDescription:'霧の向こうを照らす古い羅針盤。拠点の展示棚に追加されました。',desc:'安全な風脈をたどり、安定した資材を持ち帰る。'},
+  ruins:{name:'古代遺跡の調査',art:'🏛️',cost:3,guaranteed:7,bonusChance:.22,bonusMaterials:4,rareChance:.05,rareId:'ancient_blueprint',rareName:'古代建築の設計図',rareIcon:'📜',rareDescription:'失われた建築技術の設計図。将来の施設外観拡張に使える発見。',desc:'少し遠い遺跡を調査する。確定報酬に加えて設計図を発見する可能性がある。'},
+  starlight:{name:'星明かりの観測航路',art:'🌌',cost:2,guaranteed:5,bonusChance:.18,bonusMaterials:5,rareChance:.045,rareId:'star_fragment',rareName:'星の欠片',rareIcon:'💎',rareDescription:'夜空から落ちた小さな星の欠片。島の装飾に使える。',desc:'星の流れに沿って進み、光る鉱石や珍しい品を探す。'}
+};}
+function runExpedition(id){
+  const w=ensureGameWorld(),d=expeditionDefs()[id];
+  if(!d||w.buildings.explorationDock.status!=='built'){toast('探索港を修復すると遠征できます。');return;}
+  if((w.resources.expeditionTickets||0)<1){toast('遠征券がありません。学習セッションの記録後に獲得できます。');return;}
+  if(w.resources.developmentMaterials<d.cost){toast('遠征費用が足りません。別の航路を選ぶか、学習で資材を集めましょう。');return;}
+  w.resources.expeditionTickets-=1;
+  w.resources.developmentMaterials-=d.cost;
+  let bonus=0; if(Math.random()<d.bonusChance)bonus=d.bonusMaterials;
+  let rare=false,duplicate=false;
+  const already=(w.discoveries||[]).some(x=>x.id===d.rareId);
+  if(Math.random()<d.rareChance){
+    if(!already){w.discoveries.push({id:d.rareId,name:d.rareName,icon:d.rareIcon,description:d.rareDescription,foundAt:new Date().toISOString()});rare=true;}
+    else{duplicate=true;bonus+=3;}
+  }
+  const total=d.guaranteed+bonus;
+  w.resources.developmentMaterials+=total;
+  const record={id:uid('expedition'),missionId:id,name:d.name,cost:d.cost,guaranteed:d.guaranteed,bonus,netGain:total-d.cost,rare,duplicate,at:new Date().toISOString()};
+  w.expeditionHistory.push(record);w.world.pendingProjectNotice=false;Store.write('game-world',w);
+  const surprise=rare?`<div class="surprise">✧ 想定外の発見！「${escapeHTML(d.rareName)}」を獲得しました。</div>`:duplicate?'<div class="surprise">✧ 遺物の重複を資材3個に交換しました。</div>':bonus?'<div class="surprise">追加発見！ボーナス資材が上乗せされました。</div>':'<div class="small" style="margin-top:8px">今回は最低保証の報酬です。遠征の成果は確実に持ち帰りました。</div>';
+  showModal(`<div class="eyebrow">EXPEDITION REPORT</div><h2>遠征成功：${escapeHTML(d.name)}</h2><div class="reward-result"><div class="small">確定報酬 ${d.guaranteed} − 費用 ${d.cost}</div><div class="reward-big">+${record.netGain} 資材</div><div class="small">追加資材：+${bonus} · 遠征券：−1</div>${surprise}</div><p class="small">どの航路でも最低報酬は保証されています。ランダム要素は追加発見だけに影響し、損失や失敗はありません。</p><div class="modal-actions"><button class="btn block" id="closeExpeditionResult">拠点へ戻る</button></div>`);
+  $('#closeExpeditionResult').addEventListener('click',()=>{closeModal();screen='world';render();});
+}
+
+function renderProjects(){
+  const w=ensureGameWorld(),available=availableProjects();
+  const all=[{id:'library_restoration',name:'図書館の修復',building:'researchLab',cost:6,desc:'研究記録を保管する知識アーカイブを修復する。'},{id:'outer_island_scout',name:'周辺島の調査',building:'explorationDock',cost:6,desc:'周辺に浮かぶ島の調査準備を進め、新しい地域を解放する。'},{id:'habitat_garden',name:'生息地の整備',building:'habitat',cost:6,desc:'島の仲間が暮らせる生態系を整える。'}];
+  const projects=all.map(p=>{const unlocked=w.buildings[p.building].status==='built';const completed=!!w.projects[p.id]?.completed;const can=unlocked&&!completed&&w.resources.developmentMaterials>=p.cost;return `<div class="card"><div class="between"><h3 class="h3">${escapeHTML(p.name)}</h3><span class="badge ${completed?'success':unlocked?'blue':'locked'}">${completed?'完了':unlocked?'着手可能':'ロック中'}</span></div><p class="small" style="margin:8px 0">${escapeHTML(p.desc)}</p><div class="between small"><span>必要資材</span><strong>🪵 ${p.cost}</strong></div>${completed?'<div class="notice success" style="margin-top:10px">プロジェクト完了。施設・地域・育成機能に恒久的な効果が追加されました。</div>':`<button class="btn ${can?'':'secondary'} block" style="margin-top:12px" data-action="project-start" data-project="${p.id}" ${can?'':'disabled'}>${unlocked?(can?'プロジェクトを完了する':'資材不足'):'前提施設を修復してください'}</button>`}</div>`;}).join('');
+  const expeditions=expeditionDefs();
+  const expeditionSection=w.buildings.explorationDock.status==='built'?`<section class="section"><div class="section-head"><div><div class="eyebrow">RANDOMIZED EXPEDITIONS</div><h2 class="h2">雲海への遠征</h2></div><span class="badge success">遠征券 ${w.resources.expeditionTickets||0}</span></div><div class="notice success">各遠征は最低保証の報酬が必ずあります。運による追加報酬・珍しい遺物は上乗せだけで、失敗や資材の損失はありません。</div><div class="expedition-grid" style="margin-top:12px">${Object.entries(expeditions).map(([id,d])=>`<div class="expedition-card"><div class="route-art">${d.art}</div><h3>${d.name}</h3><p>${d.desc}</p><div class="expedition-guarantee">確定報酬：+${d.guaranteed}資材<br>費用：${d.cost}資材<br><strong>最低差引：+${d.guaranteed-d.cost}資材</strong><br><span>まれに特別な遺物を発見</span></div><button class="btn" data-action="expedition" data-expedition="${id}" ${(w.resources.expeditionTickets>0&&w.resources.developmentMaterials>=d.cost)?'':'disabled'}>${w.resources.expeditionTickets>0?(w.resources.developmentMaterials>=d.cost?'この航路を選ぶ':'資材不足'):'遠征券が必要'}</button></div>`).join('')}</div></section>`:`<section class="section"><div class="card soft"><h2 class="h2">遠征機能</h2><p class="small">探索港を修復すると、最低保証つきの遠征とランダムな追加発見が解放されます。</p></div></section>`;
+  const discoveries=w.discoveries||[];
+  return `<div class="page"><div class="screen-title"><div class="eyebrow">DEVELOPMENT & EXPEDITION</div><h1 class="h1">開拓プロジェクト</h1><p class="lead">施設の修復、地域の解放、遠征の選択で島の未来を変えていきます。</p></div><div class="card soft between"><div><div class="small">開拓資材</div><div class="metric">🪵 ${w.resources.developmentMaterials}</div><div class="small">遠征券 ${w.resources.expeditionTickets||0}枚</div></div><span class="badge">${available.length}件 着手可能</span></div><section class="section stack">${projects}</section>${expeditionSection}<section class="section"><div class="section-head"><h2 class="h2">発見した遺物</h2><span class="badge">${discoveries.length}個</span></div>${discoveries.length?`<div class="grid two">${discoveries.map(d=>`<div class="card soft"><div style="font-size:26px">${d.icon||'✧'}</div><strong>${escapeHTML(d.name)}</strong><div class="small">${escapeHTML(d.description||'遠征で発見した特別な品。')}</div></div>`).join('')}</div>`:'<div class="card soft small">遠征で珍しい遺物に出会うことがあります。遺物はすべて追加報酬で、重複時も補償があります。</div>'}</section><button class="btn ghost block" data-action="nav" data-screen="world">拠点に戻る</button></div>`;
+}
+function renderProgress(){
+  const w=ensureGameWorld(),subjects=['A','B'];
+  const cards=subjects.map(id=>{const all=ALL_UNITS.filter(u=>u.subjectId===id);const cleared=all.filter(u=>curriculumProgress[u.unitId]&&['CLEARED','MASTERED'].includes(curriculumProgress[u.unitId].status)).length;const mastered=all.filter(u=>curriculumProgress[u.unitId]?.status==='MASTERED').length;return `<div class="card"><div class="between"><h3 class="h3">科目${id}</h3><strong>${percent(cleared,all.length)}%</strong></div><div class="progress ${id==='A'?'blue':''}" style="margin:10px 0"><span style="width:${percent(cleared,all.length)}%"></span></div><div class="small">攻略済み ${cleared} / ${all.length}小分類</div><div class="small">習得済み ${mastered}小分類</div></div>`;}).join('');
+  const review=ALL_UNITS.filter(u=>curriculumProgress[u.unitId]?.status==='REVIEW_REQUIRED');
+  const totalQ=Object.values(Store.all()).filter((v)=>v&&typeof v==='object'&&v.date&&v.study&&typeof v.study.attemptedCount==='number').reduce((n,v)=>n+(v.study.attemptedCount||0),0);
+  const built=Object.values(w.buildings).filter(b=>b.status==='built').length;
+  return `<div class="page"><div class="screen-title"><div class="eyebrow">GROWTH & RECORDS</div><h1 class="h1">成長の記録</h1><p class="lead">問題数だけではなく、単元の習得と世界の発展を確認できます。</p></div><div class="grid two">${cards}</div><div class="grid two section"><div class="card soft"><div class="small">プレイヤーレベル</div><div class="metric">Lv.${Math.floor((w.resources.totalXp||0)/100)+1}</div><div class="small">累積 ${w.resources.totalXp||0} XP</div></div><div class="card soft"><div class="small">開拓資材・遠征券</div><div class="metric">${w.resources.developmentMaterials}</div><div class="small">遠征券 ${w.resources.expeditionTickets||0}枚</div></div></div><div class="grid two"><div class="card soft"><div class="small">累計演習数</div><div class="metric">${totalQ}問</div></div><div class="card soft"><div class="small">修復済み施設</div><div class="metric">${built}/3</div></div></div><section class="section"><div class="section-head"><h2 class="h2">要復習の単元</h2><span class="badge warn">${review.length}件</span></div>${review.length?review.slice(0,8).map(u=>`<div class="list-row"><div><strong>${escapeHTML(u.className)}</strong><div class="small">${escapeHTML(u.topic)}</div></div><span class="badge warn">要復習</span></div>`).join(''):'<div class="card soft small">現在、要復習に指定された単元はありません。</div>'}</section><section class="section"><h2 class="h2">開拓状況</h2><div class="card soft"><div class="between"><strong>${escapeHTML(w.world.name)}</strong><span class="badge">段階 ${w.world.visualStage||0}</span></div><div class="list-row"><span class="small">完了プロジェクト</span><strong>${Object.values(w.projects).filter(p=>p.completed).length}</strong></div><div class="list-row"><span class="small">発見した遺物</span><strong>${(w.discoveries||[]).length}</strong></div><div class="list-row"><span class="small">遠征回数</span><strong>${(w.expeditionHistory||[]).length}</strong></div></div></section><button class="btn secondary block" data-action="nav" data-screen="world">開拓拠点を見る</button></div>`;
+}
+function renderSettings(){
+  return `<div class="page"><div class="screen-title"><div class="eyebrow">PREFERENCES</div><h1 class="h1">設定</h1><p class="lead">夜の時間や表示、学習目標を調整できます。</p></div><div class="card"><h2 class="h2">夜のスケジュール</h2><div class="grid two"><div class="field"><label>ルーティン開始</label><input class="input" type="time" id="setStart" value="${settings.schedule.routineStart}"></div><div class="field"><label>勉強開始</label><input class="input" type="time" id="setStudy" value="${settings.schedule.studyStart}"></div><div class="field"><label>クロージング</label><input class="input" type="time" id="setClosing" value="${settings.schedule.closingStart}"></div><div class="field"><label>就寝目標</label><input class="input" type="time" id="setBed" value="${settings.schedule.bedTime}"></div></div><div class="field" style="margin-top:12px"><label>歯磨きタイマー（秒）</label><input class="input" type="number" min="30" max="600" id="setBrush" value="${settings.timers.brushingSeconds}"></div><div class="field" style="margin-top:12px"><label>初期の演習目標（問）</label><input class="input" type="number" min="1" max="100" id="setQuestions" value="${settings.study.defaultTargetQuestions}"></div><div class="field" style="margin-top:12px"><label>表示言語</label><select class="select" id="setLocale"><option value="ja" ${settings.locale==='ja'?'selected':''}>日本語</option><option value="en" ${settings.locale==='en'?'selected':''}>English（全画面翻訳は今後拡張）</option></select></div><button class="btn block" style="margin-top:14px" data-action="save-settings">設定を保存</button></div><section class="section"><div class="card"><h2 class="h2">使い方ガイド</h2><p class="small">初回チュートリアルをもう一度確認できます。</p><button class="btn secondary block" data-action="tutorial-open">チュートリアルを再表示</button></div></section><section class="section"><div class="card"><h2 class="h2">割り込みガード</h2><div class="list-row"><span>手動ガード</span><span class="badge success">有効</span></div><div class="list-row"><span>復帰時ガード</span><strong>15秒以上の離脱</strong></div><div class="list-row"><span>ガード時間</span><strong>5秒</strong></div><div class="small">電話・過去問道場の専用ボタンから外部遷移した場合は、復帰時ガードを1回免除します。</div></div></section><section class="section"><div class="card"><h2 class="h2">データ管理</h2><p class="small">設定・学習計画・演習記録・開拓状況は、このブラウザのLocalStorageに保存されます。ブラウザデータを消す前にバックアップしてください。</p><div class="grid two" style="margin-top:12px"><button class="btn secondary" data-action="export-data">データを書き出す</button><label class="btn ghost" for="importFile">データを読み込む<input id="importFile" type="file" accept="application/json" hidden></label></div><button class="btn danger block" style="margin-top:10px" data-action="reset-data">すべてのデータを初期化</button></div></section><section class="section"><div class="card"><h2 class="h2">動作確認用プレビュー</h2><p class="small">実際の時刻を待たずに各画面を確認できます。</p><div class="grid two" style="margin-top:10px"><button class="btn secondary" data-action="preview" data-mode="FREE">通常ホーム</button><button class="btn secondary" data-action="preview" data-mode="BRUSHING">歯磨き</button><button class="btn secondary" data-action="preview" data-mode="STUDY">勉強</button><button class="btn secondary" data-action="preview" data-mode="CLOSING">クロージング</button><button class="btn secondary" data-action="preview" data-mode="WIND_DOWN">就寝準備</button><button class="btn secondary" data-action="preview" data-mode="COMPLETED">終了</button></div><button class="btn ghost block" style="margin-top:9px" data-action="preview" data-mode="REAL">プレビュー解除・実時刻へ戻る</button></div></section><section class="section"><div class="card"><h2 class="h2">外部サービス</h2><div class="list-row"><span>過去問道場・科目A</span><a href="${DOJO_URLS.A}" target="_blank" rel="noopener">開く ↗</a></div><div class="list-row"><span>過去問道場・科目B</span><a href="${DOJO_URLS.B}" target="_blank" rel="noopener">開く ↗</a></div><div class="small">過去問道場のアカウント情報はNight Flowに保存しません。成績自動取り込みは行わず、解答数・正解数はアプリで入力します。</div></div></section><div class="footer-note">Night Flow · LocalStorage / PWA</div></div>`;
+}
+
+function toast(message,type='info'){
+  const root=$('#toastRoot');root.innerHTML=`<div class="toast">${escapeHTML(message)}</div>`;setTimeout(()=>{root.innerHTML='';},2600);
+}
+function showModal(html,onConfirm){$('#modalRoot').innerHTML=`<div class="modal-backdrop" data-action="modal-backdrop"><div class="modal" role="dialog" aria-modal="true">${html}</div></div>`;modalCallback=onConfirm;}
+function closeModal(){$('#modalRoot').innerHTML='';modalCallback=null;}
+function setScreen(next){
+  const mode=getAppMode();if(mode!=='FREE'&&!['settings'].includes(next)){toast('夜のルーティン中は、ルーティン画面を優先します。');return;}
+  screen=next;render();window.scrollTo({top:0,behavior:'smooth'});
+}
+function persistPlan(){
+  currentPlan.date=localDateKey();currentPlan.updatedAt=new Date().toISOString();Store.write(getTodayPlanKey(),currentPlan);currentSession.study.targetQuestions=currentPlan.targetQuestions;saveSession();
+}
+function setBrushTimer(){currentSession.timer=currentSession.timer||{};currentSession.timer.brushStart=new Date().toISOString();currentSession.phaseStatuses.brushing='in_progress';saveSession();toast('歯磨きタイマーを開始しました。');render();}
+function completeBrush(){currentSession.phaseStatuses.brushing='completed';currentSession.events.brushingCompletedAt=new Date().toISOString();saveSession();if(previewMode==='BRUSHING')previewMode='STUDY';toast('歯磨きを完了として記録しました。');render();}
+function startStudy(){if(!currentSession.study.startedAt){currentSession.study.startedAt=new Date().toISOString();currentSession.phaseStatuses.study='in_progress';saveSession();}}
+function createExemption(source){Store.write('guard-exemption',{source,createdAt:Date.now(),expiresAt:Date.now()+settings.guard.exemptionExpiryHours*3600000,remainingUses:1});}
+function openDojo(subject){createExemption(`dojo_${subject}`);const run={id:uid('run'),subjectId:subject,launchedAt:new Date().toISOString(),returnedAt:null,elapsedSeconds:0};currentSession.study.externalRuns.push(run);currentSession.study.activeRunId=run.id;currentSession.study.startedAt=currentSession.study.startedAt||new Date().toISOString();currentSession.phaseStatuses.study='in_progress';saveSession();location.href=DOJO_URLS[subject];}
+function openPhone(){createExemption('phone');saveSession();location.href='tel:';}
+function handleReturn(){
+  const active=currentSession.study.activeRunId;
+  if(active){const run=currentSession.study.externalRuns.find(x=>x.id===active);if(run&&!run.returnedAt){run.returnedAt=new Date().toISOString();run.elapsedSeconds=Math.max(0,Math.floor((Date.now()-new Date(run.launchedAt).getTime())/1000));currentSession.study.totalElapsedSeconds=(currentSession.study.totalElapsedSeconds||0)+run.elapsedSeconds;currentSession.study.activeRunId=null;currentSession.study.resultStatus='pending';saveSession();}}
+  const ex=Store.read('guard-exemption',null);
+  if(ex&&ex.remainingUses>0&&ex.expiresAt>Date.now()){Store.remove('guard-exemption');return false;}
+  if(ex&&ex.expiresAt<=Date.now())Store.remove('guard-exemption');
+  const hiddenAt=currentSession.visibility.hiddenAt;
+  if(hiddenAt){const elapsed=Math.floor((Date.now()-new Date(hiddenAt).getTime())/1000);currentSession.visibility.hiddenAt=null;saveSession();if(settings.guard.enabled&&elapsed>=settings.guard.returnThresholdSeconds){startGuard('resume');return true;}}
+  return false;
+}
+function startGuard(source='manual'){
+  const p=currentSession.guard; if(source==='manual')p.manualCount=(p.manualCount||0)+1;else p.resumeCount=(p.resumeCount||0)+1;p.lastTriggeredAt=new Date().toISOString();p.lastSource=source;saveSession();
+  const returnScreen=screen;let seconds=settings.guard.guardSeconds;
+  showModal(`<div class="eyebrow">INTERRUPTION GUARD</div><h2>一度、立ち止まりましょう。</h2><p class="lead">今、本当に必要な操作ですか？ ゆっくり呼吸して、元の行動に戻りましょう。</p><div class="timer-ring"><div><strong id="guardCounter">05</strong><div class="tiny">BREATHE</div></div></div><div class="modal-actions"><button class="btn block" id="guardReturn" disabled>元の行動に戻る</button></div>`,()=>{closeModal();screen=returnScreen;render();});
+  const start=Date.now(),counter=$('#guardCounter'),btn=$('#guardReturn');const interval=setInterval(()=>{const left=Math.max(0,seconds-Math.floor((Date.now()-start)/1000));if(counter)counter.textContent=String(left).padStart(2,'0');if(left<=0){clearInterval(interval);if(btn)btn.disabled=false;}},100);
+  if(btn)btn.addEventListener('click',()=>{clearInterval(interval);closeModal();render();});
+}
+function updateStudyResult(attempted,correct){
+  if(!Number.isInteger(attempted)||!Number.isInteger(correct)||attempted<0||correct<0||correct>attempted){toast('解答数・正解数を確認してください。','error');return false;}
+  currentSession.study.attemptedCount=attempted;currentSession.study.correctCount=correct;currentSession.study.resultStatus='saved';currentSession.study.resultRecordedAt=new Date().toISOString();
+  const target=currentPlan.targetQuestions;currentSession.gamification.targetReached=attempted>=target;
+  updateUnitProgress(currentPlan.unitId,currentPlan.subjectId,attempted,correct);
+  saveSession();return true;
+}
+function updateUnitProgress(unitId,subjectId,attempted,correct){
+  if(!unitId)return;
+  const today=localDateKey();
+  const prev=curriculumProgress[unitId]||{unitId,subjectId,status:'AVAILABLE',totalAttempted:0,totalCorrect:0,clearRewardGranted:false};
+  const sameDay=prev.lastStudyDate===today;
+  if(sameDay){
+    prev.totalAttempted=Math.max(0,(prev.totalAttempted||0)-(prev.lastDailyAttempted||0))+attempted;
+    prev.totalCorrect=Math.max(0,(prev.totalCorrect||0)-(prev.lastDailyCorrect||0))+correct;
+  }else{
+    prev.totalAttempted=(prev.totalAttempted||0)+attempted;
+    prev.totalCorrect=(prev.totalCorrect||0)+correct;
+  }
+  prev.accuracy=percent(prev.totalCorrect,prev.totalAttempted);
+  prev.lastDailyAttempted=attempted;prev.lastDailyCorrect=correct;prev.lastAttemptAt=new Date().toISOString();
+  const dailyAccuracy=percent(correct,attempted);
+  if(prev.status==='CLEARED'&&!sameDay&&attempted>=10&&dailyAccuracy>=80){prev.status='MASTERED';prev.masteredAt=new Date().toISOString();}
+  else if(attempted>=10&&prev.status!=='MASTERED'){
+    if(dailyAccuracy>=70){
+      if(prev.status!=='CLEARED'){prev.status='CLEARED';prev.clearedAt=new Date().toISOString();prev.clearedOn=today;prev.justCleared=true;}
+    }else{prev.status='REVIEW_REQUIRED';prev.justCleared=false;}
+  }else if(!['CLEARED','MASTERED'].includes(prev.status)){prev.status='IN_PROGRESS';}
+  prev.lastStudyDate=today;curriculumProgress[unitId]=prev;Store.write('curriculum-progress',curriculumProgress);
+}
+function calculateDailyRewards(){
+  const s=currentSession,g=s.gamification,w=ensureGameWorld();if(g.rewardsGranted)return;
+  const a=s.study.attemptedCount||0,c=s.study.correctCount||0,t=s.study.totalElapsedSeconds||0,target=currentPlan.targetQuestions||20;
+  const q=Math.min(a,target),correctXp=Math.min(Math.floor(target/2),Math.floor(c/2)),timeXp=Math.min(4,Math.floor(t/600));
+  const p=curriculumProgress[currentPlan.unitId];
+  const firstClear=!!(p&&p.justCleared&&!p.clearRewardGranted&&p.clearedOn===localDateKey());
+  const bonus=firstClear?5:0;
+  const xp=q+correctXp+timeXp+bonus;
+  const materials=(s.study.resultStatus==='saved'&&a>0?2:0)+(firstClear?3:0);
+  const ticketEarned=s.study.resultStatus==='saved'&&a>0&&w.buildings.explorationDock.status==='built'?1:0;
+  g.xpEarned=xp;g.materialsEarned=materials;g.expeditionTicketsEarned=ticketEarned;g.rewardsGranted=true;g.rewardBreakdown={question:q,correct:correctXp,time:timeXp,clear:bonus,materials,tickets:ticketEarned};
+  w.resources.totalXp=(w.resources.totalXp||0)+xp;w.resources.developmentMaterials=(w.resources.developmentMaterials||0)+materials;w.resources.expeditionTickets=Math.min(3,(w.resources.expeditionTickets||0)+ticketEarned);
+  if(firstClear&&w.buildings.habitat.status==='built'&&w.companion.speciesId){w.companion.growthPoints=(w.companion.growthPoints||0)+1;w.companion.growthStage=Math.min(3,1+Math.floor(w.companion.growthPoints/3));g.companionGrowth=true;}
+  const date=localDateKey();w.dailyRewards=w.dailyRewards||{};w.dailyRewards[date]={xp,materials,tickets:ticketEarned,createdAt:new Date().toISOString()};
+  if(firstClear){p.clearRewardGranted=true;p.justCleared=false;curriculumProgress[currentPlan.unitId]=p;Store.write('curriculum-progress',curriculumProgress);}
+  updateAchievements(w);Store.write('game-world',w);saveSession();
+}
+function updateAchievements(w){
+  const ach=w.achievements||[];const totalQ=Object.values(Store.all()).reduce((n,v)=>n+(v?.study?.attemptedCount||0),0)+(currentSession.study.attemptedCount||0);
+  const earned=(id,name,desc)=>{if(!ach.some(a=>a.id===id))ach.push({id,name,desc,unlockedAt:new Date().toISOString()});};
+  if(currentSession.study.attemptedCount>0)earned('FIRST_STEP','はじめの一歩','初めて演習結果を保存');
+  const progress=Object.values(curriculumProgress);if(progress.some(x=>x.subjectId==='A'&&x.totalAttempted>0)&&progress.some(x=>x.subjectId==='B'&&x.totalAttempted>0))earned('BOTH_SUBJECTS','二つの学び','科目A・Bの両方に挑戦');
+  if(totalQ>=100)earned('100_QUESTIONS','挑戦者','累計100問に挑戦');
+  w.achievements=ach;
+}
+
+function writeDailyLog(bedtimeReached=false){
+  const date=currentSession.date||localDateKey();
+  const month=date.slice(0,7);
+  const key=`logs:${month}`;
+  const log=Store.read(key,{schemaVersion:1,month,records:[]});
+  const record={date,brushingCompleted:currentSession.phaseStatuses.brushing==='completed',studyStarted:!!currentSession.study.startedAt,studyAttempted:currentSession.study.attemptedCount||0,studyCorrect:currentSession.study.correctCount||0,studySubject:currentPlan.subjectId,studyUnitId:currentPlan.unitId,closingCompleted:currentSession.phaseStatuses.closing==='completed',reflection:currentSession.reflection.content||'',xpEarned:currentSession.gamification.xpEarned||0,materialsEarned:currentSession.gamification.materialsEarned||0,bedtimeReached,completedAt:new Date().toISOString()};
+  const idx=log.records.findIndex(r=>r.date===date);if(idx>=0)log.records[idx]={...log.records[idx],...record};else log.records.push(record);
+  Store.write(key,log);if(bedtimeReached){currentSession.phaseStatuses.bedtime='completed';currentSession.events=currentSession.events||{};currentSession.events.bedtimeReachedAt=currentSession.events.bedtimeReachedAt||new Date().toISOString();}saveSession();
+}
+function finalizeDailySession(){
+  if(!currentSession.gamification.rewardsGranted)calculateDailyRewards();
+  if(currentSession.phaseStatuses.bedtime!=='completed')writeDailyLog(true);
+}
+
+function saveClosing(skip=false){
+  const textarea=$('#reflection');if(textarea)currentSession.reflection.content=textarea.value.trim();
+  if(skip){currentSession.reflection.skipped=true;currentSession.phaseStatuses.closing='skipped';}
+  else{currentSession.reflection.saved=true;currentSession.phaseStatuses.closing='completed';}
+  if(previewMode==='CLOSING')previewMode='WIND_DOWN';
+  currentSession.events=currentSession.events||{};currentSession.events.closingAt=new Date().toISOString();currentSession.phaseStatuses.windDown='in_progress';calculateDailyRewards();saveSession();writeDailyLog(false);toast('今日の記録を保存しました。');screen='wind_down';render();
+}
+function buildFacility(id){
+  const w=ensureGameWorld(),d=buildingDefs()[id],b=w.buildings[id];if(!d||b.status==='built')return;
+  if(w.strategy.currentFocus&&w.strategy.currentFocus!==d.route){toast('別ルートの施設です。先に開拓方針を変更してください。');return;}
+  if(w.resources.developmentMaterials<d.cost){toast('開拓資材が足りません。');return;}
+  showModal(`<div class="eyebrow">CONFIRM CONSTRUCTION</div><div class="facility-preview">${renderBuildingArt(id)}</div><h2>${d.name}を修復しますか？</h2><p class="lead">${escapeHTML(d.desc)}</p><div class="list-row"><span>必要資材</span><strong>🪵 ${d.cost}</strong></div><div class="list-row"><span>保有資材</span><strong>🪵 ${w.resources.developmentMaterials}</strong></div><div class="notice success">修復すると：${escapeHTML(d.reward)}</div><div class="modal-actions"><button class="btn secondary" data-action="modal-cancel">戻る</button><button class="btn" id="confirmBuild">修復する</button></div>`);
+  $('#confirmBuild').addEventListener('click',()=>{
+    closeModal();w.resources.developmentMaterials-=d.cost;b.status='building';b.buildStartedAt=Date.now();b.buildEndsAt=Date.now()+2200;w.strategy.initialFocus=w.strategy.initialFocus||d.route;w.strategy.currentFocus=d.route;w.decisions.push({type:'BUILD_FACILITY',buildingId:id,route:d.route,at:new Date().toISOString()});Store.write('game-world',w);screen='world';render();
+    showModal(`<div class="eyebrow">RESTORATION SEQUENCE</div><h2>${d.name}を修復しています</h2><div class="build-cinematic stage-1" id="buildCinematic">${renderBuildingArt(id)}<div class="construction-caption" id="buildStageTitle">STEP 1 · 基礎を整えています</div></div><p class="small" style="margin-top:12px">足場が組まれ、光が灯り、施設が少しずつ島に姿を現します。</p><div class="modal-actions"><button class="btn secondary block" id="skipBuild">演出をスキップ</button></div>`);
+    let finished=false;
+    const updateStage=(n,label)=>{const el=$('#buildCinematic'),title=$('#buildStageTitle');if(el)el.className=`build-cinematic stage-${n}`;if(title)title.textContent=label;};
+    const finish=()=>{if(finished)return;finished=true;pendingBuildTimers.forEach(clearTimeout);pendingBuildTimers=[];const fresh=ensureGameWorld();fresh.buildings[id].status='built';fresh.buildings[id].level=1;fresh.buildings[id].buildEndsAt=null;fresh.world.visualStage=Math.min(5,(fresh.world.visualStage||0)+1);fresh.world.pendingProjectNotice=true;if(id==='habitat'&&!fresh.companion.speciesId){fresh.companion.speciesId='island_spirit';fresh.companion.growthStage=1;fresh.companion.growthPoints=0;}if(id==='researchLab')fresh.features.researchLabUnlocked=true;if(id==='explorationDock')fresh.features.expeditionsUnlocked=true;Store.write('game-world',fresh);closeModal();toast(`${d.name}が完成しました。島の景観が変化しました。`);render();};
+    pendingBuildTimers=[setTimeout(()=>updateStage(2,'STEP 2 · 石組みと設備を組み上げています'),700),setTimeout(()=>updateStage(3,'STEP 3 · 光が灯り、修復が完了します'),1450),setTimeout(finish,2200)];
+    $('#skipBuild').addEventListener('click',finish);
+  });
+}
+function changeRoute(){
+  const w=ensureGameWorld(),current=w.strategy.currentFocus;const cost=4;if(!w.strategy.initialFocus){toast('最初の施設を修復してから開拓方針を変更できます。');return;}
+  showModal(`<div class="eyebrow">STRATEGY CHANGE</div><h2>開拓方針を変更</h2><p class="lead">現在：${routeLabel(current)||'未選択'}。変更には開拓資材4個（初期設定値）が必要です。建設済み施設や解放済み地域は失われません。</p><div class="stack" style="margin-top:14px">${[['research','🔭 研究ルート'],['exploration','🛩️ 探索ルート'],['habitat','🌱 育成ルート']].map(([id,n])=>`<button class="choice" data-action="route-select" data-route="${id}"><div class="choice-body"><strong>${n}</strong><p>${id===current?'現在選択中':''}</p></div><span>→</span></button>`).join('')}</div><div class="small" style="margin-top:10px">保有資材：${w.resources.developmentMaterials} / 変更費用：${cost}</div><div class="modal-actions"><button class="btn ghost" data-action="modal-cancel">閉じる</button></div>`,null);
+}
+function applyRoute(route){
+  const w=ensureGameWorld(),cost=4;
+  if(!['research','exploration','habitat'].includes(route)){closeModal();return;}
+  if(w.strategy.currentFocus===route){closeModal();toast('現在選択中のルートです。');return;}
+  if(w.resources.developmentMaterials<cost){toast('ルート変更に必要な資材が足りません。');return;}
+  w.resources.developmentMaterials-=cost;w.strategy.currentFocus=route;w.decisions.push({type:'CHANGE_ROUTE',route,cost,at:new Date().toISOString()});Store.write('game-world',w);closeModal();toast(`${routeLabel(route)}を優先します。建設済み施設はそのまま残ります。`);render();
+}
+function startProject(id){
+  const w=ensureGameWorld();
+  const defs={library_restoration:{name:'図書館の修復',building:'researchLab',cost:6,unlock:'knowledge_archive'},outer_island_scout:{name:'周辺島の調査',building:'explorationDock',cost:6,unlock:'outer_island'},habitat_garden:{name:'生息地の整備',building:'habitat',cost:6,unlock:'companion'}};
+  const p=defs[id];if(!p||w.projects[id]?.completed)return;
+  if(w.resources.developmentMaterials<p.cost){toast('資材が足りません。');return;}
+  if(w.buildings[p.building].status!=='built'){toast('前提施設を修復してください。');return;}
+  w.resources.developmentMaterials-=p.cost;
+  w.projects[id]={completed:true,completedAt:new Date().toISOString(),unlock:p.unlock};
+  if(id==='library_restoration'){w.features.knowledgeArchive=true;w.resources.developmentMaterials+=2;}
+  if(id==='outer_island_scout'){if(!w.world.unlockedAreas.includes('outer_island'))w.world.unlockedAreas.push('outer_island');w.features.outerIslandUnlocked=true;w.resources.expeditionTickets=Math.min(3,(w.resources.expeditionTickets||0)+1);}
+  if(id==='habitat_garden'){w.companion.speciesId='island_spirit';w.companion.growthStage=Math.max(1,w.companion.growthStage||0);w.companion.growthPoints=w.companion.growthPoints||0;w.features.companionUnlocked=true;}
+  w.world.visualStage=Math.min(5,(w.world.visualStage||0)+1);w.world.pendingProjectNotice=true;w.decisions.push({type:'COMPLETE_PROJECT',projectId:id,at:new Date().toISOString()});Store.write('game-world',w);
+  const reward=id==='library_restoration'?'知識アーカイブと資材2個':id==='outer_island_scout'?'新しい島と遠征券1枚':'仲間の生息地';
+  toast(`${p.name}完了！ ${reward}を獲得しました。`);render();
+}
+function renameIsland(){const w=ensureGameWorld();showModal(`<div class="eyebrow">ISLAND NAME</div><h2>島の名前を変更</h2><div class="field"><label for="islandNameInput">島の名前（1〜16文字）</label><input id="islandNameInput" class="input" maxlength="16" value="${escapeHTML(w.world.name)}"></div><div class="modal-actions"><button class="btn secondary" data-action="modal-cancel">キャンセル</button><button class="btn" id="saveIslandName">保存</button></div>`);$('#saveIslandName').addEventListener('click',()=>{const val=$('#islandNameInput').value.trim();if(!val||[...val].length>16){toast('1〜16文字で入力してください。');return;}w.world.name=val;Store.write('game-world',w);closeModal();render();toast('島の名前を変更しました。');});}
+function savePlan(){
+  const subject=$('#planSubject').value,classId=$('#planClass').value,topic=$('#planTopic').value,target=Number($('#planTarget').value);
+  if(!Number.isInteger(target)||target<1||target>100){toast('演習目標は1〜100問で入力してください。');return;}
+  const unit=ALL_UNITS.find(u=>u.classId===classId&&u.topic===topic);if(!unit){toast('学習テーマを選択してください。');return;}
+  const points=$$('.plan-point').map(x=>x.value.trim()).filter(Boolean);if(points.length===0){toast('要点を1つ以上登録してください。');return;}
+  currentPlan={...currentPlan,subjectId:subject,classId,topic,title:unit.className,unitId:unit.unitId,points,targetQuestions:target,source:'manual',modifiedByUser:true,updatedAt:new Date().toISOString()};persistPlan();toast('今日の学習計画を保存しました。');screen='plan';render();
+}
+function suggestPlan(){const next=nextRoadmapUnit();currentPlan.subjectId=next.subjectId;currentPlan.classId=next.classId;currentPlan.unitId=next.unitId;currentPlan.topic=next.topic;currentPlan.title=next.className;currentPlan.points=getDefaultNotes(next.classId,next.topic);currentPlan.source='roadmap';currentPlan.modifiedByUser=false;Store.write(getTodayPlanKey(),currentPlan);render();toast('ロードマップから次の単元を提案しました。');}
+function addPoint(){const root=$('#pointEditor');if(!root)return;if($$('.plan-point',root).length>=5){toast('要点は最大5項目までです。');return;}const n=$$('.plan-point',root).length;const div=document.createElement('div');div.className='field';div.innerHTML=`<label>要点 ${n+1}</label><textarea class="textarea plan-point" data-index="${n}" maxlength="200"></textarea>`;root.appendChild(div);div.querySelector('textarea').focus();}
+function saveSettings(){
+  const times={routineStart:$('#setStart').value,studyStart:$('#setStudy').value,closingStart:$('#setClosing').value,bedTime:$('#setBed').value};
+  const values=Object.values(times).map(toMinutes);if(values.some(v=>!Number.isFinite(v))||!(values[0]<values[1]&&values[1]<values[2]&&values[2]<values[3])){toast('時刻は開始から就寝まで順番に設定してください。');return;}
+  const brush=Number($('#setBrush').value),questions=Number($('#setQuestions').value);if(!Number.isInteger(brush)||brush<30||brush>600||!Number.isInteger(questions)||questions<1||questions>100){toast('タイマーは30〜600秒、問題数は1〜100問で設定してください。');return;}
+  settings.schedule=times;settings.timers.brushingSeconds=brush;settings.study.defaultTargetQuestions=questions;settings.locale=$('#setLocale').value;persistSettings();toast('設定を保存しました。');syncMode();
+}
+function showResultModal(){
+  const s=currentSession.study;showModal(`<div class="eyebrow">PRACTICE RESULT</div><h2>今日の演習結果</h2><p class="small">過去問道場で解いた合計を入力してください。複数回に分けて演習した場合は合計値を入力します。</p><div class="field" style="margin-top:12px"><label for="resultAttempted">解答した問題数</label><input id="resultAttempted" class="input" type="number" min="0" max="500" value="${s.attemptedCount}"></div><div class="field" style="margin-top:10px"><label for="resultCorrect">正解した問題数</label><input id="resultCorrect" class="input" type="number" min="0" max="500" value="${s.correctCount}"></div><div class="notice" style="margin-top:12px">不正解数・正答率・XPは自動計算します。過去問道場の成績を自動取得する機能は含みません。</div><div class="modal-actions"><button class="btn secondary" data-action="modal-cancel">後で入力</button><button class="btn" id="saveResult">保存</button></div>`);$('#saveResult').addEventListener('click',()=>{const a=Number($('#resultAttempted').value),c=Number($('#resultCorrect').value);if(!Number.isInteger(a)||!Number.isInteger(c)||a<0||a>500||c<0||c>a){toast('解答数・正解数を確認してください。');return;}if(updateStudyResult(a,c)){closeModal();toast('演習結果を保存しました。');render();}});
+}
+function exportData(){const blob=new Blob([JSON.stringify(Store.all(),null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`night-flow-backup-${localDateKey()}.json`;a.click();URL.revokeObjectURL(url);toast('バックアップを書き出しました。');}
+function importData(file){const reader=new FileReader();reader.onload=()=>{try{const obj=JSON.parse(reader.result);if(!obj||typeof obj!=='object')throw new Error('invalid');Object.entries(obj).forEach(([k,v])=>{if(k==='onboarding-complete'||k.startsWith('settings')||k.startsWith('game-world')||k.startsWith('plan:')||k.startsWith('session:')||k.startsWith('curriculum-progress')||k.startsWith('logs:')||k.startsWith('roadmap'))Store.write(k,v);});location.reload();}catch{toast('バックアップファイルを読み込めませんでした。');}};reader.readAsText(file);}
+function resetData(){showModal(`<div class="eyebrow">RESET DATA</div><h2>すべてのデータを初期化しますか？</h2><p class="lead">学習記録・ゲームの開拓状況・設定が削除されます。この操作は元に戻せません。</p><div class="modal-actions"><button class="btn secondary" data-action="modal-cancel">キャンセル</button><button class="btn danger" id="confirmReset">初期化する</button></div>`);$('#confirmReset').addEventListener('click',()=>{Object.keys(Store.all()).forEach(k=>Store.remove(k));location.reload();});}
+
+// Event delegation
+$('#appRoot').addEventListener('click',e=>{
+  const el=e.target.closest('[data-action]');if(!el)return;const a=el.dataset.action;
+  if(a==='nav'){setScreen(el.dataset.screen);return;}
+  if(a==='tutorial-open'){showTutorial(true);return;}
+  if(a==='expedition'){runExpedition(el.dataset.expedition);return;}
+  if(a==='preview'){previewMode=el.dataset.mode==='REAL'?null:el.dataset.mode;syncMode();toast(previewMode?`プレビュー：${previewMode}`:'実際の時刻に戻しました。');return;}
+  if(a==='brush-start'){setBrushTimer();return;}
+  if(a==='brush-complete'){completeBrush();return;}
+  if(a==='guard'){startGuard('manual');return;}
+  if(a==='dojo'){startStudy();openDojo(el.dataset.subject);return;}
+  if(a==='phone'){openPhone();return;}
+  if(a==='result'){showResultModal();return;}
+  if(a==='closing-save'){saveClosing(false);return;}
+  if(a==='closing-skip'){saveClosing(true);return;}
+  if(a==='plan-edit'){screen='plan';render();return;}
+  if(a==='save-plan'){savePlan();return;}
+  if(a==='suggest-plan'){suggestPlan();return;}
+  if(a==='add-point'){addPoint();return;}
+  if(a==='building-detail'){selectedBuilding=el.dataset.building;screen='facility';render();return;}
+  if(a==='build'){buildFacility(el.dataset.building);return;}
+  if(a==='change-route'){changeRoute();return;}
+  if(a==='route-select'){applyRoute(el.dataset.route);return;}
+  if(a==='project-start'){startProject(el.dataset.project);return;}
+  if(a==='rename-island'){renameIsland();return;}
+  if(a==='save-settings'){saveSettings();return;}
+  if(a==='export-data'){exportData();return;}
+  if(a==='reset-data'){resetData();return;}
+  if(a==='modal-cancel'){closeModal();return;}
+});
+$('#modalRoot').addEventListener('click',e=>{
+  if(e.target.classList.contains('modal-backdrop')){if(tutorialActive)return;closeModal();return;}
+  const el=e.target.closest('[data-action]');if(!el)return;
+  if(el.dataset.action==='modal-cancel'){closeModal();return;}
+  if(el.dataset.action==='route-select'){applyRoute(el.dataset.route);return;}
+  if(el.dataset.action==='tutorial-next'){moveTutorial(1);return;}
+  if(el.dataset.action==='tutorial-prev'){moveTutorial(-1);return;}
+  if(el.dataset.action==='tutorial-skip'||el.dataset.action==='tutorial-finish'){finishTutorial();return;}
+});
+$('#main').addEventListener('input',e=>{if(e.target.id==='reflection'){currentSession.reflection.content=e.target.value;saveSession();}});
+$('#main').addEventListener('change',e=>{
+  if(e.target.id==='planSubject'){
+    const sub=CURRICULUM.find(x=>x.id===e.target.value);const cl=sub.groups.flatMap(g=>g.classes);$('#planClass').innerHTML=cl.map(c=>`<option value="${c.id}">${escapeHTML(c.name)}</option>`).join('');const first=cl[0];$('#planTopic').innerHTML=renderTopicOptions(first.id,first.topics[0]);
+  }
+  if(e.target.id==='planClass'){$('#planTopic').innerHTML=renderTopicOptions(e.target.value,ALL_UNITS.find(x=>x.classId===e.target.value)?.topic);}
+  if(e.target.id==='importFile'&&e.target.files?.[0])importData(e.target.files[0]);
+});
+
+function handleVisibility(){
+  if(document.visibilityState==='hidden'){
+    currentSession.visibility.hiddenAt=new Date().toISOString();saveSession();
+  } else if(document.visibilityState==='visible'){
+    currentSession=getSession();handleReturn();syncMode();
+  }
+}
+document.addEventListener('visibilitychange',handleVisibility);
+window.addEventListener('pagehide',()=>{currentSession.visibility.hiddenAt=new Date().toISOString();saveSession();});
+window.addEventListener('pageshow',()=>{if(!document.hidden){currentSession=getSession();ensurePlan();if(handleReturn())return;syncMode();}});
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;});
+
+let activeDate=localDateKey();
+function tick(){
+  if(localDateKey()!==activeDate){activeDate=localDateKey();currentSession=getSession();currentPlan=null;ensurePlan();}
+  const mode=getAppMode();if(mode!==currentMode||((mode==='ROUTINE')&&getPhase().toLowerCase()!==screen)){syncMode();}
+  const brush=$('#brushTimer');if(brush&&currentSession.timer?.brushStart){const left=Math.max(0,settings.timers.brushingSeconds-Math.floor((Date.now()-new Date(currentSession.timer.brushStart).getTime())/1000));brush.textContent=fmtDuration(left);}
+  const bed=$('#bedTimer');if(bed){const left=Math.max(0,toMinutes(settings.schedule.bedTime)-minutesNow(new Date()));bed.textContent=`${String(Math.floor(left/60)).padStart(2,'0')}:${String(left%60).padStart(2,'0')}`;}
+  const remaining=$('#studyRemaining');if(remaining){const left=Math.max(0,toMinutes(settings.schedule.closingStart)-minutesNow(new Date()));remaining.textContent=`${left}分`}
+  const meta=$('#topMeta');if(meta&&currentMode==='FREE')meta.querySelector('.pill')?.replaceChildren(document.createTextNode(`✦ Lv.${Math.floor((ensureGameWorld().resources.totalXp||0)/100)+1}`));
+}
+function init(){
+  ensureGameWorld();currentSession=getSession();ensurePlan();
+  if(currentSession.visibility.hiddenAt && !document.hidden){handleReturn();}
+  syncMode();
+  if(!Store.read('onboarding-complete',false))showTutorial(false);
+  if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(err=>console.warn('SW registration failed',err));
+  timerTick=setInterval(tick,1000);
+}
+init();
+</script>
+</body>
+</html>
