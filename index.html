@@ -633,7 +633,7 @@ function renderRoadmap(){
 }
 function saveAutoPlan(){
   const examDate=$('#plannerExamDate')?.value||'';
-  const studyDays=$('input[name="plannerDay"]:checked').map(x=>Number(x.value));
+  const studyDays=Array.from(document.querySelectorAll('input[name="plannerDay"]:checked')).map(x=>Number(x.value));
   const dailyMinutes=Number($('#plannerMinutes')?.value),targetQuestions=Number($('#plannerQuestions')?.value);
   const config={examDate,studyDays,dailyMinutes,targetQuestions,createdAt:new Date().toISOString()};
   try{
