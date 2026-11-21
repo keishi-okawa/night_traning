@@ -76,9 +76,20 @@ try {
   await page.locator("#plannerQuestions").fill("20");
   await page.locator('[data-action="roadmap-generate"]').click();
 
-  await page.waitForSelector(".gantt-week .gantt-task", { timeout: 10000 });
+  await page.waitForTimeout(500);
+  const plannerDiagnostics = await page.evaluate(() => ({
+    values: {
+      exam: document.querySelector("#plannerExamDate")?.value,
+      minutes: document.querySelector("#plannerMinutes")?.value,
+      questions: document.querySelector("#plannerQuestions")?.value,
+      weekdays: [...document.querySelectorAll('input[name="plannerDay"]:checked')].map(x=>x.value)
+    },
+    toast: document.querySelector("#toastRoot")?.innerText || "",
+    savedPlan: !!localStorage.getItem("nightflow:v1:auto-plan-generated"),
+    mainText: document.querySelector("#main")?.innerText.slice(0,1200) || ""
+  }));
   const taskCount = await page.locator(".gantt-week .gantt-task").count();
-  if (taskCount < 1) throw new Error("The Gantt chart was generated without any daily tasks.");
+  if (taskCount < 1) throw new Error("The Gantt chart was generated without any daily tasks: " + JSON.stringify(plannerDiagnostics));
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(250);
