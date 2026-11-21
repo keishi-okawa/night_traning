@@ -254,6 +254,7 @@ let currentMode = 'FREE';
 let tutorialActive = false;
 let tutorialStep = 0;
 let pendingBuildTimers = [];
+let roadmapWeekIndex = 0;
 
 function structuredCloneSafe(obj){return JSON.parse(JSON.stringify(obj));}
 function getTodayPlanKey(){return `plan:${localDateKey()}`;}
@@ -461,6 +462,180 @@ function renderWindDown(){
 function renderCompleted(){
   return `<div class="routine-shell page"><div class="card" style="margin-top:9vh;text-align:center;padding:30px 22px"><div style="font-size:42px">☾</div><div class="eyebrow">DAY COMPLETED</div><div class="routine-message">今日のルーティン終了。</div><p class="routine-sub">お疲れさまでした。<br>今日の記録は保存されています。</p><div class="divider"></div><div class="routine-time">${escapeHTML(settings.schedule.bedTime)}</div><div class="small">おやすみなさい。</div><div class="notice" style="margin-top:18px">ゲームや学習の追加操作は、次の時間にしましょう。</div><button class="btn ghost block" style="margin-top:14px" data-action="preview" data-mode="FREE">通常画面をプレビュー（動作確認用）</button></div></div>`;
 }
+
+function getMainQuestState(){
+  const w=ensureGameWorld(),built=Object.entries(w.buildings).filter(([,b])=>b.status==='built');
+  const completed=Object.entries(w.projects||{}).filter(([,p])=>p.completed);
+  const done=!!w.world.lighthouseLit;
+  const step=done?5:built.length===0?0:completed.length===0?1:built.length<2?2:completed.length<2?3:4;
+  const titles=[
+    '最初の拠点を取り戻す',
+    '最初の開拓プロジェクトを完了する',
+    '二つ目の施設を修復する',
+    '二つ目の開拓プロジェクトを完了する',
+    '星渡りの灯台を再点灯する',
+    '群島の航路を取り戻した'
+  ];
+  const descriptions=[
+    '漂着したこの島は、古い文明の拠点でした。研究・探索・育成のいずれかを選び、再建の足場を作りましょう。',
+    '選んだ施設の機能を使って、島の記録・航路・生態系のいずれかを取り戻しましょう。',
+    '灯台を再点灯するには、異なる専門性を持つ二つの施設が必要です。次の施設を選び、拠点の力を広げましょう。',
+    '二つの施設をつなぐプロジェクトを完了し、灯台を動かすための共鳴部品を集めましょう。',
+    '二つの施設と二つの開拓成果が揃いました。開拓資材を使って灯台に火を戻し、空の航路を再接続しましょう。',
+    '星渡りの灯台が再点灯しました。ここから先は、自由に群島を広げることができます。'
+  ];
+  const progress=done?100:Math.round((step/5)*100);
+  return {step,title:titles[step],description:descriptions[step],progress,builtCount:built.length,completedCount:completed.length,canIgnite:step===4&&built.length>=2&&completed.length>=2&&w.resources.developmentMaterials>=8,done};
+}
+function renderCampaignCard(){
+  const q=getMainQuestState();
+  const actionLabel=q.step===0?'最初の施設を選ぶ':q.step===1||q.step===3?'開拓プロジェクトを確認':q.step===2?'二つ目の施設を選ぶ':q.step===4?(q.canIgnite?'灯台を再点灯する':'必要条件を確認する'):'次の群島を探索する';
+  return `<section class="card campaign-card">
+    <div class="campaign-kicker">MAIN CAMPAIGN · 星渡りの灯台</div>
+    <div class="campaign-title">消えた灯台に、もう一度光を。</div>
+    <p class="small" style="color:#536071">かつて空の航路を照らしていた星渡りの灯台が消え、浮遊島は孤立しました。あなたの拠点を再建し、島々をつなぐ光を取り戻しましょう。</p>
+    <div class="campaign-progress"><span style="width:${q.progress}%"></span></div>
+    <div class="between small" style="margin-top:6px;color:#657181"><span>メインクエスト ${q.done?'完了':q.step+1+'/5'}</span><strong>${q.progress}%</strong></div>
+    <div class="campaign-step"><span class="step-no">${q.done?'✓':q.step+1}</span><div><strong>${escapeHTML(q.title)}</strong><div class="small" style="color:#5b6878;margin-top:4px">${escapeHTML(q.description)}</div></div></div>
+    ${q.step===4?'<div class="small" style="color:#576477;margin:8px 0">必要条件：修復施設2つ以上・開拓プロジェクト2件以上・資材8個</div>':''}
+    <button class="btn block" data-action="campaign-next" ${q.step===4&&!q.canIgnite?'disabled':''}>${actionLabel} →</button>
+  </section>`;
+}
+function campaignNext(){
+  const q=getMainQuestState();
+  if(q.step===0||q.step===2){screen='world';render();return;}
+  if(q.step===1||q.step===3||q.step===4){screen='project';render();return;}
+  screen='world';render();
+}
+function getPlannerConfig(){
+  return Store.read('auto-plan-config',{examDate:'',studyDays:[1,2,3,4,5],dailyMinutes:40,targetQuestions:20,createdAt:null});
+}
+function parseLocalDate(dateString){
+  const parts=String(dateString||'').split('-').map(Number);
+  if(parts.length!==3||parts.some(x=>!Number.isFinite(x)))return null;
+  const d=new Date(parts[0],parts[1]-1,parts[2]);d.setHours(0,0,0,0);
+  return Number.isNaN(d.getTime())?null:d;
+}
+function dateKeyLocal(date){
+  return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+}
+function getNextStudyUnits(){
+  const unitsA=ALL_UNITS.filter(u=>u.subjectId==='A'&&!['MASTERED'].includes(curriculumProgress[u.unitId]?.status));
+  const unitsB=ALL_UNITS.filter(u=>u.subjectId==='B'&&!['MASTERED'].includes(curriculumProgress[u.unitId]?.status));
+  const reviewA=unitsA.filter(u=>curriculumProgress[u.unitId]?.status==='REVIEW_REQUIRED');
+  const reviewB=unitsB.filter(u=>curriculumProgress[u.unitId]?.status==='REVIEW_REQUIRED');
+  const normalA=unitsA.filter(u=>curriculumProgress[u.unitId]?.status!=='REVIEW_REQUIRED');
+  const normalB=unitsB.filter(u=>curriculumProgress[u.unitId]?.status!=='REVIEW_REQUIRED');
+  return {A:[...reviewA,...normalA],B:[...reviewB,...normalB]};
+}
+function createAutoPlan(config){
+  const exam=parseLocalDate(config.examDate);
+  if(!exam)throw new Error('試験日を設定してください。');
+  const today=new Date();today.setHours(0,0,0,0);
+  const start=new Date(today);start.setDate(start.getDate()+1);
+  if(exam<start)throw new Error('試験日は明日以降の日付にしてください。');
+  if(!Array.isArray(config.studyDays)||!config.studyDays.length)throw new Error('学習する曜日を1日以上選択してください。');
+  const minutes=Number(config.dailyMinutes),questions=Number(config.targetQuestions);
+  if(!Number.isInteger(minutes)||minutes<20||minutes>120)throw new Error('1日の学習時間は20〜120分で設定してください。');
+  if(!Number.isInteger(questions)||questions<1||questions>100)throw new Error('問題数は1〜100問で設定してください。');
+  const queues=getNextStudyUnits(),dates=[];
+  for(let d=new Date(start);d<=exam;d.setDate(d.getDate()+1)){
+    if(config.studyDays.includes(d.getDay()))dates.push(new Date(d));
+  }
+  if(!dates.length)throw new Error('試験日までの学習可能日がありません。');
+  let a=0,b=0,consecutiveA=0;
+  const sessions=[],covered=[];
+  for(let i=0;i<dates.length;i++){
+    let subject;
+    if(a>=queues.A.length)subject='B';
+    else if(b>=queues.B.length)subject='A';
+    else if(consecutiveA>=3){subject='B';consecutiveA=0;}
+    else subject='A';
+    const unit=subject==='A'?queues.A[a++]:queues.B[b++];
+    if(!unit)continue;
+    if(subject==='A')consecutiveA++;else consecutiveA=0;
+    const prior=covered.slice(-2);
+    const isReviewDay=(i>0&&(i+1)%5===0);
+    sessions.push({
+      date:dateKeyLocal(dates[i]),subjectId:subject,unitId:unit.unitId,classId:unit.classId,
+      title:unit.className,topic:unit.topic,groupName:unit.groupName,
+      durationMinutes:minutes,targetQuestions:questions,
+      startTime:settings.schedule.studyStart,
+      blocks:[
+        {kind:'review',minutes:Math.max(5,Math.round(minutes*0.125)),label:'前回の復習'},
+        {kind:'summary',minutes:Math.max(5,Math.round(minutes*0.25)),label:'要点の確認'},
+        {kind:'practice',minutes:minutes-Math.max(5,Math.round(minutes*0.125))-Math.max(5,Math.round(minutes*0.25)),label:'過去問演習'}
+      ],
+      reviewUnitIds:isReviewDay?prior.map(x=>x.unitId):[],
+      status:'planned'
+    });
+    covered.push(unit);
+  }
+  const unplanned=[...queues.A.slice(a),...queues.B.slice(b)];
+  const weeks={};
+  sessions.forEach(session=>{
+    const d=parseLocalDate(session.date),monday=new Date(d);monday.setDate(d.getDate()-((d.getDay()+6)%7));
+    const key=dateKeyLocal(monday);(weeks[key]??=[]).push(session);
+  });
+  return {
+    schemaVersion:1,examDate:config.examDate,generatedAt:new Date().toISOString(),
+    startDate:dateKeyLocal(start),endDate:config.examDate,studyDays:[...config.studyDays],
+    dailyMinutes:minutes,targetQuestions:questions,sessions,weeks,
+    totalUnits:queues.A.length+queues.B.length,plannedUnits:sessions.length,
+    unplannedUnits:unplanned.length,unplannedUnitIds:unplanned.map(x=>x.unitId),
+    estimatedHours:Math.round(sessions.reduce((n,x)=>n+x.durationMinutes,0)/60*10)/10,
+    subjectTotals:{A:sessions.filter(x=>x.subjectId==='A').length,B:sessions.filter(x=>x.subjectId==='B').length}
+  };
+}
+function getAutoPlan(){
+  return Store.read('auto-plan-generated',null);
+}
+function isPlannerSessionDone(item){
+  const progress=curriculumProgress[item.unitId];
+  return !!(progress&&progress.lastStudyDate&&progress.lastStudyDate===item.date);
+}
+function renderRoadmap(){
+  const cfg=getPlannerConfig(),plan=getAutoPlan();
+  const minDate=dateKeyLocal(new Date(Date.now()+86400000));
+  const days=['日','月','火','水','木','金','土'];
+  const weekdayControls=days.map((d,i)=>`<label><input type="checkbox" name="plannerDay" value="${i}" ${cfg.studyDays.includes(i)?'checked':''}> ${d}</label>`).join('');
+  let gantt='';
+  if(plan&&plan.sessions?.length){
+    const weekKeys=Object.keys(plan.weeks).sort(),offset=Math.max(0,Math.min(weekKeys.length-1,roadmapWeekIndex));
+    roadmapWeekIndex=offset;
+    const weekKey=weekKeys[offset],items=plan.weeks[weekKey]||[];
+    const monday=parseLocalDate(weekKey);
+    const cells=Array.from({length:7},(_,i)=>{
+      const d=new Date(monday);d.setDate(d.getDate()+i);const key=dateKeyLocal(d),item=items.find(x=>x.date===key);
+      const done=item&&isPlannerSessionDone(item);
+      const today=key===dateKeyLocal(new Date());
+      const dayName=['日','月','火','水','木','金','土'][d.getDay()];
+      return `<div class="gantt-day ${item?'':'is-off'} ${today?'is-today':''}"><div class="gantt-date">${dayName} · ${d.getMonth()+1}/${d.getDate()}</div>${item?`<div class="gantt-task ${item.subjectId==='B'?'subject-b':''}"><div class="between"><strong style="font-size:10px">科目${item.subjectId}</strong><span style="font-size:9px">${done?'✓':'予定'}</span></div><div class="task-name">${escapeHTML(item.topic)}</div><div class="task-meta">${item.startTime} · ${item.durationMinutes}分 · ${item.targetQuestions}問</div></div>${item.reviewUnitIds.length?'<div class="small" style="margin-top:5px;color:#8a6b34">＋復習</div>':''}`:'<div class="small" style="margin-top:20px;text-align:center">休み</div>'}</div>`;
+    }).join('');
+    const doneCount=plan.sessions.filter(isPlannerSessionDone).length;
+    const coverage=plan.totalUnits?Math.round(plan.plannedUnits/plan.totalUnits*100):100;
+    gantt=`<section class="section"><div class="section-head"><div><div class="eyebrow">GANTT · WEEK ${offset+1}/${weekKeys.length}</div><h2 class="h2">${weekKey} の週</h2></div><div class="actions"><button class="btn ghost smallbtn" data-action="roadmap-prev" ${offset===0?'disabled':''}>←</button><button class="btn ghost smallbtn" data-action="roadmap-next" ${offset>=weekKeys.length-1?'disabled':''}>→</button></div></div><div class="gantt-legend"><span><i></i>科目A</span><span><i class="legend-b"></i>科目B</span><span><i class="legend-review"></i>復習</span></div><div class="gantt-scroll"><div class="gantt-week">${cells}</div></div></section>
+      <div class="plan-summary-grid section"><div class="card soft"><div class="small">学習日数</div><div class="metric">${plan.sessions.length}</div></div><div class="card soft"><div class="small">予定時間</div><div class="metric">${plan.estimatedHours}h</div></div><div class="card soft"><div class="small">計画進捗</div><div class="metric">${doneCount}/${plan.sessions.length}</div></div></div>
+      <div class="card"><div class="between"><strong>シラバスの割当状況</strong><strong>${coverage}%</strong></div><div class="progress" style="margin:9px 0"><span style="width:${Math.min(100,coverage)}%"></span></div><div class="small">学習可能日 ${plan.sessions.length}日 / 対象未習得単元 ${plan.totalUnits}件</div>${plan.unplannedUnits?'<div class="notice warn" style="margin-top:10px">試験日までの日数ではすべての未習得単元を割り当てられません。学習曜日を増やすか、1日の学習時間を調整してください。</div>':'<div class="notice success" style="margin-top:10px">現在の未習得単元は、設定した学習日に割り当てられています。</div>'}</div>`;
+  }
+  return `<div class="page"><div class="screen-title"><div class="eyebrow">AUTO STUDY PLAN · FE CURRENT SYLLABUS</div><h1 class="h1">学習ロードマップ</h1><p class="lead">試験日から逆算して、科目Aを優先しながら科目Bも織り込んだ日別学習計画を自動作成します。学習する曜日と1日の時間は自分の生活に合わせて調整できます。</p></div>
+    <section class="card"><div class="eyebrow">PLAN BUILDER</div><h2 class="h2" style="margin:5px 0 12px">試験日と学習時間を設定</h2><div class="gantt-toolbar"><div class="field"><label for="plannerExamDate">目標試験日</label><input class="input" type="date" id="plannerExamDate" min="${minDate}" value="${escapeHTML(cfg.examDate||'')}"></div><div class="field"><label for="plannerMinutes">1日の学習時間</label><input class="input" type="number" id="plannerMinutes" min="20" max="120" step="5" value="${cfg.dailyMinutes}"></div><div class="field"><label for="plannerQuestions">1日の問題数</label><input class="input" type="number" id="plannerQuestions" min="1" max="100" value="${cfg.targetQuestions}"></div><div class="field"><label>学習開始予定</label><div class="input" style="display:flex;align-items:center">${escapeHTML(settings.schedule.studyStart)}</div></div></div><div class="field" style="margin-top:12px"><label>学習する曜日</label><div class="weekday-picks">${weekdayControls}</div><div class="small" style="margin-top:6px">初期設定は月〜金です。土日を追加すると、試験日までの学習範囲を広げられます。</div></div><div class="grid two" style="margin-top:14px"><button class="btn secondary" data-action="roadmap-generate">自動計画を作成・更新</button><button class="btn ghost" data-action="nav" data-screen="plan">今日の学習内容を編集</button></div></section>
+    ${gantt||'<div class="card plan-empty section"><div style="font-size:34px">▥</div><h2 class="h2">まだ学習計画がありません</h2><p class="small">試験日と学習できる曜日を設定し、「自動計画を作成」を押してください。日ごとの単元・所要時間・問題数をガントチャートにします。</p></div>'}
+    <section class="section card"><h2 class="h2">自動計画のルール</h2><div class="list-row"><span class="small">学習範囲</span><strong>IPAシラバス Ver.9.2 全分類</strong></div><div class="list-row"><span class="small">科目配分</span><strong>科目A優先・科目Bを定期挿入</strong></div><div class="list-row"><span class="small">復習</span><strong>5学習回ごとに直近単元を確認</strong></div><div class="small">各日の40分（初期値）は、復習・要点確認・過去問演習に分割します。学習の進捗や単元の習得状況に応じて、計画を再生成できます。</div></section></div>`;
+}
+function saveAutoPlan(){
+  const examDate=$('#plannerExamDate')?.value||'';
+  const studyDays=$('input[name="plannerDay"]:checked').map(x=>Number(x.value));
+  const dailyMinutes=Number($('#plannerMinutes')?.value),targetQuestions=Number($('#plannerQuestions')?.value);
+  const config={examDate,studyDays,dailyMinutes,targetQuestions,createdAt:new Date().toISOString()};
+  try{
+    const plan=createAutoPlan(config);
+    Store.write('auto-plan-config',config);Store.write('auto-plan-generated',plan);roadmapWeekIndex=0;
+    toast(`学習計画を作成しました。全${plan.sessions.length}回の学習予定です。`);
+    render();
+  }catch(error){toast(error.message||'学習計画を作成できませんでした。','error');}
+}
+
 function renderPlan(){
   const p=currentPlan||ensurePlan();
   const subject=CURRICULUM.find(x=>x.id===p.subjectId)||CURRICULUM[0];
