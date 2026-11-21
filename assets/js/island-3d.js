@@ -344,18 +344,20 @@ function createEnvironmentMap(){
 const environmentMap=createEnvironmentMap();
 
 function createScene(el) {
-  if (!el || el.dataset.mounted === "1") return;
+  if (!el || el.dataset.mounted) return;
   el.dataset.mounted = "1";
   let renderer;
   try {
-    renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});
+    const compactDevice=(window.matchMedia?.("(max-width: 720px)")?.matches||navigator.deviceMemory<=4||navigator.hardwareConcurrency<=4||navigator.connection?.saveData);
+    renderer=new THREE.WebGLRenderer({antialias:!compactDevice,alpha:false,powerPreference:"high-performance",failIfMajorPerformanceCaveat:false});
   } catch (error) {
     el.dataset.mounted="error";
     el.innerHTML='<img src="assets/game/island-scene.svg" alt="浮遊島のフォールバック画像" style="width:100%;height:100%;object-fit:cover"><div class="island-webgl-fallback" style="position:absolute;inset:auto 10px 10px;background:#fffdfaeb;border-radius:12px;padding:10px">この端末ではリアルタイム3Dを利用できません。画像表示に切り替えています。</div>';
     console.warn("Night Flow 3D renderer unavailable",error);
     return;
   }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  const renderScale=compactDevice?1.15:Math.min(window.devicePixelRatio||1,1.75);
+  renderer.setPixelRatio(renderScale);
   renderer.setSize(el.clientWidth||800,el.clientHeight||420,false);
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
@@ -364,6 +366,8 @@ function createScene(el) {
   renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   el.appendChild(renderer.domElement);
   renderer.domElement.setAttribute("aria-label","操作できる3D浮遊島。ドラッグで回転、ホイールまたはピンチで拡大縮小できます。");
+  renderer.domElement.tabIndex=0;
+  renderer.domElement.addEventListener("keydown",e=>{if(e.key==="+"||e.key==="="){radius-=2;placeCamera();}if(e.key==="-"||e.key==="_"){radius+=2;placeCamera();}});
 
   const scene=new THREE.Scene();
   scene.background=environmentMap;scene.backgroundBlurriness=0.12;
@@ -390,7 +394,8 @@ function createScene(el) {
   const key=new THREE.DirectionalLight("#fff0d8",3.6);
   key.position.set(-18,28,16);
   key.castShadow=true;
-  key.shadow.mapSize.set(2048,2048);
+  const shadowSize=compactDevice?1024:2048;
+  key.shadow.mapSize.set(shadowSize,shadowSize);
   key.shadow.camera.left=-24;key.shadow.camera.right=24;key.shadow.camera.top=24;key.shadow.camera.bottom=-24;
   key.shadow.bias=-0.0002;
   key.shadow.normalBias=0.02;
@@ -453,19 +458,19 @@ function createScene(el) {
 
   const clock=new THREE.Clock();
   let raf=0,disposed=false,drag=false,lastX=0,lastY=0,autoRotate=true;
-  const onDown=e=>{drag=true;autoRotate=false;lastX=e.clientX;lastY=e.clientY;el.setPointerCapture?.(e.pointerId);};
+  const onDown=e=>{if(e.pointerType==="mouse"&&e.button!==0)return;drag=true;autoRotate=false;lastX=e.clientX;lastY=e.clientY;el.setPointerCapture?.(e.pointerId);};
   const onMove=e=>{
-    if(!drag)return;
+    if(!drag||pointers.size>1)return;
     const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;
     theta-=dx*0.006;phi+=dy*0.004;placeCamera();
   };
   const onUp=()=>{drag=false;};
-  const onWheel=e=>{radius+=e.deltaY*0.018;placeCamera();};
+  const onWheel=e=>{e.preventDefault();radius+=e.deltaY*0.018;placeCamera();};
   renderer.domElement.addEventListener("pointerdown",onDown);
   renderer.domElement.addEventListener("pointermove",onMove);
   renderer.domElement.addEventListener("pointerup",onUp);
   renderer.domElement.addEventListener("pointercancel",onUp);
-  renderer.domElement.addEventListener("wheel",onWheel,{passive:true});
+  renderer.domElement.addEventListener("wheel",onWheel,{passive:false});
   let touchStartDistance=0;
   const pointers=new Map();
   const pointerTrack=e=>{pointers.set(e.pointerId,[e.clientX,e.clientY]);if(pointers.size===2){const pts=[...pointers.values()];touchStartDistance=Math.hypot(pts[0][0]-pts[1][0],pts[0][1]-pts[1][1]);}};
