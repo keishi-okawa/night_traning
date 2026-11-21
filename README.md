@@ -50,7 +50,7 @@ HTTPSまたはlocalhostで配信してください。`file://`ではService Work
 py -m http.server 8000
 ```
 
-ブラウザで `http://localhost:8000` を開きます。GitHub Pagesでは Settings → Pages → Deploy from a branch → `main` またはこの修復ブランチ → `/(root)` を選択します。
+ブラウザで `http://localhost:8000` を開きます。GitHub Pages への公開は .github/workflows/deploy-preview.yml が担当します。Settings → Pages → Build and deployment → Source を GitHub Actions に設定済みで、main への push 後に自動デプロイします。公開先は [https://keishi-okawa.github.io/night_traning/](https://keishi-okawa.github.io/night_traning/) です。
 
 ## 主なファイル
 
@@ -72,7 +72,7 @@ py -m http.server 8000
 - 過去問道場の分野は外部サイトを開いた後に選択します。非公開APIやスクレイピングには依存しません。
 - カリキュラムはIPAシラバスVer.9.2の分類カタログです。すべての要点コンテンツが完成済みという意味ではありません。
 - 学習・ゲームデータはLocalStorageに保存されます。ブラウザデータ削除に備えてJSONバックアップを取得してください。
-- 復帰時ガードはPage Visibility APIと専用遷移フラグで判定し、移動先アプリ名までは判別しません。
+- 復帰時ガードはPage Visibility APIと専用遷移フラグで判定し、移動先アプリ名までは判別しません。ガード画面では現在の目的・次の一歩・元の画面を提示し、明示的な操作で復帰します。
 
 ## 初期バランス値
 
@@ -91,3 +91,4 @@ py -m http.server 8000
 - [004：リアルタイム3Dモデル・WebGL拠点](docs/仕様変更書-004-リアルタイム3D.md)
 - [005：メインクエスト・ゲーム進行](docs/仕様変更書-005-メインクエスト.md)
 - [006：自動学習計画・ガントチャート](docs/仕様変更書-006-自動学習計画.md)
+- [007：目的を思い出して元の行動へ戻る](docs/仕様変更書-007-目的への復帰フロー.md)
