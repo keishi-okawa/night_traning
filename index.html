@@ -780,9 +780,17 @@ function rememberNavigation(){
 function getGuardReturnContext(source='manual'){
   const saved=currentSession.navigation||{};
   const useSaved=source==='resume'&&saved.date===localDateKey();
-  const originScreen=useSaved?(saved.screen||screen):screen;
-  const originMode=useSaved?(saved.mode||getAppMode()):getAppMode();
-  const originPhase=useSaved?(saved.phase||getPhase()):getPhase();
+  let originScreen=useSaved?(saved.screen||screen):screen;
+  let originMode=useSaved?(saved.mode||getAppMode()):getAppMode();
+  let originPhase=useSaved?(saved.phase||getPhase()):getPhase();
+  if(useSaved){
+    const livePhase=getPhase(),liveMode=getAppMode();
+    if(liveMode==='ROUTINE'||liveMode==='COMPLETED'){
+      originScreen=livePhase.toLowerCase();originMode=liveMode;originPhase=livePhase;
+    }else if(originMode==='ROUTINE'&&liveMode==='FREE'){
+      originScreen='plan';originMode='FREE';originPhase='FREE';
+    }
+  }
   const p=currentPlan||ensurePlan();
   const attempted=currentSession.study.attemptedCount||0;
   const target=p.targetQuestions||settings.study.defaultTargetQuestions;
@@ -811,6 +819,10 @@ function getGuardReturnContext(source='manual'){
       nextAction='今表示されているルーティンの一歩を終える';
       buttonLabel='ルーティンに戻る';
     }
+  }else if(originMode==='COMPLETED'){
+    goal='今日のルーティンを終えた記録を確認し、しっかり休む';
+    nextAction='今日の実績を確認したら、アプリを閉じて休む';
+    buttonLabel='今日の結果に戻る';
   }else{
     const labels={home:'ホーム',plan:'今日の学習',roadmap:'学習計画',world:'開拓拠点',facility:'施設詳細',project:'開拓プロジェクト',progress:'学習の進捗',settings:'設定'};
     const label=labels[originScreen]||'元の画面';
