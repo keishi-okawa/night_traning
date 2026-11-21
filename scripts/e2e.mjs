@@ -60,7 +60,6 @@ try {
     mainHtml: document.querySelector("#main")?.innerHTML.slice(0, 1600) || "",
     moduleLoaded: !!window.NightFlow3D
   }));
-  console.log("INITIAL_DIAGNOSTICS " + JSON.stringify(initialDiagnostics));
   if (!initialDiagnostics.sceneCount) {
     throw new Error("Initial home did not render the 3D island: " + JSON.stringify(initialDiagnostics));
   }
@@ -159,15 +158,19 @@ try {
   const shellCached = await page.evaluate(async () => (await caches.keys()).includes("night-flow-shell-v3"));
   if (!shellCached) throw new Error("PWA app shell was not cached.");
   await page.reload({ waitUntil: "domcontentloaded" });
-  await page.waitForSelector(".island-3d-scene", { timeout: 15000 });
+  // The last user destination was the roadmap screen; reload must restore it,
+  // not force the user back to the home screen.
+  await page.waitForSelector("#plannerExamDate", { timeout: 15000 });
+  const restoredRoadmap = await page.locator("#plannerExamDate").isVisible();
+  if (!restoredRoadmap) throw new Error("The saved roadmap destination was not restored after reload.");
   const controlled = await page.evaluate(() => !!navigator.serviceWorker.controller);
   if (!controlled) throw new Error("The page was not controlled by the Service Worker after reload.");
   await context.setOffline(true);
   await page.reload({ waitUntil: "domcontentloaded" });
-  await page.waitForSelector("#main .page", { timeout: 15000 });
-  const offlineHomeLoaded = await page.locator("#main .page").count() > 0;
+  await page.waitForSelector("#plannerExamDate", { timeout: 15000 });
+  const offlinePlannerLoaded = await page.locator("#plannerExamDate").isVisible();
   await context.setOffline(false);
-  if (!offlineHomeLoaded) throw new Error("The app did not reopen from the offline cache.");
+  if (!offlinePlannerLoaded) throw new Error("The saved roadmap screen did not reopen from the offline cache.");
   await page.locator("#nav-roadmap").click();
   await page.waitForSelector(".gantt-week .gantt-task", { timeout: 10000 });
 
@@ -254,7 +257,8 @@ try {
     webglCanvas: sceneDiagnostics.sceneStates.some(s => s.canvas),
     serviceWorkerActive,
     shellCached,
-    offlineHomeLoaded,
+    offlinePlannerLoaded,
+    restoredRoadmap,
     ganttTasksThisWeek: taskCount,
     ganttVisibleOnMobile,
     mobileHorizontalOverflow: mobileOverflow,
