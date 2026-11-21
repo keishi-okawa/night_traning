@@ -14,8 +14,12 @@ const context = await browser.newContext({ viewport: { width: 1440, height: 1000
 const page = await context.newPage();
 const runtimeErrors = [];
 const failedResponses = [];
+const consoleErrors = [];
+const failedRequests = [];
 
 page.on("pageerror", (error) => runtimeErrors.push(error.message));
+page.on("console", (message) => { if (message.type() === "error") consoleErrors.push(message.text()); });
+page.on("requestfailed", (request) => failedRequests.push({url:request.url(),error:request.failure()?.errorText}));
 page.on("response", (response) => {
   if (response.status() >= 400 && !response.url().endsWith("/favicon.ico")) {
     failedResponses.push({ status: response.status(), url: response.url() });
@@ -38,11 +42,23 @@ try {
   await page.goto("http://127.0.0.1:4173/", { waitUntil: "domcontentloaded" });
   await page.waitForSelector("#main .page", { timeout: 15000 });
   await page.waitForSelector(".island-3d-scene", { timeout: 15000 });
-  await page.waitForFunction(
-    () => !!document.querySelector(".island-3d-scene canvas") ||
-      !!document.querySelector(".island-webgl-fallback"),
-    { timeout: 15000 }
-  );
+  await page.waitForTimeout(3000);
+  const sceneDiagnostics = await page.evaluate(() => ({
+    moduleLoaded: !!window.NightFlow3D,
+    sceneCount: document.querySelectorAll(".island-3d-scene").length,
+    sceneStates: [...document.querySelectorAll(".island-3d-scene")].map(el => ({
+      mounted: el.dataset.mounted || "not-mounted",
+      children: el.children.length,
+      canvas: !!el.querySelector("canvas"),
+      fallback: !!el.querySelector(".island-webgl-fallback")
+    })),
+    scriptSources: [...document.scripts].map(el => el.src).filter(Boolean)
+  }));
+  if (!sceneDiagnostics.sceneStates.some(s => s.canvas || s.fallback)) {
+    throw new Error("3D initialization did not finish: " + JSON.stringify({
+      sceneDiagnostics, runtimeErrors, consoleErrors, failedResponses, failedRequests
+    }));
+  }
 
   const campaignVisible = await page.locator("#main .campaign-card").first().isVisible();
   if (!campaignVisible) throw new Error("Main campaign card was not visible on the home screen.");
@@ -73,6 +89,7 @@ try {
   });
   if (!ganttVisibleOnMobile) throw new Error("Gantt chart was not visible at mobile viewport width.");
   if (runtimeErrors.length) throw new Error(`Runtime errors: ${runtimeErrors.join(" | ")}`);
+  if (consoleErrors.some(x=>/Failed to load module script|three\.core|island-3d/.test(x))) throw new Error(`Module errors: ${consoleErrors.join(" | ")}`);
   if (failedResponses.length) throw new Error(`Failed requests: ${JSON.stringify(failedResponses)}`);
 
   console.log(JSON.stringify({
@@ -81,7 +98,10 @@ try {
     webglCanvas: await page.locator(".island-3d-scene canvas").count() > 0,
     ganttTasksThisWeek: taskCount,
     ganttVisibleOnMobile,
-    mobileHorizontalOverflow: mobileOverflow
+    mobileHorizontalOverflow: mobileOverflow,
+    sceneDiagnostics,
+    consoleErrors: consoleErrors.slice(0,5),
+    failedRequests
   }));
 } finally {
   await browser.close();
