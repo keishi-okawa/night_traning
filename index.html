@@ -82,6 +82,54 @@
 
 .island-home-hero{min-height:330px}.island-home-hero .animated-island{position:absolute;inset:0;width:100%;height:100%;min-height:0;max-height:none;aspect-ratio:auto;border:0;border-radius:0;box-shadow:none}.island-home-hero .hero-overlay{z-index:10;background:linear-gradient(180deg,#08142b00 0%,#08142b12 35%,#091526ed 100%)}.scene-weather-pill{position:absolute;z-index:5;right:12px;top:12px;padding:6px 9px;border-radius:99px;background:#102a44bb;border:1px solid #d3eaff55;color:#e3f4ff;font-size:10px;backdrop-filter:blur(7px)}.island-scene.animated-island .island-label{bottom:10px;left:12px;opacity:.9}.scene-ruin span{display:inline-block;background:#142741bc;padding:3px 6px;border-radius:99px}.island-home-hero .island-label{display:none}
 @media(max-width:650px){.island-home-hero{min-height:300px}.island-home-hero .hero-title{font-size:21px}.island-home-hero .hero-overlay{padding:13px}.island-home-hero .hero-stats{margin-top:8px}.scene-weather-pill{font-size:9px;top:8px;right:8px}}
+
+/* Real-time WebGL island and study Gantt */
+.island-3d-scene{position:relative;width:100%;height:clamp(300px,55vw,520px);min-height:300px;overflow:hidden;border-radius:20px;background:linear-gradient(145deg,#9db7d0,#d1c7bd 58%,#738ea3);isolation:isolate;box-shadow:inset 0 1px 0 #ffffff55,0 18px 42px #0a183326}
+.island-3d-scene.compact{height:clamp(300px,42vw,440px)}
+.island-3d-scene.facility-focus{height:clamp(320px,65vw,470px);border-radius:18px}
+.island-3d-scene canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.island-3d-scene canvas:active{cursor:grabbing}
+.island-3d-hud{position:absolute;left:12px;right:12px;bottom:10px;display:flex;justify-content:space-between;gap:8px;pointer-events:none;align-items:end}
+.island-3d-hud .hud-chip{padding:7px 10px;border:1px solid #ffffff77;border-radius:999px;background:#12263bbf;color:#f6f7f6;font-size:11px;backdrop-filter:blur(10px);box-shadow:0 3px 15px #0a1a2b33}
+.island-webgl-fallback{display:grid;place-items:center;height:100%;padding:24px;text-align:center;color:#273c50;background:linear-gradient(145deg,#b8cfdd,#d4cbb8)}
+.island-home-hero{overflow:visible}
+.island-home-hero .island-3d-scene{border-radius:20px 20px 0 0}
+.island-home-hero .hero-overlay{position:relative;background:linear-gradient(180deg,#142236 0%,#101a2a 100%);padding:16px;border-radius:0 0 20px 20px}
+.facility-preview .island-3d-scene{margin-bottom:12px}
+.campaign-card{border:1px solid #d5c6a2;background:linear-gradient(130deg,#fff9e9,#f6f0df);color:#27384a}
+.campaign-kicker{font-size:10px;letter-spacing:.14em;font-weight:900;color:#8a7141}
+.campaign-title{font-size:clamp(20px,4vw,28px);font-weight:900;line-height:1.25;margin:5px 0}
+.campaign-step{display:flex;gap:12px;align-items:start;margin:12px 0}
+.campaign-step .step-no{display:grid;place-items:center;flex:0 0 28px;height:28px;border-radius:50%;background:#e8dcc0;color:#604d2a;font-weight:900}
+.campaign-progress{height:8px;border-radius:99px;background:#e2dccd;overflow:hidden}
+.campaign-progress>span{display:block;height:100%;background:linear-gradient(90deg,#6b9b8d,#d2b36a);border-radius:99px}
+.gantt-toolbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.gantt-toolbar .field{min-width:0}
+.weekday-picks{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.weekday-picks label{display:flex;align-items:center;justify-content:center;gap:3px;border:1px solid var(--line);border-radius:10px;padding:8px 2px;font-size:11px;white-space:nowrap}
+.weekday-picks input{accent-color:#5b8f83}
+.gantt-scroll{overflow-x:auto;padding-bottom:8px}
+.gantt-week{min-width:630px;display:grid;grid-template-columns:repeat(7,minmax(78px,1fr));gap:7px}
+.gantt-day{min-height:132px;border:1px solid var(--line);border-radius:12px;padding:8px;background:var(--card);min-width:0}
+.gantt-day.is-off{background:var(--surface-2);opacity:.58}
+.gantt-day.is-today{outline:2px solid #6b9b8d;outline-offset:1px}
+.gantt-date{font-size:11px;font-weight:850;color:var(--muted)}
+.gantt-task{margin-top:8px;border-radius:8px;padding:8px 7px;min-height:70px;border-left:4px solid #5488ad;background:#e8f0f7;color:#20384e}
+.gantt-task.subject-b{border-color:#5a9b83;background:#e6f2eb;color:#244739}
+.gantt-task.review{border-color:#b68d4e;background:#f8f0dd;color:#5b4724}
+.gantt-task .task-name{font-size:11px;font-weight:850;line-height:1.35;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.gantt-task .task-meta{font-size:9px;margin-top:5px;opacity:.8}
+.gantt-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.gantt-legend span{display:inline-flex;align-items:center;gap:5px}
+.gantt-legend i{width:9px;height:9px;border-radius:3px;display:inline-block;background:#5488ad}
+.gantt-legend .legend-b{background:#5a9b83}.gantt-legend .legend-review{background:#b68d4e}
+.plan-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.plan-summary-grid .card{padding:12px}
+.plan-summary-grid .metric{font-size:21px}
+.plan-empty{text-align:center;padding:28px 18px}
+@media(max-width:700px){.gantt-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}.plan-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.plan-summary-grid .metric{font-size:18px}}
+@media(prefers-reduced-motion:reduce){.island-3d-scene canvas{cursor:default}}
+
 </style>
 </head>
 <body>
@@ -291,15 +339,11 @@ function renderBuildingArt(id, extraClass=''){
   const alt={researchLab:'石造りの天文観測塔と青く光るドーム',explorationDock:'飛行船と木造の浮遊島探索港',habitat:'ガラス温室と光る水晶の生息地'}[id]||'開拓施設';
   return `<img class="structure-card-art ${extraClass}" src="assets/game/${asset}" alt="${alt}" loading="eager">`;
 }
-function renderIslandScene(w,compact=false){
-  const defs=[['researchLab','lab','研究施設'],['explorationDock','dock','探索港'],['habitat','habitat','生息地']];
-  const structures=defs.map(([id,pos,name])=>{
-    const b=w.buildings[id]||{status:'locked'};
-    if(b.status==='built')return `<div class="scene-structure ${pos}">${renderBuildingArt(id)}<span class="scene-structure-label">${name} · Lv.${b.level||1}</span></div>`;
-    return `<div class="scene-ruin ${pos}" aria-label="${name}・未修復"><div class="ruin-plinth"></div><span>${name} · 未修復</span></div>`;
-  }).join('');
-  const stage=Math.max(0,Math.min(3,w.world.visualStage||0));
-  return `<div class="island-scene animated-island ${compact?'compact':''} stage-${stage}"><img class="island-bg" src="assets/game/island-scene.svg" alt="風に揺れる木々、流れる滝、雲海に浮かぶ島" loading="eager">${structures}<div class="island-label"><strong>${escapeHTML(w.world.name||'はじまりの島')}</strong><small>開拓段階 ${stage} · 風が吹き抜ける浮遊島</small></div><div class="scene-weather-pill">☁ 雲海の風</div></div>`;
+function renderIslandScene(w,compact=false,preview=''){
+  const stage=Math.max(0,Math.min(5,w.world.visualStage||0));
+  const attrs=['researchLab','explorationDock','habitat'].map(id=>`data-${id.toLowerCase()}="${w.buildings[id]?.status==='built'?'built':'ruin'}"`).join(' ');
+  const previewAttr=preview?`data-preview="${preview}"`:'';
+  return `<div class="island-3d-scene ${compact?'compact':''} ${preview?'facility-focus':''}" data-island3d data-stage="${stage}" ${attrs} ${previewAttr} aria-label="3D浮遊島。ドラッグして視点を回転できます。"><div class="island-3d-hud"><span class="hud-chip">${escapeHTML(w.world.name||'はじまりの島')} · 開拓段階 ${stage}</span><span class="hud-chip">ドラッグで回転 · ピンチで拡大</span></div></div>`;
 }
 function tutorialStepHtml(index){
   const steps=[
@@ -370,6 +414,7 @@ function render(){
   if(currentMode==='COMPLETED'){main.innerHTML=renderCompleted();return;}
   const pages={home:renderHome,plan:renderPlan,world:renderWorld,facility:renderFacility,project:renderProjects,progress:renderProgress,settings:renderSettings};
   main.innerHTML=(pages[screen]||renderHome)();
+  window.NightFlow3D?.mountAll();
 }
 function renderHome(){
   const w=ensureGameWorld(),p=currentPlan||ensurePlan();
@@ -447,7 +492,7 @@ function renderFacility(){
   const w=ensureGameWorld(),id=selectedBuilding||'researchLab',d=buildingDefs()[id],b=w.buildings[id];
   const wrongRoute=!!(w.strategy.currentFocus&&w.strategy.currentFocus!==d.route);
   const canBuild=b.status!=='built'&&!wrongRoute&&w.resources.developmentMaterials>=d.cost;
-  return `<div class="page"><div class="between screen-title"><button class="btn ghost smallbtn" data-action="nav" data-screen="world">← 拠点へ戻る</button><span class="pill">🪵 ${w.resources.developmentMaterials} 資材</span></div><div class="card"><div class="facility-preview">${renderBuildingArt(id)}</div><div class="eyebrow">FACILITY · 3D STRUCTURE</div><h1 class="h1">${d.name}</h1><p class="lead">${d.desc}</p><div class="divider"></div><div class="list-row"><span class="small">開拓ルート</span><strong>${routeLabel(d.route)}</strong></div><div class="list-row"><span class="small">必要資材</span><strong>🪵 ${d.cost}</strong></div><div class="list-row"><span class="small">現在の状態</span><strong>${b.status==='built'?`修復済み Lv.${b.level||1}`:'未修復'}</strong></div><div class="notice success" style="margin-top:12px"><strong>修復で得られるもの</strong><br>${d.reward}<br><span class="small">${d.benefit}</span></div>${b.status==='built'?`<div class="notice success" style="margin-top:12px">この施設は修復済みです。島の景観にも反映されています。</div><button class="btn secondary block" style="margin-top:12px" data-action="nav" data-screen="world">拠点に戻る</button>`:`<button class="btn block" style="margin-top:14px" data-action="build" data-building="${id}" ${canBuild?'':'disabled'}>🛠️ この施設を修復する</button>${wrongRoute?`<div class="notice warn" style="margin-top:9px">現在は${routeLabel(w.strategy.currentFocus)}を優先しています。別ルートの建設には、先に方針変更が必要です。</div><button class="btn secondary block" style="margin-top:9px" data-action="change-route">開拓方針を変更する</button>`:canBuild?'':`<div class="small" style="margin-top:8px">資材が${d.cost-w.resources.developmentMaterials}個不足しています。学習報酬や遠征で資材を集められます。</div>`}`}</div></div>`;
+  return `<div class="page"><div class="between screen-title"><button class="btn ghost smallbtn" data-action="nav" data-screen="world">← 拠点へ戻る</button><span class="pill">🪵 ${w.resources.developmentMaterials} 資材</span></div><div class="card"><div class="facility-preview">${renderIslandScene(w,false,id)}</div><div class="eyebrow">FACILITY · 3D STRUCTURE</div><h1 class="h1">${d.name}</h1><p class="lead">${d.desc}</p><div class="divider"></div><div class="list-row"><span class="small">開拓ルート</span><strong>${routeLabel(d.route)}</strong></div><div class="list-row"><span class="small">必要資材</span><strong>🪵 ${d.cost}</strong></div><div class="list-row"><span class="small">現在の状態</span><strong>${b.status==='built'?`修復済み Lv.${b.level||1}`:'未修復'}</strong></div><div class="notice success" style="margin-top:12px"><strong>修復で得られるもの</strong><br>${d.reward}<br><span class="small">${d.benefit}</span></div>${b.status==='built'?`<div class="notice success" style="margin-top:12px">この施設は修復済みです。島の景観にも反映されています。</div><button class="btn secondary block" style="margin-top:12px" data-action="nav" data-screen="world">拠点に戻る</button>`:`<button class="btn block" style="margin-top:14px" data-action="build" data-building="${id}" ${canBuild?'':'disabled'}>🛠️ この施設を修復する</button>${wrongRoute?`<div class="notice warn" style="margin-top:9px">現在は${routeLabel(w.strategy.currentFocus)}を優先しています。別ルートの建設には、先に方針変更が必要です。</div><button class="btn secondary block" style="margin-top:9px" data-action="change-route">開拓方針を変更する</button>`:canBuild?'':`<div class="small" style="margin-top:8px">資材が${d.cost-w.resources.developmentMaterials}個不足しています。学習報酬や遠征で資材を集められます。</div>`}`}</div></div>`;
 }
 function availableProjects(){
   const w=ensureGameWorld(),defs=[
