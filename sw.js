@@ -1,4 +1,4 @@
-const CACHE_NAME='night-flow-shell-v3';
+const CACHE_NAME='night-flow-shell-v4';
 const APP_SHELL=['./','./index.html','./manifest.webmanifest','./assets/icons/icon.svg',
   './assets/icons/icon-192.png',
   './assets/js/island-3d.js',

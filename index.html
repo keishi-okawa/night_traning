@@ -13,7 +13,15 @@
 <title>Night Flow</title>
 <style>
 :root{--bg:#0d1424;--bg2:#131f35;--panel:rgba(24,38,61,.88);--panel2:#1b2b45;--line:rgba(187,210,245,.14);--text:#edf4ff;--muted:#9fb0ca;--blue:#7fb5ff;--cyan:#78d9e8;--green:#78d6a2;--gold:#efc878;--rose:#ff9f9f;--shadow:0 18px 50px rgba(0,0,0,.25);--radius:20px;--max:1040px}
-*{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",Meiryo,sans-serif;background:radial-gradient(ellipse at 15% 0%,#1e3554 0%,transparent 38%),radial-gradient(ellipse at 90% 16%,#202d50 0%,transparent 34%),linear-gradient(180deg,#0d1628,#0b1220 65%,#0c1423);min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}a{color:inherit}.app{max-width:var(--max);margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 16px calc(94px + env(safe-area-inset-bottom));min-height:100vh}.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.02em}.brand-mark{width:38px;height:38px;border-radius:13px;background:linear-gradient(145deg,#89c9ff,#4e78c6);display:grid;place-items:center;color:#09152b;box-shadow:0 8px 24px #3e78bd55;font-size:20px}.brand small{display:block;color:var(--muted);font-weight:500;font-size:10px;letter-spacing:.1em;margin-top:1px}.top-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#1a2b45b8;border-radius:999px;padding:7px 11px;color:#dbe8fc;font-size:12px;white-space:nowrap}.pill.gold{border-color:#dfbd7255;color:#ffe2a0;background:#5a472333}.pill.green{border-color:#7ad6a255;color:#a5efc2;background:#244c3c55}.pill.blue{border-color:#86bfff55;color:#b9d9ff;background:#294a7355}.page{animation:fade .22s ease both}@keyframes fade{from{opacity:.4;transform:translateY(5px)}to{opacity:1;transform:none}}.eyebrow{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:700}.h1{font-size:clamp(25px,5vw,36px);line-height:1.2;margin:7px 0 9px;font-weight:800;letter-spacing:-.03em}.h2{font-size:21px;margin:0 0 8px;letter-spacing:-.02em}.h3{font-size:16px;margin:0;font-weight:750}.lead{color:#bfcee3;line-height:1.7;margin:0;font-size:14px}.muted{color:var(--muted)}.small{font-size:12px;color:var(--muted);line-height:1.55}.tiny{font-size:10px;color:var(--muted)}.section{margin:20px 0}.section-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin-bottom:10px}.card{background:linear-gradient(150deg,rgba(30,47,74,.92),rgba(17,29,49,.96));border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}.card.soft{background:rgba(21,35,56,.72);box-shadow:none}.card.flat{box-shadow:none}.grid{display:grid;gap:12px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.row{display:flex;align-items:center;gap:10px}.between{display:flex;align-items:center;justify-content:space-between;gap:10px}.stack{display:flex;flex-direction:column;gap:10px}.divider{height:1px;background:var(--line);margin:12px 0}.btn{border:1px solid transparent;border-radius:14px;padding:12px 15px;background:linear-gradient(135deg,#6daeff,#4f7fd3);color:#07152b;font-weight:800;box-shadow:0 8px 22px #2862b255;min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}.btn.secondary{background:#253a58;color:#e8f1ff;border-color:#55749c66;box-shadow:none}.btn.ghost{background:transparent;color:#d5e4fb;border-color:var(--line);box-shadow:none}.btn.gold{background:linear-gradient(135deg,#f2d48f,#c89543);color:#30200a;box-shadow:0 8px 20px #c28c3f33}.btn.danger{background:#4b2732;color:#ffd8df;border-color:#aa566a66;box-shadow:none}.btn.smallbtn{min-height:36px;padding:8px 11px;border-radius:11px;font-size:12px}.btn.block{width:100%}.iconbtn{height:40px;width:40px;border:1px solid var(--line);border-radius:13px;background:#1c2c45;color:var(--text);display:grid;place-items:center}.badge{font-size:10px;font-weight:800;letter-spacing:.04em;border-radius:999px;padding:5px 8px;border:1px solid var(--line);color:#dceaff;background:#263a56;white-space:nowrap}.badge.success{color:#a6f0c5;background:#204d3b77;border-color:#6bd49d55}.badge.warn{color:#ffdfa0;background:#59472877;border-color:#e6bd6655}.badge.locked{color:#bac7d8;background:#34425477}.metric{font-size:26px;font-weight:850;letter-spacing:-.04em}.progress{height:9px;border-radius:99px;background:#34455d;overflow:hidden}.progress>span{height:100%;display:block;border-radius:99px;background:linear-gradient(90deg,#60c6b3,#83d6a0);transition:width .35s}.progress.blue>span{background:linear-gradient(90deg,#70adff,#8cbbff)}.progress.gold>span{background:linear-gradient(90deg,#d6a34d,#f3d28c)}.input,.select,.textarea{width:100%;border:1px solid #5a729355;background:#0f1d31;color:var(--text);border-radius:12px;padding:12px 13px;outline:none}.input:focus,.select:focus,.textarea:focus{border-color:#8dc1ff;box-shadow:0 0 0 3px #6daeff22}.textarea{min-height:82px;resize:vertical;line-height:1.6}.field{display:flex;flex-direction:column;gap:6px}.field label{font-size:12px;color:#c3d2e7;font-weight:700}.field-help{font-size:11px;color:var(--muted)}.notice{border:1px solid #83baff44;background:#1d3c5c66;border-radius:14px;padding:12px 13px;color:#d5e8ff;font-size:12px;line-height:1.65}.notice.warn{border-color:#e9bd6b55;background:#4a382655;color:#ffe1a6}.notice.success{border-color:#78d6a255;background:#1f493966;color:#c9f4dc}.hero{border-radius:24px;overflow:hidden;border:1px solid #a8caff33;box-shadow:0 24px 55px #0005;position:relative;background:#15233b;min-height:250px}.hero-img{width:100%;height:260px;object-fit:cover;display:block;opacity:.9}.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,#08142b08 0%,#08142b15 45%,#091526eF 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:18px}.hero-title{font-size:24px;font-weight:850;text-shadow:0 2px 12px #0008}.hero-sub{font-size:12px;color:#d4e3f6;margin-top:4px}.hero-stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.statbox{background:#0b1a2dbb;border:1px solid #d2e6ff33;border-radius:12px;padding:7px 10px;font-size:11px;backdrop-filter:blur(8px)}.statbox strong{font-size:13px;color:#fff}.feature-card{display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--line);background:#192a43;border-radius:16px}.feature-icon{width:44px;height:44px;border-radius:14px;background:#314967;display:grid;place-items:center;font-size:22px;flex:none}.feature-card .body{min-width:0;flex:1}.taskline{display:flex;gap:10px;align-items:start;padding:9px 0;border-bottom:1px solid var(--line)}.taskline:last-child{border-bottom:0}.dot{width:8px;height:8px;border-radius:50%;background:var(--green);margin-top:6px;flex:none}.nav{position:fixed;z-index:20;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));width:min(520px,calc(100% - 24px));display:flex;justify-content:space-around;gap:4px;padding:8px;background:#101c30ed;border:1px solid #93b5e733;border-radius:20px;box-shadow:0 14px 40px #0008;backdrop-filter:blur(18px)}.nav button{flex:1;background:transparent;border:0;border-radius:13px;min-height:48px;color:#94a9c5;font-size:10px;font-weight:700;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}.nav button span:first-child{font-size:18px}.nav button.active{background:#294c75;color:#e7f3ff}.routine-shell{max-width:620px;margin:3vh auto 0}.routine-shell .card{padding:22px}.routine-time{font-size:clamp(48px,14vw,76px);font-weight:850;letter-spacing:-.06em;line-height:1}.mono{filter:grayscale(1);--blue:#ddd;--cyan:#ddd;--green:#ddd}.mono .btn{background:#e1e1e1;color:#151515;box-shadow:none}.mono .btn.secondary,.mono .btn.ghost{background:#262626;color:#fff;border-color:#555}.timer-ring{width:190px;height:190px;border-radius:50%;border:7px solid #354c69;display:grid;place-items:center;margin:14px auto;background:radial-gradient(circle,#1b2e49 0%,#102038 70%);box-shadow:inset 0 0 30px #0005,0 12px 35px #0003}.timer-ring strong{font-size:42px;letter-spacing:-.04em}.routine-message{text-align:center;font-size:clamp(23px,6vw,30px);font-weight:850;margin:14px 0 8px}.routine-sub{text-align:center;color:var(--muted);font-size:13px;line-height:1.7}.mini-action{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:20px}.screen-title{margin-bottom:16px}.screen-title h1{margin:5px 0 6px}.island-scene{position:relative;border-radius:22px;overflow:hidden;border:1px solid #a8caff44;box-shadow:var(--shadow);background:#1c3454}.island-scene img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;transition:filter .3s}.island-scene::after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,#0b1629d9);pointer-events:none}.island-label{position:absolute;left:15px;bottom:14px;z-index:2;text-shadow:0 2px 12px #000}.island-label strong{font-size:21px}.island-label small{display:block;color:#d0e2f8;margin-top:4px}.building-marker{position:absolute;z-index:2;border:1px solid #e3efff77;background:#11243acc;backdrop-filter:blur(8px);border-radius:12px;padding:7px 9px;font-size:11px;color:#eff7ff;box-shadow:0 6px 18px #0005}.building-marker.lab{top:33%;right:25%}.building-marker.dock{bottom:24%;left:6%}.building-marker.habitat{top:48%;left:44%}.building-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.building-card{background:#192b43;border:1px solid var(--line);border-radius:16px;padding:12px 9px;min-width:0;text-align:left;color:var(--text)}.building-card .art{height:58px;display:grid;place-items:center;font-size:34px;background:linear-gradient(135deg,#2b4766,#182943);border-radius:12px;margin-bottom:9px}.building-card strong{display:block;font-size:12px}.building-card small{display:block;color:var(--muted);font-size:10px;margin-top:4px}.building-card.selected{border-color:#8ec4ff;box-shadow:0 0 0 2px #7cb7ff22}.building-card.built{border-color:#70d6a377}.choice{display:flex;align-items:start;gap:11px;padding:13px;border:1px solid var(--line);border-radius:15px;background:#172840;text-align:left;color:var(--text);width:100%}.choice.selected{border-color:#8ec4ff;background:#213b5b}.choice .symbol{font-size:24px}.choice .choice-body{flex:1}.choice p{font-size:12px;color:var(--muted);margin:4px 0 0;line-height:1.5}.choice input{accent-color:#7fb5ff}.tag{display:inline-flex;border-radius:8px;padding:4px 7px;background:#2a4564;color:#bcdcff;font-size:10px;font-weight:700}.levelbar{display:flex;align-items:center;gap:10px}.level-circle{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#ffe0a0,#c58c42);color:#2f210b;font-weight:900;flex:none}.achievement{display:flex;align-items:center;gap:10px;padding:11px;background:#172940;border:1px solid var(--line);border-radius:13px}.achievement .medal{width:36px;height:36px;border-radius:11px;background:#3b4050;display:grid;place-items:center;font-size:19px;flex:none}.achievement.unlocked .medal{background:#534329}.modal-backdrop{position:fixed;inset:0;background:#050a13c9;z-index:50;display:grid;place-items:center;padding:16px;backdrop-filter:blur(6px)}.modal{width:min(480px,100%);max-height:88vh;overflow:auto;background:#14243a;border:1px solid #9cbce744;border-radius:22px;padding:19px;box-shadow:0 25px 90px #000a}.modal h2{margin:0 0 8px}.modal-actions{display:flex;gap:8px;margin-top:16px}.modal-actions>*{flex:1}.hidden{display:none!important}.empty{text-align:center;padding:25px 14px;color:var(--muted)}.callout-title{font-weight:800;font-size:14px;margin-bottom:5px}.kpi{display:flex;gap:8px;flex-wrap:wrap}.kpi .pill{flex:1;justify-content:center}.list-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.list-row:last-child{border-bottom:0}.topic-pill{font-size:11px;color:#d3e7ff;background:#203a59;border-radius:8px;padding:5px 8px}.switch{accent-color:#6eaefa;width:18px;height:18px}.footer-note{text-align:center;color:#7e92ad;font-size:10px;margin:26px 0 5px}.construction{position:relative;overflow:hidden;border-radius:16px}.construction img{width:100%;display:block;filter:saturate(.72)}.construction .stage-label{position:absolute;bottom:0;left:0;right:0;padding:13px;background:linear-gradient(transparent,#091425dd);font-weight:800}.construction.building img{animation:buildPulse 1.3s ease-in-out infinite alternate}@keyframes buildPulse{from{filter:brightness(.85) saturate(.8)}to{filter:brightness(1.2) saturate(1.15)}}.toast{position:fixed;z-index:80;left:50%;transform:translateX(-50%);bottom:calc(82px + env(safe-area-inset-bottom));background:#e6f3ff;color:#14243a;padding:11px 15px;border-radius:14px;font-weight:750;font-size:12px;box-shadow:var(--shadow);max-width:calc(100% - 28px);animation:fade .2s}.xp-float{font-weight:900;color:#ffe19c}.notice-list{display:grid;gap:8px}.mobile-only{display:none}
+*{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",Meiryo,sans-serif;background:radial-gradient(ellipse at 15% 0%,#1e3554 0%,transparent 38%),radial-gradient(ellipse at 90% 16%,#202d50 0%,transparent 34%),linear-gradient(180deg,#0d1628,#0b1220 65%,#0c1423);min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}a{color:inherit}.app{max-width:var(--max);margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 16px calc(94px + env(safe-area-inset-bottom));min-height:100vh}.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.02em}.brand-mark{width:38px;height:38px;border-radius:13px;background:linear-gradient(145deg,#89c9ff,#4e78c6);display:grid;place-items:center;color:#09152b;box-shadow:0 8px 24px #3e78bd55;font-size:20px}.brand small{display:block;color:var(--muted);font-weight:500;font-size:10px;letter-spacing:.1em;margin-top:1px}.top-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#1a2b45b8;border-radius:999px;padding:7px 11px;color:#dbe8fc;font-size:12px;white-space:nowrap}.pill.gold{border-color:#dfbd7255;color:#ffe2a0;background:#5a472333}.pill.green{border-color:#7ad6a255;color:#a5efc2;background:#244c3c55}.pill.blue{border-color:#86bfff55;color:#b9d9ff;background:#294a7355}.page{animation:fade .22s ease both}@keyframes fade{from{opacity:.4;transform:translateY(5px)}to{opacity:1;transform:none}}.eyebrow{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:700}.h1{font-size:clamp(25px,5vw,36px);line-height:1.2;margin:7px 0 9px;font-weight:800;letter-spacing:-.03em}.h2{font-size:21px;margin:0 0 8px;letter-spacing:-.02em}.h3{font-size:16px;margin:0;font-weight:750}.lead{color:#bfcee3;line-height:1.7;margin:0;font-size:14px}.muted{color:var(--muted)}.small{font-size:12px;color:var(--muted);line-height:1.55}.tiny{font-size:10px;color:var(--muted)}.section{margin:20px 0}.section-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin-bottom:10px}.card{background:linear-gradient(150deg,rgba(30,47,74,.92),rgba(17,29,49,.96));border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}.card.soft{background:rgba(21,35,56,.72);box-shadow:none}.card.flat{box-shadow:none}.grid{display:grid;gap:12px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.row{display:flex;align-items:center;gap:10px}.between{display:flex;align-items:center;justify-content:space-between;gap:10px}.stack{display:flex;flex-direction:column;gap:10px}.divider{height:1px;background:var(--line);margin:12px 0}.btn{border:1px solid transparent;border-radius:14px;padding:12px 15px;background:linear-gradient(135deg,#6daeff,#4f7fd3);color:#07152b;font-weight:800;box-shadow:0 8px 22px #2862b255;min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}.btn.secondary{background:#253a58;color:#e8f1ff;border-color:#55749c66;box-shadow:none}.btn.ghost{background:transparent;color:#d5e4fb;border-color:var(--line);box-shadow:none}.btn.gold{background:linear-gradient(135deg,#f2d48f,#c89543);color:#30200a;box-shadow:0 8px 20px #c28c3f33}.btn.danger{background:#4b2732;color:#ffd8df;border-color:#aa566a66;box-shadow:none}.btn.smallbtn{min-height:36px;padding:8px 11px;border-radius:11px;font-size:12px}.btn.block{width:100%}.iconbtn{height:40px;width:40px;border:1px solid var(--line);border-radius:13px;background:#1c2c45;color:var(--text);display:grid;place-items:center}.badge{font-size:10px;font-weight:800;letter-spacing:.04em;border-radius:999px;padding:5px 8px;border:1px solid var(--line);color:#dceaff;background:#263a56;white-space:nowrap}.badge.success{color:#a6f0c5;background:#204d3b77;border-color:#6bd49d55}.badge.warn{color:#ffdfa0;background:#59472877;border-color:#e6bd6655}.badge.locked{color:#bac7d8;background:#34425477}.metric{font-size:26px;font-weight:850;letter-spacing:-.04em}.progress{height:9px;border-radius:99px;background:#34455d;overflow:hidden}.progress>span{height:100%;display:block;border-radius:99px;background:linear-gradient(90deg,#60c6b3,#83d6a0);transition:width .35s}.progress.blue>span{background:linear-gradient(90deg,#70adff,#8cbbff)}.progress.gold>span{background:linear-gradient(90deg,#d6a34d,#f3d28c)}.input,.select,.textarea{width:100%;border:1px solid #5a729355;background:#0f1d31;color:var(--text);border-radius:12px;padding:12px 13px;outline:none}.input:focus,.select:focus,.textarea:focus{border-color:#8dc1ff;box-shadow:0 0 0 3px #6daeff22}.textarea{min-height:82px;resize:vertical;line-height:1.6}.field{display:flex;flex-direction:column;gap:6px}.field label{font-size:12px;color:#c3d2e7;font-weight:700}.field-help{font-size:11px;color:var(--muted)}.notice{border:1px solid #83baff44;background:#1d3c5c66;border-radius:14px;padding:12px 13px;color:#d5e8ff;font-size:12px;line-height:1.65}.notice.warn{border-color:#e9bd6b55;background:#4a382655;color:#ffe1a6}.notice.success{border-color:#78d6a255;background:#1f493966;color:#c9f4dc}.hero{border-radius:24px;overflow:hidden;border:1px solid #a8caff33;box-shadow:0 24px 55px #0005;position:relative;background:#15233b;min-height:250px}.hero-img{width:100%;height:260px;object-fit:cover;display:block;opacity:.9}.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,#08142b08 0%,#08142b15 45%,#091526eF 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:18px}.hero-title{font-size:24px;font-weight:850;text-shadow:0 2px 12px #0008}.hero-sub{font-size:12px;color:#d4e3f6;margin-top:4px}.hero-stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.statbox{background:#0b1a2dbb;border:1px solid #d2e6ff33;border-radius:12px;padding:7px 10px;font-size:11px;backdrop-filter:blur(8px)}.statbox strong{font-size:13px;color:#fff}.feature-card{display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--line);background:#192a43;border-radius:16px}.feature-icon{width:44px;height:44px;border-radius:14px;background:#314967;display:grid;place-items:center;font-size:22px;flex:none}.feature-card .body{min-width:0;flex:1}.taskline{display:flex;gap:10px;align-items:start;padding:9px 0;border-bottom:1px solid var(--line)}.taskline:last-child{border-bottom:0}.dot{width:8px;height:8px;border-radius:50%;background:var(--green);margin-top:6px;flex:none}.nav{position:fixed;z-index:20;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));width:min(520px,calc(100% - 24px));display:flex;justify-content:space-around;gap:4px;padding:8px;background:#101c30ed;border:1px solid #93b5e733;border-radius:20px;box-shadow:0 14px 40px #0008;backdrop-filter:blur(18px)}.nav button{flex:1;background:transparent;border:0;border-radius:13px;min-height:48px;color:#94a9c5;font-size:10px;font-weight:700;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}.nav button span:first-child{font-size:18px}.nav button.active{background:#294c75;color:#e7f3ff}.routine-shell{max-width:620px;margin:3vh auto 0}.routine-shell .card{padding:22px}.routine-time{font-size:clamp(48px,14vw,76px);font-weight:850;letter-spacing:-.06em;line-height:1}.mono{filter:grayscale(1);--blue:#ddd;--cyan:#ddd;--green:#ddd}.mono .btn{background:#e1e1e1;color:#151515;box-shadow:none}.mono .btn.secondary,.mono .btn.ghost{background:#262626;color:#fff;border-color:#555}.timer-ring{width:190px;height:190px;border-radius:50%;border:7px solid #354c69;display:grid;place-items:center;margin:14px auto;background:radial-gradient(circle,#1b2e49 0%,#102038 70%);box-shadow:inset 0 0 30px #0005,0 12px 35px #0003}.timer-ring strong{font-size:42px;letter-spacing:-.04em}.routine-message{text-align:center;font-size:clamp(23px,6vw,30px);font-weight:850;margin:14px 0 8px}.routine-sub{text-align:center;color:var(--muted);font-size:13px;line-height:1.7}.mini-action{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:20px}.screen-title{margin-bottom:16px}.screen-title h1{margin:5px 0 6px}.island-scene{position:relative;border-radius:22px;overflow:hidden;border:1px solid #a8caff44;box-shadow:var(--shadow);background:#1c3454}.island-scene img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;transition:filter .3s}.island-scene::after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,#0b1629d9);pointer-events:none}.island-label{position:absolute;left:15px;bottom:14px;z-index:2;text-shadow:0 2px 12px #000}.island-label strong{font-size:21px}.island-label small{display:block;color:#d0e2f8;margin-top:4px}.building-marker{position:absolute;z-index:2;border:1px solid #e3efff77;background:#11243acc;backdrop-filter:blur(8px);border-radius:12px;padding:7px 9px;font-size:11px;color:#eff7ff;box-shadow:0 6px 18px #0005}.building-marker.lab{top:33%;right:25%}.building-marker.dock{bottom:24%;left:6%}.building-marker.habitat{top:48%;left:44%}.building-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.building-card{background:#192b43;border:1px solid var(--line);border-radius:16px;padding:12px 9px;min-width:0;text-align:left;color:var(--text)}.building-card .art{height:58px;display:grid;place-items:center;font-size:34px;background:linear-gradient(135deg,#2b4766,#182943);border-radius:12px;margin-bottom:9px}.building-card strong{display:block;font-size:12px}.building-card small{display:block;color:var(--muted);font-size:10px;margin-top:4px}.building-card.selected{border-color:#8ec4ff;box-shadow:0 0 0 2px #7cb7ff22}.building-card.built{border-color:#70d6a377}.choice{display:flex;align-items:start;gap:11px;padding:13px;border:1px solid var(--line);border-radius:15px;background:#172840;text-align:left;color:var(--text);width:100%}.choice.selected{border-color:#8ec4ff;background:#213b5b}.choice .symbol{font-size:24px}.choice .choice-body{flex:1}.choice p{font-size:12px;color:var(--muted);margin:4px 0 0;line-height:1.5}.choice input{accent-color:#7fb5ff}.tag{display:inline-flex;border-radius:8px;padding:4px 7px;background:#2a4564;color:#bcdcff;font-size:10px;font-weight:700}.levelbar{display:flex;align-items:center;gap:10px}.level-circle{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#ffe0a0,#c58c42);color:#2f210b;font-weight:900;flex:none}.achievement{display:flex;align-items:center;gap:10px;padding:11px;background:#172940;border:1px solid var(--line);border-radius:13px}.achievement .medal{width:36px;height:36px;border-radius:11px;background:#3b4050;display:grid;place-items:center;font-size:19px;flex:none}.achievement.unlocked .medal{background:#534329}.modal-backdrop{position:fixed;inset:0;background:#050a13c9;z-index:50;display:grid;place-items:center;padding:16px;backdrop-filter:blur(6px)}.modal{width:min(480px,100%);max-height:88vh;overflow:auto;background:#14243a;border:1px solid #9cbce744;border-radius:22px;padding:19px;box-shadow:0 25px 90px #000a}.modal h2{margin:0 0 8px}.modal-actions{display:flex;gap:8px;margin-top:16px}.modal-actions>*{flex:1}
+.guard-modal .guard-purpose{border:1px solid #8ebeff44;background:linear-gradient(145deg,#203d5d,#172b45);border-radius:16px;padding:14px;margin:14px 0}
+.guard-modal .guard-purpose strong{display:block;font-size:16px;line-height:1.6;margin-top:6px}
+.guard-modal .guard-next{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+.guard-modal .guard-next span{display:block;color:var(--muted);font-size:11px;margin-bottom:4px}
+.guard-modal .guard-next strong{font-size:14px;margin:0}
+.guard-modal .guard-return{width:100%;min-height:50px;font-size:15px}
+.guard-modal .guard-hint{text-align:center;margin:10px 0 0}
+.hidden{display:none!important}.empty{text-align:center;padding:25px 14px;color:var(--muted)}.callout-title{font-weight:800;font-size:14px;margin-bottom:5px}.kpi{display:flex;gap:8px;flex-wrap:wrap}.kpi .pill{flex:1;justify-content:center}.list-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.list-row:last-child{border-bottom:0}.topic-pill{font-size:11px;color:#d3e7ff;background:#203a59;border-radius:8px;padding:5px 8px}.switch{accent-color:#6eaefa;width:18px;height:18px}.footer-note{text-align:center;color:#7e92ad;font-size:10px;margin:26px 0 5px}.construction{position:relative;overflow:hidden;border-radius:16px}.construction img{width:100%;display:block;filter:saturate(.72)}.construction .stage-label{position:absolute;bottom:0;left:0;right:0;padding:13px;background:linear-gradient(transparent,#091425dd);font-weight:800}.construction.building img{animation:buildPulse 1.3s ease-in-out infinite alternate}@keyframes buildPulse{from{filter:brightness(.85) saturate(.8)}to{filter:brightness(1.2) saturate(1.15)}}.toast{position:fixed;z-index:80;left:50%;transform:translateX(-50%);bottom:calc(82px + env(safe-area-inset-bottom));background:#e6f3ff;color:#14243a;padding:11px 15px;border-radius:14px;font-weight:750;font-size:12px;box-shadow:var(--shadow);max-width:calc(100% - 28px);animation:fade .2s}.xp-float{font-weight:900;color:#ffe19c}.notice-list{display:grid;gap:8px}.mobile-only{display:none}
 @media(max-width:650px){.app{padding-left:13px;padding-right:13px}.topbar{margin-bottom:13px}.grid.two,.grid.three{grid-template-columns:1fr}.building-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.building-card{padding:9px 7px}.building-card .art{height:48px;font-size:27px}.hero-img{height:238px}.routine-shell{margin-top:1vh}.routine-shell .card{padding:18px}.routine-time{font-size:58px}.timer-ring{width:164px;height:164px}.timer-ring strong{font-size:36px}.section{margin:16px 0}.mobile-only{display:block}}
 @media(min-width:760px){.home-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:14px;align-items:start}.hero-img{height:350px}.home-aside{display:grid;gap:12px}.wide-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
@@ -241,6 +249,8 @@ let settings = Store.read('settings', structuredCloneSafe(APP_DEFAULTS));
 let screen = 'home';
 let previewMode = null;
 let timerTick = null;
+let guardCountdownInterval = null;
+let guardModalActive = false;
 let installPrompt = null;
 let pendingBuildTimer = null;
 let gameWorld = Store.read('game-world', null);
@@ -288,6 +298,9 @@ function getSession(){
   s.study.externalRuns=s.study.externalRuns||[];
   s.reflection=s.reflection||{content:'',saved:false,skipped:false};
   s.gamification=s.gamification||{xpEarned:0,materialsEarned:0,rewardsGranted:false,targetReached:false};
+  s.guard=s.guard||{manualCount:0,resumeCount:0,lastTriggeredAt:null};
+  s.guard.manualCount=s.guard.manualCount||0;s.guard.resumeCount=s.guard.resumeCount||0;s.guard.returnContext=s.guard.returnContext||null;
+  s.navigation=s.navigation||{date:s.date||localDateKey(),screen:'home',mode:'FREE',phase:'FREE',updatedAt:null};
   return s;
 }
 function saveSession(){Store.write(getTodaySessionKey(),currentSession);}
@@ -404,6 +417,7 @@ function updateNav(){
   $$('#bottomNav button').forEach(b=>b.classList.toggle('active',b.dataset.screen===screen || (screen==='world'&&b.dataset.screen==='world')));
 }
 function render(){
+  rememberNavigation();
   updateTopMeta();updateNav();
   const main=$('#main');
   if(currentMode==='ROUTINE'){
@@ -450,12 +464,12 @@ function renderHome(){
 }
 function renderBrushing(){
   const s=currentSession;const timer=s.timer?.brushStart?Math.max(0,settings.timers.brushingSeconds-Math.floor((Date.now()-new Date(s.timer.brushStart).getTime())/1000)):settings.timers.brushingSeconds;
-  return `<div class="routine-shell page"><div class="between"><span class="pill">ROUTINE MODE</span><span class="pill">${fmtTime(new Date())}</span></div><div class="card" style="margin-top:14px;text-align:center"><div class="eyebrow">21:45 · AFTER MEAL</div><div class="routine-message">スマホを置きましょう。</div><p class="routine-sub">洗面所へ向かい、歯磨きを始めましょう。<br>次の行動は、終わってからで大丈夫です。</p><div class="timer-ring"><div><strong id="brushTimer">${fmtDuration(timer)}</strong><div class="tiny">BRUSHING TIMER</div></div></div>${s.phaseStatuses.brushing==='completed'?'<div class="notice success">歯磨きは完了として記録されています。</div>':`<button class="btn block" data-action="brush-start">${s.timer?.brushStart?'タイマーをやり直す':'洗面所へ向かう · タイマー開始'}</button>`}<button class="btn secondary block" style="margin-top:9px" data-action="brush-complete">歯磨き完了</button><div class="mini-action"><button class="btn ghost smallbtn" data-action="guard">5秒ガード</button></div><div class="small" style="margin-top:14px">21:50になると、勉強画面へ自動で切り替わります。</div></div></div>`;
+  return `<div class="routine-shell page"><div class="between"><span class="pill">ROUTINE MODE</span><span class="pill">${fmtTime(new Date())}</span></div><div class="card" style="margin-top:14px;text-align:center"><div class="eyebrow">21:45 · AFTER MEAL</div><div class="routine-message">スマホを置きましょう。</div><p class="routine-sub">洗面所へ向かい、歯磨きを始めましょう。<br>次の行動は、終わってからで大丈夫です。</p><div class="timer-ring"><div><strong id="brushTimer">${fmtDuration(timer)}</strong><div class="tiny">BRUSHING TIMER</div></div></div>${s.phaseStatuses.brushing==='completed'?'<div class="notice success">歯磨きは完了として記録されています。</div>':`<button class="btn block" data-action="brush-start">${s.timer?.brushStart?'タイマーをやり直す':'洗面所へ向かう · タイマー開始'}</button>`}<button class="btn secondary block" style="margin-top:9px" data-action="brush-complete">歯磨き完了</button><div class="mini-action"><button class="btn ghost smallbtn" data-action="guard">目的を確認する · 5秒</button></div><div class="small" style="margin-top:14px">21:50になると、勉強画面へ自動で切り替わります。</div></div></div>`;
 }
 function renderStudy(){
   const p=currentPlan||ensurePlan(),s=currentSession,remaining=Math.max(0,toMinutes(settings.schedule.closingStart)-minutesNow(new Date()));
   const progress=Math.min(100,percent(s.study.attemptedCount,p.targetQuestions));
-  return `<div class="routine-shell page"><div class="between"><span class="pill">ROUTINE MODE</span><span class="pill">${fmtTime(new Date())}</span></div><div class="card" style="margin-top:14px"><div class="between"><div class="eyebrow">STUDY SESSION</div><span class="badge ${p.subjectId==='A'?'blue':'success'}">${p.subjectId==='A'?'科目A':'科目B'}</span></div><div class="routine-message" style="text-align:left;margin-top:7px">今日の学習</div><h2 class="h2">${escapeHTML(p.title)}</h2><p class="lead">${escapeHTML(p.topic)}</p><div class="divider"></div><div class="between"><strong>今日覚える要点</strong><span class="small">${p.points.length}項目</span></div><div style="margin-top:8px">${p.points.map((pt,i)=>`<div class="taskline"><span class="topic-pill">${String(i+1).padStart(2,'0')}</span><span style="font-size:13px;line-height:1.6">${escapeHTML(pt)}</span></div>`).join('')}</div><div class="divider"></div><div class="between"><strong>今日の演習目標</strong><strong>${s.study.attemptedCount} / ${p.targetQuestions}問</strong></div><div class="progress" style="margin:8px 0"><span style="width:${progress}%"></span></div>${s.gamification.targetReached?'<div class="notice success">✦ 目標達成！このまま22:30まで続けても大丈夫です。</div>':''}<div class="grid two" style="margin-top:12px"><div class="card soft"><div class="small">解答数</div><div class="metric">${s.study.attemptedCount}</div></div><div class="card soft"><div class="small">正解数</div><div class="metric">${s.study.correctCount}</div></div></div><div class="between small" style="margin-top:12px"><span>クロージングまで</span><strong id="studyRemaining">${Math.floor(remaining/60)}分</strong></div><button class="btn block" style="margin-top:12px" data-action="dojo" data-subject="${p.subjectId}">過去問道場で演習する ↗</button><div class="grid two" style="margin-top:9px"><button class="btn secondary" data-action="result">演習結果を記録</button><button class="btn ghost" data-action="plan-edit">計画を変更</button></div><div class="mini-action"><button class="btn ghost smallbtn" data-action="guard">5秒ガード</button></div></div></div>`;
+  return `<div class="routine-shell page"><div class="between"><span class="pill">ROUTINE MODE</span><span class="pill">${fmtTime(new Date())}</span></div><div class="card" style="margin-top:14px"><div class="between"><div class="eyebrow">STUDY SESSION</div><span class="badge ${p.subjectId==='A'?'blue':'success'}">${p.subjectId==='A'?'科目A':'科目B'}</span></div><div class="routine-message" style="text-align:left;margin-top:7px">今日の学習</div><h2 class="h2">${escapeHTML(p.title)}</h2><p class="lead">${escapeHTML(p.topic)}</p><div class="divider"></div><div class="between"><strong>今日覚える要点</strong><span class="small">${p.points.length}項目</span></div><div style="margin-top:8px">${p.points.map((pt,i)=>`<div class="taskline"><span class="topic-pill">${String(i+1).padStart(2,'0')}</span><span style="font-size:13px;line-height:1.6">${escapeHTML(pt)}</span></div>`).join('')}</div><div class="divider"></div><div class="between"><strong>今日の演習目標</strong><strong>${s.study.attemptedCount} / ${p.targetQuestions}問</strong></div><div class="progress" style="margin:8px 0"><span style="width:${progress}%"></span></div>${s.gamification.targetReached?'<div class="notice success">✦ 目標達成！このまま22:30まで続けても大丈夫です。</div>':''}<div class="grid two" style="margin-top:12px"><div class="card soft"><div class="small">解答数</div><div class="metric">${s.study.attemptedCount}</div></div><div class="card soft"><div class="small">正解数</div><div class="metric">${s.study.correctCount}</div></div></div><div class="between small" style="margin-top:12px"><span>クロージングまで</span><strong id="studyRemaining">${Math.floor(remaining/60)}分</strong></div><button class="btn block" style="margin-top:12px" data-action="dojo" data-subject="${p.subjectId}">過去問道場で演習する ↗</button><div class="grid two" style="margin-top:9px"><button class="btn secondary" data-action="result">演習結果を記録</button><button class="btn ghost" data-action="plan-edit">計画を変更</button></div><div class="mini-action"><button class="btn ghost smallbtn" data-action="guard">目的を確認する · 5秒</button></div></div></div>`;
 }
 function renderClosing(){
   const s=currentSession,p=currentPlan;const hasPending=s.study.resultStatus!=='saved'&&(s.study.attemptedCount===0||s.study.resultStatus==='pending');
@@ -463,7 +477,7 @@ function renderClosing(){
 }
 function renderWindDown(){
   const mins=Math.max(0,toMinutes(settings.schedule.bedTime)-minutesNow(new Date()));
-  return `<div class="routine-shell page"><div class="between"><span class="pill">WIND DOWN · LOW STIMULATION</span><span class="pill">${fmtTime(new Date())}</span></div><div class="card" style="margin-top:14px;text-align:center"><div class="eyebrow">BEDTIME MODE</div><div class="routine-message">あとは、ゆっくり。</div><p class="routine-sub">必要な電話・連絡だけにしましょう。<br>SNSや動画は明日に回して大丈夫です。</p><div class="timer-ring"><div><strong id="bedTimer">${String(Math.floor(mins/60)).padStart(2,'0')}:${String(mins%60).padStart(2,'0')}</strong><div class="tiny">UNTIL BEDTIME</div></div></div><div class="routine-time">${escapeHTML(settings.schedule.bedTime)}</div><div class="small">就寝予定時刻</div><button class="btn block" style="margin-top:18px" data-action="phone">☎ 必要な電話をする</button><button class="btn ghost block" style="margin-top:9px" data-action="guard">5秒ガード</button><div class="small" style="margin-top:14px">23:20になると今日のルーティンを終了します。</div></div></div>`;
+  return `<div class="routine-shell page"><div class="between"><span class="pill">WIND DOWN · LOW STIMULATION</span><span class="pill">${fmtTime(new Date())}</span></div><div class="card" style="margin-top:14px;text-align:center"><div class="eyebrow">BEDTIME MODE</div><div class="routine-message">あとは、ゆっくり。</div><p class="routine-sub">必要な電話・連絡だけにしましょう。<br>SNSや動画は明日に回して大丈夫です。</p><div class="timer-ring"><div><strong id="bedTimer">${String(Math.floor(mins/60)).padStart(2,'0')}:${String(mins%60).padStart(2,'0')}</strong><div class="tiny">UNTIL BEDTIME</div></div></div><div class="routine-time">${escapeHTML(settings.schedule.bedTime)}</div><div class="small">就寝予定時刻</div><button class="btn block" style="margin-top:18px" data-action="phone">☎ 必要な電話をする</button><button class="btn ghost block" style="margin-top:9px" data-action="guard">目的を確認する · 5秒</button><div class="small" style="margin-top:14px">23:20になると今日のルーティンを終了します。</div></div></div>`;
 }
 function renderCompleted(){
   return `<div class="routine-shell page"><div class="card" style="margin-top:9vh;text-align:center;padding:30px 22px"><div style="font-size:42px">☾</div><div class="eyebrow">DAY COMPLETED</div><div class="routine-message">今日のルーティン終了。</div><p class="routine-sub">お疲れさまでした。<br>今日の記録は保存されています。</p><div class="divider"></div><div class="routine-time">${escapeHTML(settings.schedule.bedTime)}</div><div class="small">おやすみなさい。</div><div class="notice" style="margin-top:18px">ゲームや学習の追加操作は、次の時間にしましょう。</div><button class="btn ghost block" style="margin-top:14px" data-action="preview" data-mode="FREE">通常画面をプレビュー（動作確認用）</button></div></div>`;
@@ -742,7 +756,7 @@ function toast(message,type='info'){
   const root=$('#toastRoot');root.innerHTML=`<div class="toast">${escapeHTML(message)}</div>`;setTimeout(()=>{root.innerHTML='';},2600);
 }
 function showModal(html,onConfirm){$('#modalRoot').innerHTML=`<div class="modal-backdrop" data-action="modal-backdrop"><div class="modal" role="dialog" aria-modal="true">${html}</div></div>`;modalCallback=onConfirm;}
-function closeModal(){$('#modalRoot').innerHTML='';modalCallback=null;}
+function closeModal(){if(guardCountdownInterval){clearInterval(guardCountdownInterval);guardCountdownInterval=null;}guardModalActive=false;$('#modalRoot').innerHTML='';modalCallback=null;}
 function setScreen(next){
   const mode=getAppMode();if(mode!=='FREE'&&!['settings'].includes(next)){toast('夜のルーティン中は、ルーティン画面を優先します。');return;}
   screen=next;render();window.scrollTo({top:0,behavior:'smooth'});
@@ -754,24 +768,154 @@ function setBrushTimer(){currentSession.timer=currentSession.timer||{};currentSe
 function completeBrush(){currentSession.phaseStatuses.brushing='completed';currentSession.events.brushingCompletedAt=new Date().toISOString();saveSession();if(previewMode==='BRUSHING')previewMode='STUDY';toast('歯磨きを完了として記録しました。');render();}
 function startStudy(){if(!currentSession.study.startedAt){currentSession.study.startedAt=new Date().toISOString();currentSession.phaseStatuses.study='in_progress';saveSession();}}
 function createExemption(source){Store.write('guard-exemption',{source,createdAt:Date.now(),expiresAt:Date.now()+settings.guard.exemptionExpiryHours*3600000,remainingUses:1});}
-function openDojo(subject){createExemption(`dojo_${subject}`);const run={id:uid('run'),subjectId:subject,launchedAt:new Date().toISOString(),returnedAt:null,elapsedSeconds:0};currentSession.study.externalRuns.push(run);currentSession.study.activeRunId=run.id;currentSession.study.startedAt=currentSession.study.startedAt||new Date().toISOString();currentSession.phaseStatuses.study='in_progress';saveSession();location.href=DOJO_URLS[subject];}
-function openPhone(){createExemption('phone');saveSession();location.href='tel:';}
+function rememberNavigation(){
+  if(!currentSession)return;
+  const next={date:localDateKey(),screen,mode:currentMode,phase:getPhase()};
+  const previous=currentSession.navigation||{};
+  if(previous.date!==next.date||previous.screen!==next.screen||previous.mode!==next.mode||previous.phase!==next.phase){
+    currentSession.navigation={...next,updatedAt:new Date().toISOString()};
+    saveSession();
+  }
+}
+function getGuardReturnContext(source='manual'){
+  const saved=currentSession.navigation||{};
+  const useSaved=source==='resume'&&saved.date===localDateKey();
+  let originScreen=useSaved?(saved.screen||screen):screen;
+  let originMode=useSaved?(saved.mode||getAppMode()):getAppMode();
+  let originPhase=useSaved?(saved.phase||getPhase()):getPhase();
+  if(useSaved){
+    const livePhase=getPhase(),liveMode=getAppMode();
+    if(liveMode==='ROUTINE'||liveMode==='COMPLETED'){
+      originScreen=livePhase.toLowerCase();originMode=liveMode;originPhase=livePhase;
+    }else if(originMode==='ROUTINE'&&liveMode==='FREE'){
+      originScreen='plan';originMode='FREE';originPhase='FREE';
+    }
+  }
+  const p=currentPlan||ensurePlan();
+  const attempted=currentSession.study.attemptedCount||0;
+  const target=p.targetQuestions||settings.study.defaultTargetQuestions;
+  let goal='今やることを一つに絞り、今日の流れに戻る';
+  let nextAction='表示中の画面で、決めた作業を一つ進める';
+  let buttonLabel='元の画面に戻る';
+  if(originMode==='ROUTINE'){
+    if(originPhase==='BRUSHING'){
+      goal='食後の歯磨きを済ませ、学習を始められる状態に整える';
+      nextAction=currentSession.phaseStatuses.brushing==='completed'?'歯磨きは完了。次の学習へ進む':'歯磨きタイマーを続け、終わったら完了を記録する';
+      buttonLabel='歯磨きに戻る';
+    }else if(originPhase==='STUDY'){
+      goal=`基本情報技術者試験の「${p.title||'今日の単元'}」を1単元進める`;
+      nextAction=currentSession.study.resultStatus==='saved'?'演習結果を確認し、今日の学習を締めくくる':attempted>=target?'演習結果を記録する':`過去問をあと${Math.max(0,target-attempted)}問解き、結果を記録する`;
+      buttonLabel='今日の学習に戻る';
+    }else if(originPhase==='CLOSING'){
+      goal='今日できたことを残し、夜の操作を終わりにする';
+      nextAction=currentSession.reflection.saved||currentSession.reflection.skipped?'就寝準備へ進む':'演習結果と今日の振り返りを保存する';
+      buttonLabel='今日の振り返りに戻る';
+    }else if(originPhase==='WIND_DOWN'){
+      goal='必要な連絡だけを済ませ、就寝予定時刻に向けて画面を閉じる';
+      nextAction='連絡が終わったらアプリを閉じ、休む';
+      buttonLabel='就寝準備に戻る';
+    }else{
+      goal='今日のルーティンを最後まで無理なく進める';
+      nextAction='今表示されているルーティンの一歩を終える';
+      buttonLabel='ルーティンに戻る';
+    }
+  }else if(originMode==='COMPLETED'){
+    goal='今日のルーティンを終えた記録を確認し、しっかり休む';
+    nextAction='今日の実績を確認したら、アプリを閉じて休む';
+    buttonLabel='今日の結果に戻る';
+  }else{
+    const labels={home:'ホーム',plan:'今日の学習',roadmap:'学習計画',world:'開拓拠点',facility:'施設詳細',project:'開拓プロジェクト',progress:'学習の進捗',settings:'設定'};
+    const label=labels[originScreen]||'元の画面';
+    if(originScreen==='plan'){
+      goal=`今日の学習単元「${p.title||'学習内容'}」を確認して、一歩進める`;
+      nextAction='要点を一つ確認してから演習を始める';
+      buttonLabel='今日の学習に戻る';
+    }else if(originScreen==='roadmap'){
+      goal='試験日までの計画を確認し、今日やることを一つ決める';
+      nextAction='今日の予定単元と学習時間を確認する';
+      buttonLabel='学習計画に戻る';
+    }else if(originScreen==='home'){
+      goal='今日の目的を確認し、次にやることを一つ選ぶ';
+      nextAction='今日の学習か夜のルーティンを始める';
+      buttonLabel='ホームに戻る';
+    }else{
+      goal=`${label}で決めた作業を、必要な分だけ進める`;
+      nextAction='作業を一つだけ選んで続ける';
+      buttonLabel=`${label}に戻る`;
+    }
+  }
+  return {date:localDateKey(),source,originScreen,originMode,originPhase,goal,nextAction,buttonLabel,createdAt:new Date().toISOString(),status:'waiting',resumedAt:null};
+}
+function resumeFromGuard(){
+  const context=currentSession.guard.returnContext;
+  if(!context){closeModal();render();return;}
+  const livePhase=getPhase();
+  if(context.originMode==='ROUTINE'){
+    if(['BRUSHING','STUDY','CLOSING','WIND_DOWN'].includes(livePhase)){
+      currentMode='ROUTINE';screen=livePhase.toLowerCase();
+      if(livePhase!==context.originPhase)toast(`時間帯が変わったため、現在の「${({BRUSHING:'歯磨き',STUDY:'学習',CLOSING:'振り返り',WIND_DOWN:'就寝準備'})[livePhase]}」へ戻ります。`);
+    }else if(livePhase==='COMPLETED'){
+      currentMode='COMPLETED';screen='completed';
+    }else{
+      currentMode='FREE';screen='plan';toast('ルーティン時間を過ぎたため、今日の学習計画を開きました。');
+    }
+  }else{
+    currentMode=getAppMode();
+    screen=currentMode==='FREE'?context.originScreen||'home':getPhase().toLowerCase();
+  }
+  context.status='resumed';context.resumedAt=new Date().toISOString();context.resumedScreen=screen;
+  saveSession();
+  closeModal();
+  syncMode();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function openDojo(subject){rememberNavigation();createExemption(`dojo_${subject}`);const run={id:uid('run'),subjectId:subject,launchedAt:new Date().toISOString(),returnedAt:null,elapsedSeconds:0};currentSession.study.externalRuns.push(run);currentSession.study.activeRunId=run.id;currentSession.study.startedAt=currentSession.study.startedAt||new Date().toISOString();currentSession.phaseStatuses.study='in_progress';saveSession();location.href=DOJO_URLS[subject];}
+function openPhone(){rememberNavigation();createExemption('phone');saveSession();location.href='tel:';}
 function handleReturn(){
   const active=currentSession.study.activeRunId;
   if(active){const run=currentSession.study.externalRuns.find(x=>x.id===active);if(run&&!run.returnedAt){run.returnedAt=new Date().toISOString();run.elapsedSeconds=Math.max(0,Math.floor((Date.now()-new Date(run.launchedAt).getTime())/1000));currentSession.study.totalElapsedSeconds=(currentSession.study.totalElapsedSeconds||0)+run.elapsedSeconds;currentSession.study.activeRunId=null;currentSession.study.resultStatus='pending';saveSession();}}
   const ex=Store.read('guard-exemption',null);
-  if(ex&&ex.remainingUses>0&&ex.expiresAt>Date.now()){Store.remove('guard-exemption');return false;}
+  if(ex&&ex.remainingUses>0&&ex.expiresAt>Date.now()){
+    Store.remove('guard-exemption');
+    if(currentSession.visibility.hiddenAt){currentSession.visibility.hiddenAt=null;saveSession();}
+    return false;
+  }
   if(ex&&ex.expiresAt<=Date.now())Store.remove('guard-exemption');
   const hiddenAt=currentSession.visibility.hiddenAt;
   if(hiddenAt){const elapsed=Math.floor((Date.now()-new Date(hiddenAt).getTime())/1000);currentSession.visibility.hiddenAt=null;saveSession();if(settings.guard.enabled&&elapsed>=settings.guard.returnThresholdSeconds){startGuard('resume');return true;}}
   return false;
 }
 function startGuard(source='manual'){
-  const p=currentSession.guard; if(source==='manual')p.manualCount=(p.manualCount||0)+1;else p.resumeCount=(p.resumeCount||0)+1;p.lastTriggeredAt=new Date().toISOString();p.lastSource=source;saveSession();
-  const returnScreen=screen;let seconds=settings.guard.guardSeconds;
-  showModal(`<div class="eyebrow">INTERRUPTION GUARD</div><h2>一度、立ち止まりましょう。</h2><p class="lead">今、本当に必要な操作ですか？ ゆっくり呼吸して、元の行動に戻りましょう。</p><div class="timer-ring"><div><strong id="guardCounter">05</strong><div class="tiny">BREATHE</div></div></div><div class="modal-actions"><button class="btn block" id="guardReturn" disabled>元の行動に戻る</button></div>`,()=>{closeModal();screen=returnScreen;render();});
-  const start=Date.now(),counter=$('#guardCounter'),btn=$('#guardReturn');const interval=setInterval(()=>{const left=Math.max(0,seconds-Math.floor((Date.now()-start)/1000));if(counter)counter.textContent=String(left).padStart(2,'0');if(left<=0){clearInterval(interval);if(btn)btn.disabled=false;}},100);
-  if(btn)btn.addEventListener('click',()=>{clearInterval(interval);closeModal();render();});
+  if(guardCountdownInterval){clearInterval(guardCountdownInterval);guardCountdownInterval=null;}
+  const p=currentSession.guard;
+  if(source==='manual')p.manualCount=(p.manualCount||0)+1;else p.resumeCount=(p.resumeCount||0)+1;
+  p.lastTriggeredAt=new Date().toISOString();p.lastSource=source;
+  const context=getGuardReturnContext(source);p.returnContext=context;saveSession();
+  const seconds=Math.max(0,Number(settings.guard.guardSeconds)||0);
+  const initial=String(seconds).padStart(2,'0');
+  guardModalActive=true;
+  showModal(`<div class="guard-modal" role="document" data-guard-source="${escapeHTML(source)}">
+    <div class="eyebrow">PAUSE · REMEMBER YOUR WHY</div>
+    <h2>目的を思い出して、次の一歩へ。</h2>
+    <p class="lead">いま必要なのは、全部を頑張ることではありません。決めた一歩に戻ることです。</p>
+    <div class="guard-purpose">
+      <div class="eyebrow">今の目的</div>
+      <strong class="guard-goal">${escapeHTML(context.goal)}</strong>
+      <div class="guard-next"><span>戻ったら、まずこれをする</span><strong>${escapeHTML(context.nextAction)}</strong></div>
+    </div>
+    <div class="timer-ring"><div><strong id="guardCounter" aria-live="polite">${initial}</strong><div class="tiny">呼吸を整える時間</div></div></div>
+    <button class="btn block guard-return" id="guardReturn" ${seconds>0?'disabled':''}>${escapeHTML(context.buttonLabel)}</button>
+    <p class="small guard-hint">${seconds>0?'カウントが終わったら、ボタンを押して元の画面へ戻ります。':'準備ができたら、ボタンを押して元の画面へ戻ります。'}</p>
+  </div>`);
+  const start=Date.now(),counter=$('#guardCounter'),btn=$('#guardReturn');
+  if(seconds>0){
+    guardCountdownInterval=setInterval(()=>{
+      const left=Math.max(0,seconds-Math.floor((Date.now()-start)/1000));
+      if(counter)counter.textContent=String(left).padStart(2,'0');
+      if(left<=0){clearInterval(guardCountdownInterval);guardCountdownInterval=null;if(btn)btn.disabled=false;}
+    },100);
+  }
+  if(btn)btn.addEventListener('click',()=>{if(btn.disabled)return;resumeFromGuard();});
 }
 function updateStudyResult(attempted,correct){
   if(!Number.isInteger(attempted)||!Number.isInteger(correct)||attempted<0||correct<0||correct>attempted){toast('解答数・正解数を確認してください。','error');return false;}
@@ -962,9 +1106,9 @@ $('#appRoot').addEventListener('click',e=>{
   if(a==='modal-cancel'){closeModal();return;}
 });
 $('#modalRoot').addEventListener('click',e=>{
-  if(e.target.classList.contains('modal-backdrop')){if(tutorialActive)return;closeModal();return;}
+  if(e.target.classList.contains('modal-backdrop')){if(tutorialActive||guardModalActive)return;closeModal();return;}
   const el=e.target.closest('[data-action]');if(!el)return;
-  if(el.dataset.action==='modal-cancel'){closeModal();return;}
+  if(el.dataset.action==='modal-cancel'){if(guardModalActive)return;closeModal();return;}
   if(el.dataset.action==='route-select'){applyRoute(el.dataset.route);return;}
   if(el.dataset.action==='tutorial-next'){moveTutorial(1);return;}
   if(el.dataset.action==='tutorial-prev'){moveTutorial(-1);return;}
@@ -1002,6 +1146,11 @@ function tick(){
 }
 function init(){
   ensureGameWorld();currentSession=getSession();ensurePlan();
+  const savedNavigation=currentSession.navigation;
+  if(savedNavigation?.date===localDateKey()&&getAppMode()==='FREE'){
+    if(savedNavigation.mode==='FREE'&&['home','plan','roadmap','world','facility','project','progress','settings'].includes(savedNavigation.screen))screen=savedNavigation.screen;
+    else if(savedNavigation.mode==='ROUTINE'&&savedNavigation.phase==='STUDY')screen='plan';
+  }
   if(currentSession.visibility.hiddenAt && !document.hidden){handleReturn();}
   syncMode();
   if(!Store.read('onboarding-complete',false))showTutorial(false);

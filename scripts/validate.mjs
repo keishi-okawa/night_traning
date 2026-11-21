@@ -16,6 +16,7 @@ if (!manifest.name || manifest.start_url !== "./") throw new Error("Invalid PWA 
 if (!scene.includes("../vendor/three.module.js")) throw new Error("Three.js must be loaded locally");
 if (!threeModule.includes("./three.core.js")) throw new Error("Three.js core import missing");
 if (!sw.includes("assets/vendor/three.module.js") || !sw.includes("assets/vendor/three.core.js")) throw new Error("Three.js files must be precached");
+if (!sw.includes("night-flow-shell-v4")) throw new Error("Service Worker cache version must be bumped for app updates");
 if (!html.includes("function renderRoadmap") || !html.includes("data-screen=\"roadmap\"")) throw new Error("Gantt planner screen/navigation missing");
 if (!html.includes("function getMainQuestState") || !html.includes("beacon_reignition")) throw new Error("Main campaign objective missing");
 if (!html.includes("data-island3d")) throw new Error("3D island host missing");
