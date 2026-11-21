@@ -120,6 +120,54 @@ try {
     return main.scrollWidth > window.innerWidth + 4;
   });
   if (!ganttVisibleOnMobile) throw new Error("Gantt chart was not visible at mobile viewport width.");
+  if (mobileOverflow) throw new Error("The app overflows horizontally on mobile.");
+
+  // Goal-first interruption guard: explain the purpose, prevent accidental
+  // dismissal, then return the user to the exact task they came from.
+  await page.locator("#nav-settings").click();
+  await page.locator('[data-action="preview"][data-mode="STUDY"]').click();
+  await page.waitForSelector("#main .routine-shell", { timeout: 10000 });
+  const studyTitleBeforeGuard = (await page.locator("#main .routine-shell .h2").first().innerText()).trim();
+  await page.locator('#main [data-action="guard"]').click();
+  const guardModal = page.locator("#modalRoot .guard-modal");
+  await guardModal.waitFor({ state: "visible", timeout: 5000 });
+  const guardGoal = (await guardModal.locator(".guard-goal").innerText()).trim();
+  const guardNextAction = (await guardModal.locator(".guard-next strong").innerText()).trim();
+  const guardReturnButton = page.locator("#guardReturn");
+  const guardButtonDisabledInitially = await guardReturnButton.isDisabled();
+  if (!guardGoal.includes("基本情報技術者試験")) {
+    throw new Error("The guard did not remind the user of the study purpose: " + guardGoal);
+  }
+  if (!guardNextAction.includes("過去問")) {
+    throw new Error("The guard did not describe the next concrete study action: " + guardNextAction);
+  }
+  if (!guardButtonDisabledInitially) throw new Error("The return action was enabled before the pause finished.");
+
+  await page.locator("#modalRoot .modal-backdrop").click({ position: { x: 4, y: 4 } });
+  const guardBackdropDismissBlocked = await guardModal.isVisible();
+  if (!guardBackdropDismissBlocked) throw new Error("The interruption guard closed when its backdrop was clicked.");
+
+  await page.waitForFunction(() => {
+    const button = document.querySelector("#guardReturn");
+    return !!button && !button.disabled;
+  }, null, { timeout: 9000 });
+  await guardReturnButton.click();
+  await guardModal.waitFor({ state: "detached", timeout: 5000 });
+  const studyTitleAfterGuard = (await page.locator("#main .routine-shell .h2").first().innerText()).trim();
+  const guardContextPersisted = await page.evaluate(() => {
+    const key = [...Array(localStorage.length)].map((_, i) => localStorage.key(i))
+      .find(value => value && value.startsWith("nightflow:v1:session:"));
+    if (!key) return false;
+    const session = JSON.parse(localStorage.getItem(key));
+    return session?.guard?.returnContext?.status === "resumed"
+      && !!session.guard.returnContext.resumedAt
+      && session.guard.returnContext.resumedScreen === "study";
+  });
+  if (studyTitleAfterGuard !== studyTitleBeforeGuard) {
+    throw new Error("The guard did not restore the original study screen.");
+  }
+  if (!guardContextPersisted) throw new Error("The return destination was not persisted after resuming.");
+
   if (runtimeErrors.length) throw new Error(`Runtime errors: ${runtimeErrors.join(" | ")}`);
   if (consoleErrors.some(x=>/Failed to load module script|three\.core|island-3d/.test(x))) throw new Error(`Module errors: ${consoleErrors.join(" | ")}`);
   if (failedResponses.length) throw new Error(`Failed requests: ${JSON.stringify(failedResponses)}`);
@@ -134,6 +182,12 @@ try {
     ganttTasksThisWeek: taskCount,
     ganttVisibleOnMobile,
     mobileHorizontalOverflow: mobileOverflow,
+    guardPurposeVisible: guardGoal.length > 0,
+    guardNextAction,
+    guardButtonDisabledInitially,
+    guardBackdropDismissBlocked,
+    guardRestoredOriginalScreen: studyTitleAfterGuard === studyTitleBeforeGuard,
+    guardContextPersisted,
     sceneDiagnostics,
     consoleErrors: consoleErrors.slice(0,5),
     failedRequests
