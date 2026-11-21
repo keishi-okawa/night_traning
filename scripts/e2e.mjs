@@ -30,7 +30,7 @@ await page.addInitScript(() => {
   localStorage.setItem("nightflow:v1:onboarding-complete", "true");
   localStorage.setItem("nightflow:v1:settings", JSON.stringify({
     locale: "ja",
-    schedule: { routineStart: "23:50", studyStart: "23:55", closingStart: "23:58", bedTime: "23:59" },
+    schedule: { routineStart: "22:50", studyStart: "22:55", closingStart: "23:35", bedTime: "23:59" },
     timers: { brushingSeconds: 180 },
     study: { defaultTargetQuestions: 20 },
     guard: { enabled: true, returnThresholdSeconds: 15, guardSeconds: 5, exemptionExpiryHours: 2 },
