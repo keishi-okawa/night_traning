@@ -248,7 +248,9 @@ const Store = {
 let settings = Store.read('settings', structuredCloneSafe(APP_DEFAULTS));
 let screen = 'home';
 let previewMode = null;
-let timerTick = null;\nlet guardCountdownInterval = null;\nlet guardModalActive = false;
+let timerTick = null;
+let guardCountdownInterval = null;
+let guardModalActive = false;
 let installPrompt = null;
 let pendingBuildTimer = null;
 let gameWorld = Store.read('game-world', null);
