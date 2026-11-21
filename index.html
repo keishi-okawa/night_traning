@@ -141,7 +141,8 @@
   <main id="main" aria-live="polite"></main>
   <nav class="nav hidden" id="bottomNav" aria-label="メインナビゲーション">
     <button data-action="nav" data-screen="home" id="nav-home"><span>⌂</span>ホーム</button>
-    <button data-action="nav" data-screen="plan" id="nav-plan"><span>▤</span>学習計画</button>
+    <button data-action="nav" data-screen="plan" id="nav-plan"><span>▤</span>今日</button>
+    <button data-action="nav" data-screen="roadmap" id="nav-roadmap"><span>▥</span>ガント</button>
     <button data-action="nav" data-screen="world" id="nav-world"><span>✧</span>開拓</button>
     <button data-action="nav" data-screen="settings" id="nav-settings"><span>⚙</span>設定</button>
   </nav>
@@ -263,6 +264,8 @@ function ensureGameWorld(){
   if(!gameWorld){gameWorld={schemaVersion:4,world:{worldId:'floating_archipelago',name:'はじまりの島',visualStage:0,currentAreaId:'home_island',unlockedAreas:['home_island'],pendingProjectNotice:false},resources:{developmentMaterials:10,totalXp:0,expeditionTickets:0},buildings:{researchLab:{level:0,status:'locked'},explorationDock:{level:0,status:'locked'},habitat:{level:0,status:'locked'}},strategy:{initialFocus:null,currentFocus:null},companion:{speciesId:null,growthStage:0,growthPoints:0,evolutionPath:null},decisions:[],projects:{},achievements:[],dailyRewards:{},expeditionHistory:[],discoveries:[],features:{}};Store.write('game-world',gameWorld);}
   gameWorld.schemaVersion=4;
   gameWorld.world=gameWorld.world||{worldId:'floating_archipelago',name:'はじまりの島',visualStage:0,currentAreaId:'home_island',unlockedAreas:['home_island']};
+  if(typeof gameWorld.world.lighthouseLit!=='boolean')gameWorld.world.lighthouseLit=false;
+  gameWorld.mainQuest=gameWorld.mainQuest||{claimedMilestones:[]};gameWorld.mainQuest.claimedMilestones=gameWorld.mainQuest.claimedMilestones||[];
   gameWorld.resources=gameWorld.resources||{developmentMaterials:10,totalXp:0};
   if(typeof gameWorld.resources.expeditionTickets!=='number')gameWorld.resources.expeditionTickets=0;
   if(typeof gameWorld.resources.totalXp!=='number')gameWorld.resources.totalXp=0;
@@ -291,8 +294,9 @@ function saveSession(){Store.write(getTodaySessionKey(),currentSession);}
 function ensurePlan(){
   currentPlan=Store.read(getTodayPlanKey(),null);
   if(!currentPlan){
-    const next=nextRoadmapUnit();
-    currentPlan={schemaVersion:1,date:localDateKey(),examCode:'FE',systemId:'current',curriculumVersion:'9.2',subjectId:next?.subjectId||'A',unitId:next?.unitId||'foundation',classId:next?.classId||'foundation',topic:next?.topic||'離散数学',title:next?.title||'基礎理論',points:getDefaultNotes(next?.classId||'foundation',next?.topic||'離散数学'),targetQuestions:settings.study.defaultTargetQuestions,source:'roadmap',modifiedByUser:false,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+    const scheduled=getAutoPlan()?.sessions?.find(x=>x.date===localDateKey());
+    const next=scheduled?findUnit(scheduled.unitId):nextRoadmapUnit();
+    currentPlan={schemaVersion:1,date:localDateKey(),examCode:'FE',systemId:'current',curriculumVersion:'9.2',subjectId:next?.subjectId||'A',unitId:next?.unitId||'foundation',classId:next?.classId||'foundation',topic:next?.topic||'離散数学',title:next?.title||'基礎理論',points:getDefaultNotes(next?.classId||'foundation',next?.topic||'離散数学'),targetQuestions:scheduled?.targetQuestions||settings.study.defaultTargetQuestions,source:scheduled?'auto-roadmap':'roadmap',plannedMinutes:scheduled?.durationMinutes||40,modifiedByUser:false,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
     Store.write(getTodayPlanKey(),currentPlan);
   } else if(!currentPlan.targetQuestions){currentPlan.targetQuestions=settings.study.defaultTargetQuestions;}
   currentSession=getSession();
@@ -413,7 +417,7 @@ function render(){
   }
   main.classList.remove('mono');
   if(currentMode==='COMPLETED'){main.innerHTML=renderCompleted();return;}
-  const pages={home:renderHome,plan:renderPlan,world:renderWorld,facility:renderFacility,project:renderProjects,progress:renderProgress,settings:renderSettings};
+  const pages={home:renderHome,plan:renderPlan,roadmap:renderRoadmap,world:renderWorld,facility:renderFacility,project:renderProjects,progress:renderProgress,settings:renderSettings};
   main.innerHTML=(pages[screen]||renderHome)();
   window.NightFlow3D?.mountAll();
 }
@@ -430,10 +434,10 @@ function renderHome(){
     <div class="home-grid">
       <div class="stack">
         <section class="hero island-home-hero">${renderIslandScene(w,true)}<div class="hero-overlay"><div class="eyebrow">YOUR FLOATING ISLAND</div><div class="hero-title">${escapeHTML(w.world.name||'はじまりの島')}</div><div class="hero-sub">施設を選び、世界の発展を自分の戦略で変えていきましょう。</div><div class="hero-stats"><span class="statbox">✦ <strong>Lv.${level}</strong></span><span class="statbox">🪵 <strong>${w.resources.developmentMaterials}</strong> 資材</span><span class="statbox">🧭 <strong>${w.resources.expeditionTickets||0}</strong> 遠征券</span></div><button class="btn gold block" data-action="nav" data-screen="world">開拓拠点を見る →</button></div></section>
-        ${notice}
+        ${renderCampaignCard()}\n        ${notice}
       </div>
       <div class="home-aside">
-        <section class="card"><div class="between"><div><div class="eyebrow">TODAY'S STUDY</div><h2 class="h2" style="margin-top:5px">今日の学習</h2></div><span class="badge ${p.subjectId==='A'?'blue':'success'}">${p.subjectId==='A'?'科目A':'科目B'}</span></div><div style="font-size:17px;font-weight:800;margin:8px 0 4px">${escapeHTML(p.title||'学習単元')}</div><div class="small">${escapeHTML(p.topic||'')}</div><div class="divider"></div><div class="between small"><span>要点 ${p.points.length}項目</span><span>演習目標 ${p.targetQuestions}問</span></div><button class="btn block" style="margin-top:12px" data-action="nav" data-screen="plan">学習計画を確認する</button></section>
+        <section class="card"><div class="between"><div><div class="eyebrow">TODAY'S STUDY</div><h2 class="h2" style="margin-top:5px">今日の学習</h2></div><span class="badge ${p.subjectId==='A'?'blue':'success'}">${p.subjectId==='A'?'科目A':'科目B'}</span></div><div style="font-size:17px;font-weight:800;margin:8px 0 4px">${escapeHTML(p.title||'学習単元')}</div><div class="small">${escapeHTML(p.topic||'')}</div><div class="divider"></div><div class="between small"><span>要点 ${p.points.length}項目</span><span>演習目標 ${p.targetQuestions}問</span></div><button class="btn block" style="margin-top:12px" data-action="nav" data-screen="plan">今日の学習内容を確認</button><button class="btn secondary block" style="margin-top:7px" data-action="nav" data-screen="roadmap">長期計画・ガントチャートを見る</button></section>
         <section class="card soft"><div class="eyebrow">PLAYER DEVELOPMENT</div><div class="between" style="margin:8px 0"><div><div class="metric">LEVEL ${level}</div><div class="small">累計 ${w.resources.totalXp||0} XP</div></div><div class="level-circle">✦</div></div><div class="progress gold"><span style="width:${xp}%"></span></div><div class="between small" style="margin-top:6px"><span>${xp} / 100 XP</span><span>次のレベルまで ${100-xp} XP</span></div></section>
         <section class="card"><div class="eyebrow">TONIGHT'S ROUTINE</div><div class="between" style="margin:8px 0"><div class="metric">${escapeHTML(settings.schedule.routineStart)}</div><span class="badge">夜の開始</span></div><div class="small">歯磨き → 勉強 → クロージング → ${escapeHTML(settings.schedule.bedTime)}就寝</div><div class="divider"></div><button class="btn secondary block" data-action="preview" data-mode="BRUSHING">ルーティンをプレビュー</button></section>
       </div>
@@ -640,7 +644,7 @@ function renderPlan(){
   const p=currentPlan||ensurePlan();
   const subject=CURRICULUM.find(x=>x.id===p.subjectId)||CURRICULUM[0];
   const opts=subject.groups.flatMap(g=>g.classes.map(c=>`<option value="${c.id}" ${c.id===p.classId?'selected':''}>${escapeHTML(g.name)} · ${escapeHTML(c.name)}</option>`)).join('');
-  return `<div class="page"><div class="screen-title"><div class="eyebrow">STUDY ROADMAP · CURRENT SYLLABUS 9.2</div><h1 class="h1">学習計画</h1><p class="lead">IPAシラバスの分類をもとに、今日の単元を決めます。科目Aを優先しつつ、科目Bもロードマップに含めます。</p></div><div class="card"><div class="grid two"><div class="field"><label for="planSubject">試験科目</label><select class="select" id="planSubject"><option value="A" ${p.subjectId==='A'?'selected':''}>科目A</option><option value="B" ${p.subjectId==='B'?'selected':''}>科目B</option></select></div><div class="field"><label for="planClass">中分類・分野</label><select class="select" id="planClass">${opts}</select></div></div><div class="field" style="margin-top:12px"><label for="planTopic">今日の小分類・テーマ</label><select class="select" id="planTopic">${renderTopicOptions(p.classId,p.topic)}</select></div><div class="field" style="margin-top:12px"><label for="planTarget">今日の演習目標（1〜100問）</label><input class="input" type="number" min="1" max="100" id="planTarget" value="${p.targetQuestions}"></div><div class="divider"></div><div class="between"><strong>今日覚える要点</strong><button class="btn ghost smallbtn" data-action="add-point">＋ 要点を追加</button></div><div id="pointEditor" class="stack" style="margin-top:10px">${p.points.map((x,i)=>`<div class="field"><label>要点 ${i+1}</label><textarea class="textarea plan-point" data-index="${i}" maxlength="200">${escapeHTML(x)}</textarea></div>`).join('')}</div><div class="grid two" style="margin-top:15px"><button class="btn secondary" data-action="suggest-plan">次の単元を提案</button><button class="btn" data-action="save-plan">今日の計画を保存</button></div></div><section class="section"><div class="section-head"><div><div class="eyebrow">CURRICULUM</div><h2 class="h2">シラバス全分類</h2></div><span class="badge">${ALL_UNITS.length}小分類</span></div><div class="notice">現行シラバスVer.9.2の大分類・中分類・小分類の名称を学習カタログに収録しています。詳細な要点は単元ごとに追加・編集できます。過去問道場の分野指定は外部サイト側で選択してください。</div><div class="grid two" style="margin-top:10px">${CURRICULUM.map(s=>`<div class="card soft"><div class="between"><strong>${s.name}</strong><span class="badge">${s.groups.reduce((n,g)=>n+g.classes.length,0)}分類</span></div><div class="small" style="margin-top:7px">${s.groups.map(g=>`${g.name}：${g.classes.length}`).join(' / ')}</div></div>`).join('')}</div><div class="small" style="margin-top:9px">出典：IPA「基本情報技術者試験シラバス Ver.9.2」。科目Bの分野名は過去問道場の現行分類に合わせています。</div></section></div>`;
+  return `<div class="page"><div class="screen-title"><div class="eyebrow">STUDY ROADMAP · CURRENT SYLLABUS 9.2</div><h1 class="h1">今日の学習</h1><p class="lead">今日取り組む単元・要点・演習目標を確認して、すぐに学習を始めます。</p><button class="btn secondary" style="margin-top:9px" data-action="nav" data-screen="roadmap">試験日から自動計画を作成・確認 →</button></div><div class="card"><div class="grid two"><div class="field"><label for="planSubject">試験科目</label><select class="select" id="planSubject"><option value="A" ${p.subjectId==='A'?'selected':''}>科目A</option><option value="B" ${p.subjectId==='B'?'selected':''}>科目B</option></select></div><div class="field"><label for="planClass">中分類・分野</label><select class="select" id="planClass">${opts}</select></div></div><div class="field" style="margin-top:12px"><label for="planTopic">今日の小分類・テーマ</label><select class="select" id="planTopic">${renderTopicOptions(p.classId,p.topic)}</select></div><div class="field" style="margin-top:12px"><label for="planTarget">今日の演習目標（1〜100問）</label><input class="input" type="number" min="1" max="100" id="planTarget" value="${p.targetQuestions}"></div><div class="divider"></div><div class="between"><strong>今日覚える要点</strong><button class="btn ghost smallbtn" data-action="add-point">＋ 要点を追加</button></div><div id="pointEditor" class="stack" style="margin-top:10px">${p.points.map((x,i)=>`<div class="field"><label>要点 ${i+1}</label><textarea class="textarea plan-point" data-index="${i}" maxlength="200">${escapeHTML(x)}</textarea></div>`).join('')}</div><div class="grid two" style="margin-top:15px"><button class="btn secondary" data-action="suggest-plan">次の単元を提案</button><button class="btn" data-action="save-plan">今日の計画を保存</button></div></div><section class="section"><div class="section-head"><div><div class="eyebrow">CURRICULUM</div><h2 class="h2">シラバス全分類</h2></div><span class="badge">${ALL_UNITS.length}小分類</span></div><div class="notice">現行シラバスVer.9.2の大分類・中分類・小分類の名称を学習カタログに収録しています。詳細な要点は単元ごとに追加・編集できます。過去問道場の分野指定は外部サイト側で選択してください。</div><div class="grid two" style="margin-top:10px">${CURRICULUM.map(s=>`<div class="card soft"><div class="between"><strong>${s.name}</strong><span class="badge">${s.groups.reduce((n,g)=>n+g.classes.length,0)}分類</span></div><div class="small" style="margin-top:7px">${s.groups.map(g=>`${g.name}：${g.classes.length}`).join(' / ')}</div></div>`).join('')}</div><div class="small" style="margin-top:9px">出典：IPA「基本情報技術者試験シラバス Ver.9.2」。科目Bの分野名は過去問道場の現行分類に合わせています。</div></section></div>`;
 }
 function renderTopicOptions(classId,selected){const cls=ALL_UNITS.filter(u=>u.classId===classId);return cls.map(u=>`<option value="${escapeHTML(u.topic)}" ${u.topic===selected?'selected':''}>${escapeHTML(u.topic)}</option>`).join('');}
 function renderWorld(){
@@ -651,6 +655,7 @@ function renderWorld(){
   const buildCards=buildings.map(([id,name,route])=>{const b=w.buildings[id];return `<button class="building-card ${b.status==='built'?'built':'unbuilt'}" data-action="building-detail" data-building="${id}"><div class="art">${renderBuildingArt(id)}</div><strong>${name}</strong><small>${b.status==='built'?`Lv.${b.level||1} · 修復済み`:'未修復 · '+route}</small></button>`;}).join('');
   return `<div class="page"><div class="screen-title"><div class="eyebrow">YOUR FLOATING ISLAND · LIVE WORLD</div><div class="between"><div><h1 class="h1">${escapeHTML(w.world.name)}</h1><p class="lead">風が流れ、施設が息づくあなたの開拓拠点。</p></div><button class="btn ghost smallbtn" data-action="rename-island">✎ 名前変更</button></div></div>
     ${renderIslandScene(w,false)}
+    ${renderCampaignCard()}
     <div class="world-resource-row" style="margin-top:12px"><span class="pill gold">✦ Lv.${Math.floor((w.resources.totalXp||0)/100)+1}</span><span class="pill">🪵 ${w.resources.developmentMaterials} 資材</span><span class="pill blue">🧭 遠征券 ${w.resources.expeditionTickets||0}</span></div>
     ${projects.length?`<div class="notice success" style="margin-top:12px"><div class="callout-title">✦ 新しい開拓が可能です</div>${projects.map(p=>escapeHTML(p.name)).join(' / ')}<div style="margin-top:7px"><button class="btn secondary smallbtn" data-action="nav" data-screen="project">開拓内容を確認する</button></div></div>`:''}
     <section class="section"><div class="section-head"><div><div class="eyebrow">FACILITIES</div><h2 class="h2">島の施設</h2></div><span class="small">建設後に島の景観が変化</span></div><div class="building-grid">${buildCards}</div></section>
@@ -867,6 +872,17 @@ function applyRoute(route){
 function startProject(id){
   const w=ensureGameWorld();
   const defs={library_restoration:{name:'図書館の修復',building:'researchLab',cost:6,unlock:'knowledge_archive'},outer_island_scout:{name:'周辺島の調査',building:'explorationDock',cost:6,unlock:'outer_island'},habitat_garden:{name:'生息地の整備',building:'habitat',cost:6,unlock:'companion'}};
+  if(id==='beacon_reignition'){
+    const q=getMainQuestState();
+    if(!q.canIgnite){toast('二つの施設・二つの開拓プロジェクト・資材8個が必要です。');return;}
+    w.resources.developmentMaterials-=8;w.resources.developmentMaterials+=10;w.resources.totalXp=(w.resources.totalXp||0)+40;
+    w.world.lighthouseLit=true;w.world.visualStage=5;
+    if(!w.world.unlockedAreas.includes('starward_realm'))w.world.unlockedAreas.push('starward_realm');
+    w.projects.beacon_reignition={completed:true,completedAt:new Date().toISOString(),unlock:'starward_realm'};
+    w.mainQuest.claimedMilestones.push('beacon_reignition');
+    w.discoveries.push({id:'starward_beacon_core',name:'星渡りの灯火核',icon:'✧',description:'灯台を再点灯した証。孤立していた浮遊群島の航路が再接続された。',foundAt:new Date().toISOString()});
+    Store.write('game-world',w);toast('星渡りの灯台が再点灯しました。新しい群島への航路が開きました。');render();return;
+  }
   const p=defs[id];if(!p||w.projects[id]?.completed)return;
   if(w.resources.developmentMaterials<p.cost){toast('資材が足りません。');return;}
   if(w.buildings[p.building].status!=='built'){toast('前提施設を修復してください。');return;}
@@ -875,6 +891,8 @@ function startProject(id){
   if(id==='library_restoration'){w.features.knowledgeArchive=true;w.resources.developmentMaterials+=2;}
   if(id==='outer_island_scout'){if(!w.world.unlockedAreas.includes('outer_island'))w.world.unlockedAreas.push('outer_island');w.features.outerIslandUnlocked=true;w.resources.expeditionTickets=Math.min(3,(w.resources.expeditionTickets||0)+1);}
   if(id==='habitat_garden'){w.companion.speciesId='island_spirit';w.companion.growthStage=Math.max(1,w.companion.growthStage||0);w.companion.growthPoints=w.companion.growthPoints||0;w.features.companionUnlocked=true;}
+  const completedBefore=Object.values(w.projects).filter(x=>x.completed).length;
+  if(completedBefore<2){w.resources.developmentMaterials+=completedBefore===0?3:5;w.mainQuest.claimedMilestones.push('project-'+id);}
   w.world.visualStage=Math.min(5,(w.world.visualStage||0)+1);w.world.pendingProjectNotice=true;w.decisions.push({type:'COMPLETE_PROJECT',projectId:id,at:new Date().toISOString()});Store.write('game-world',w);
   const reward=id==='library_restoration'?'知識アーカイブと資材2個':id==='outer_island_scout'?'新しい島と遠征券1枚':'仲間の生息地';
   toast(`${p.name}完了！ ${reward}を獲得しました。`);render();
@@ -907,6 +925,10 @@ $('#appRoot').addEventListener('click',e=>{
   const el=e.target.closest('[data-action]');if(!el)return;const a=el.dataset.action;
   if(a==='nav'){setScreen(el.dataset.screen);return;}
   if(a==='tutorial-open'){showTutorial(true);return;}
+  if(a==='campaign-next'){campaignNext();return;}
+  if(a==='roadmap-generate'){saveAutoPlan();return;}
+  if(a==='roadmap-prev'){roadmapWeekIndex=Math.max(0,roadmapWeekIndex-1);render();return;}
+  if(a==='roadmap-next'){const n=Object.keys(getAutoPlan()?.weeks||{}).length;roadmapWeekIndex=Math.min(Math.max(0,n-1),roadmapWeekIndex+1);render();return;}
   if(a==='expedition'){runExpedition(el.dataset.expedition);return;}
   if(a==='preview'){previewMode=el.dataset.mode==='REAL'?null:el.dataset.mode;syncMode();toast(previewMode?`プレビュー：${previewMode}`:'実際の時刻に戻しました。');return;}
   if(a==='brush-start'){setBrushTimer();return;}
