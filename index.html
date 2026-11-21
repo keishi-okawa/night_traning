@@ -496,7 +496,7 @@ function renderCampaignCard(){
   const actionLabel=q.step===0?'最初の施設を選ぶ':q.step===1||q.step===3?'開拓プロジェクトを確認':q.step===2?'二つ目の施設を選ぶ':q.step===4?(q.canIgnite?'灯台を再点灯する':'必要条件を確認する'):'次の群島を探索する';
   return `<section class="card campaign-card">
     <div class="campaign-kicker">MAIN CAMPAIGN · 星渡りの灯台</div>
-    <div class="campaign-title">${q.done?\'星渡りの灯台が再び空を照らしています。\':\'消えた灯台に、もう一度光を。\'}</div>
+    <div class="campaign-title">${q.done?'星渡りの灯台が再び空を照らしています。':'消えた灯台に、もう一度光を。'}</div>
     <p class="small" style="color:#536071">かつて空の航路を照らしていた星渡りの灯台が消え、浮遊島は孤立しました。あなたの拠点を再建し、島々をつなぐ光を取り戻しましょう。</p>
     <div class="campaign-progress"><span style="width:${q.progress}%"></span></div>
     <div class="between small" style="margin-top:6px;color:#657181"><span>メインクエスト ${q.done?'完了':q.step+1+'/5'}</span><strong>${q.progress}%</strong></div>
