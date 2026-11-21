@@ -346,9 +346,9 @@ const environmentMap=createEnvironmentMap();
 function createScene(el) {
   if (!el || el.dataset.mounted) return;
   el.dataset.mounted = "1";
+  const compactDevice=(window.matchMedia?.("(max-width: 720px)")?.matches||navigator.deviceMemory<=4||navigator.hardwareConcurrency<=4||navigator.connection?.saveData);
   let renderer;
   try {
-    const compactDevice=(window.matchMedia?.("(max-width: 720px)")?.matches||navigator.deviceMemory<=4||navigator.hardwareConcurrency<=4||navigator.connection?.saveData);
     renderer=new THREE.WebGLRenderer({antialias:!compactDevice,alpha:false,powerPreference:"high-performance",failIfMajorPerformanceCaveat:false});
   } catch (error) {
     el.dataset.mounted="error";
