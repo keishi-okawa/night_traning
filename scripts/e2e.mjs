@@ -91,6 +91,27 @@ try {
   const taskCount = await page.locator(".gantt-week .gantt-task").count();
   if (taskCount < 1) throw new Error("The Gantt chart was generated without any daily tasks: " + JSON.stringify(plannerDiagnostics));
 
+  const serviceWorkerActive = await page.evaluate(async () => {
+    if (!("serviceWorker" in navigator)) return false;
+    const registration = await navigator.serviceWorker.ready;
+    return !!registration.active;
+  });
+  if (!serviceWorkerActive) throw new Error("Service Worker did not become active.");
+  const shellCached = await page.evaluate(async () => (await caches.keys()).includes("night-flow-shell-v3"));
+  if (!shellCached) throw new Error("PWA app shell was not cached.");
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await page.waitForSelector(".island-3d-scene", { timeout: 15000 });
+  const controlled = await page.evaluate(() => !!navigator.serviceWorker.controller);
+  if (!controlled) throw new Error("The page was not controlled by the Service Worker after reload.");
+  await context.setOffline(true);
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await page.waitForSelector("#main .page", { timeout: 15000 });
+  const offlineHomeLoaded = await page.locator("#main .page").count() > 0;
+  await context.setOffline(false);
+  if (!offlineHomeLoaded) throw new Error("The app did not reopen from the offline cache.");
+  await page.locator("#nav-roadmap").click();
+  await page.waitForSelector(".gantt-week .gantt-task", { timeout: 10000 });
+
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(250);
   const ganttVisibleOnMobile = await page.locator(".gantt-week").isVisible();
@@ -106,7 +127,10 @@ try {
   console.log(JSON.stringify({
     result: "passed",
     campaignVisible,
-    webglCanvas: await page.locator(".island-3d-scene canvas").count() > 0,
+    webglCanvas: sceneDiagnostics.sceneStates.some(s => s.canvas),
+    serviceWorkerActive,
+    shellCached,
+    offlineHomeLoaded,
     ganttTasksThisWeek: taskCount,
     ganttVisibleOnMobile,
     mobileHorizontalOverflow: mobileOverflow,
