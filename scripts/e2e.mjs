@@ -187,6 +187,23 @@ try {
   await page.locator('[data-action="preview"][data-mode="STUDY"]').click();
   await page.waitForSelector("#main .routine-shell", { timeout: 10000 });
   const studyTitleBeforeGuard = (await page.locator("#main .routine-shell .h2").first().innerText()).trim();
+  const phaseAdvance = await page.evaluate(() => {
+    previewMode = "CLOSING";
+    const context = getGuardReturnContext("resume");
+    const result = {
+      originMode: context.originMode,
+      originPhase: context.originPhase,
+      goal: context.goal,
+      nextAction: context.nextAction,
+      buttonLabel: context.buttonLabel
+    };
+    previewMode = "STUDY";
+    syncMode();
+    return result;
+  });
+  if (phaseAdvance.originPhase !== "CLOSING" || !phaseAdvance.goal.includes("今日できたこと")) {
+    throw new Error("A time-phase change did not update the return purpose: " + JSON.stringify(phaseAdvance));
+  }
   await page.locator('#main [data-action="guard"]').click();
   const guardModal = page.locator("#modalRoot .guard-modal");
   await guardModal.waitFor({ state: "visible", timeout: 5000 });
@@ -242,6 +259,8 @@ try {
     ganttVisibleOnMobile,
     mobileHorizontalOverflow: mobileOverflow,
     guardPurposeVisible: guardGoal.length > 0,
+    phaseAdvancePurposeUpdated: phaseAdvance.originPhase === "CLOSING" && phaseAdvance.goal.includes("今日できたこと"),
+    phaseAdvance,
     guardNextAction,
     guardButtonDisabledInitially,
     guardBackdropDismissBlocked,
