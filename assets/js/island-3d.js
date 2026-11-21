@@ -325,6 +325,60 @@ function addPathAndProps(parent) {
   }
 }
 
+
+function addStarwardLighthouse(parent, isLit=false) {
+  const g=group(parent,[3.1,0.16,-6.1]);
+  // Foundation and weathered stone shaft.
+  cylinder(g,1.72,1.92,0.42,materials.darkStone,[0,0.22,0],48);
+  cylinder(g,1.1,1.42,2.65,materials.stone,[0,1.72,0],40);
+  cylinder(g,1.22,1.22,0.22,materials.copper,[0,3.08,0],40);
+  cylinder(g,0.78,0.94,1.35,materials.stone,[0,3.84,0],36);
+  // Balcony, columns and railings.
+  const balcony=mesh(new THREE.TorusGeometry(1.3,0.09,12,48),materials.copper,g,[0,3.18,0]);
+  balcony.rotation.x=Math.PI/2;
+  const rail=mesh(new THREE.TorusGeometry(1.24,0.035,8,48),materials.gold,g,[0,3.72,0]);
+  rail.rotation.x=Math.PI/2;
+  for(let i=0;i<12;i++){
+    const a=i*Math.PI/6;
+    cylinder(g,0.035,0.045,0.55,materials.gold,[Math.cos(a)*1.25,3.48,Math.sin(a)*1.25],8);
+  }
+  for(let i=0;i<8;i++){
+    const a=i*Math.PI/4;
+    const x=Math.sin(a)*0.86,z=Math.cos(a)*0.86;
+    const win=mesh(new THREE.BoxGeometry(0.22,0.84,0.1),
+      new THREE.MeshPhysicalMaterial({color:isLit?"#ffdb8c":"#53616a",emissive:isLit?"#e39c3e":"#15212b",emissiveIntensity:isLit?1.1:0.04,roughness:0.2}),
+      g,[x,1.9,z]);
+    win.lookAt(x*1.4,1.9,z*1.4);
+  }
+  // The lantern chamber is deliberately more visible than a generic tower roof.
+  const chamber=mesh(new THREE.CylinderGeometry(0.78,0.82,0.92,32),materials.glass,g,[0,4.72,0]);
+  chamber.material= new THREE.MeshPhysicalMaterial({color:isLit?"#ffe6a1":"#70818c",roughness:0.12,metalness:0.18,transmission:isLit?0.22:0.08,transparent:true,opacity:isLit?0.78:0.38,thickness:0.35,side:THREE.DoubleSide,emissive:isLit?"#f9a63e":"#101923",emissiveIntensity:isLit?0.85:0.02});
+  const roof=mesh(new THREE.ConeGeometry(1.04,0.72,10),materials.copper,g,[0,5.54,0]);
+  roof.rotation.y=Math.PI/10;
+  cylinder(g,0.075,0.075,0.72,materials.gold,[0,6.15,0],12);
+  if(isLit){
+    const lens=mesh(new THREE.SphereGeometry(0.4,28,20),materials.glow,g,[0,4.76,0]);
+    lens.scale.set(1,1.2,1);
+    const beaconLight=new THREE.PointLight("#ffd27c",95,34,1.5);
+    beaconLight.position.set(0,4.75,0);
+    g.add(beaconLight);
+    const beamMaterial=new THREE.MeshBasicMaterial({color:"#ffe3a0",transparent:true,opacity:0.1,depthWrite:false,side:THREE.DoubleSide});
+    const beam=mesh(new THREE.CylinderGeometry(0.06,3.1,16,40,1,true),beamMaterial,g,[0,12.0,0]);
+    beam.renderOrder=2;
+    const halo=mesh(new THREE.TorusGeometry(1.05,0.045,12,48),materials.glow,g,[0,4.76,0]);
+    halo.rotation.x=Math.PI/2;
+    g.userData.litLens=lens;
+    g.userData.light=beaconLight;
+  } else {
+    // The broken lantern roof and scattered fragments communicate the unfinished goal.
+    mesh(new THREE.DodecahedronGeometry(0.28,0),materials.darkStone,g,[-0.52,4.15,0.16],[1.6,0.45,1.0]);
+    mesh(new THREE.DodecahedronGeometry(0.22,0),materials.stone,g,[0.48,4.06,-0.14],[1.2,0.55,0.9]);
+    mesh(new THREE.DodecahedronGeometry(0.18,0),materials.copper,g,[0.12,5.7,0.08],[0.8,1.4,0.8]);
+  }
+  g.userData.isLighthouse=true;
+  return g;
+}
+
 function createEnvironmentMap(){
   const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=512;
   const ctx=canvas.getContext('2d');
@@ -408,6 +462,8 @@ function createScene(el) {
   const world=group(scene);
   makeIslandBody(world);
   addPathAndProps(world);
+  const isBeaconLit=el.dataset.lighthouse==="lit";
+  const lighthouse=addStarwardLighthouse(world,isBeaconLit);
   addWaterfall(world,-8.2,-3.5,0.3);
   addWaterfall(world,8.2,-2.5,-0.3);
 
