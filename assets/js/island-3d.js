@@ -351,7 +351,7 @@ function createScene(el) {
     renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});
   } catch (error) {
     el.dataset.mounted="error";
-    el.innerHTML='<div class="island-webgl-fallback">この端末では3D表示を利用できません。WebGL対応ブラウザで開いてください。</div>';
+    el.innerHTML='<img src="assets/game/island-scene.svg" alt="浮遊島のフォールバック画像" style="width:100%;height:100%;object-fit:cover"><div class="island-webgl-fallback" style="position:absolute;inset:auto 10px 10px;background:#fffdfaeb;border-radius:12px;padding:10px">この端末ではリアルタイム3Dを利用できません。画像表示に切り替えています。</div>';
     console.warn("Night Flow 3D renderer unavailable",error);
     return;
   }
@@ -366,8 +366,8 @@ function createScene(el) {
   renderer.domElement.setAttribute("aria-label","操作できる3D浮遊島。ドラッグで回転、ホイールまたはピンチで拡大縮小できます。");
 
   const scene=new THREE.Scene();
-  scene.background=new THREE.Color("#91a8c7");
-  scene.environment=environmentMap;scene.environmentIntensity=0.7;
+  scene.background=environmentMap;scene.backgroundBlurriness=0.12;
+  scene.environment=environmentMap;scene.environmentIntensity=0.85;
   scene.fog=new THREE.Fog("#9eb2c9",30,72);
   const camera=new THREE.PerspectiveCamera(38,1,0.1,120);
   const isPreview=el.dataset.preview||"";
