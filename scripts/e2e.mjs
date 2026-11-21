@@ -41,6 +41,13 @@ await page.addInitScript(() => {
 try {
   await page.goto("http://127.0.0.1:4173/", { waitUntil: "domcontentloaded" });
   await page.waitForSelector("#main .page", { timeout: 15000 });
+  // Run the smoke test in the app's normal/home mode regardless of the
+  // GitHub runner's timezone or local clock.
+  await page.evaluate(() => {
+    if (typeof syncMode !== "function") throw new Error("Night Flow did not finish initializing.");
+    previewMode = "FREE";
+    syncMode();
+  });
   await page.waitForSelector(".island-3d-scene", { timeout: 15000 });
   await page.waitForTimeout(3000);
   const sceneDiagnostics = await page.evaluate(() => ({
