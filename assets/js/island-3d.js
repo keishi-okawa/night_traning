@@ -36,12 +36,20 @@ function noiseTexture(base, accent, seed = 17, size = 512) {
   return texture;
 }
 
+const grassMap=noiseTexture('#778f60','#c7d5a0',29);
+const grassBump=grassMap.clone();grassBump.colorSpace=THREE.NoColorSpace;
+const rockMap=noiseTexture('#777d7e','#bec1b8',61);
+const rockBump=rockMap.clone();rockBump.colorSpace=THREE.NoColorSpace;
+const stoneMap=noiseTexture('#98998e','#e1d8c2',83);
+const stoneBump=stoneMap.clone();stoneBump.colorSpace=THREE.NoColorSpace;
+const woodMap=noiseTexture('#805538','#c69461',101);
+const woodBump=woodMap.clone();woodBump.colorSpace=THREE.NoColorSpace;
 const materials = {
-  grass: new THREE.MeshStandardMaterial({ color: "#7f9e68", map: noiseTexture("#778f60", "#c7d5a0", 29), roughness: 0.96 }),
-  rock: new THREE.MeshStandardMaterial({ vertexColors: true, map: noiseTexture("#777d7e", "#bec1b8", 61), roughness: 0.92 }),
-  stone: new THREE.MeshStandardMaterial({ color: "#a9a89a", map: noiseTexture("#98998e", "#e1d8c2", 83), roughness: 0.82 }),
+  grass: new THREE.MeshStandardMaterial({ color: "#7f9e68", map: grassMap, bumpMap: grassBump, bumpScale: 0.075, roughness: 0.96 }),
+  rock: new THREE.MeshStandardMaterial({ vertexColors: true, map: rockMap, bumpMap: rockBump, bumpScale: 0.16, roughness: 0.94 }),
+  stone: new THREE.MeshStandardMaterial({ color: "#a9a89a", map: stoneMap, bumpMap: stoneBump, bumpScale: 0.09, roughness: 0.86 }),
   darkStone: new THREE.MeshStandardMaterial({ color: "#596873", roughness: 0.9 }),
-  wood: new THREE.MeshStandardMaterial({ color: "#8a6040", map: noiseTexture("#805538", "#c69461", 101), roughness: 0.78 }),
+  wood: new THREE.MeshStandardMaterial({ color: "#8a6040", map: woodMap, bumpMap: woodBump, bumpScale: 0.055, roughness: 0.82 }),
   copper: new THREE.MeshStandardMaterial({ color: "#9e7853", metalness: 0.72, roughness: 0.34 }),
   gold: new THREE.MeshStandardMaterial({ color: "#d6b56c", metalness: 0.68, roughness: 0.28 }),
   glass: new THREE.MeshPhysicalMaterial({ color: "#9bd8e1", roughness: 0.12, metalness: 0.12, transmission: 0.42, transparent: true, opacity: 0.5, thickness: 0.35, side: THREE.DoubleSide }),
@@ -116,6 +124,7 @@ function makeIslandBody(parent) {
 
   const top = mesh(new THREE.CircleGeometry(11.8, 96), materials.grass, parent, [0, 0.015, 0]);
   top.rotation.x = -Math.PI / 2;
+  top.scale.set(1,0.74,1);
   top.receiveShadow = true;
 
   // Broken rock shelves under the island make its silhouette less geometric.
@@ -316,6 +325,24 @@ function addPathAndProps(parent) {
   }
 }
 
+function createEnvironmentMap(){
+  const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=512;
+  const ctx=canvas.getContext('2d');
+  const sky=ctx.createLinearGradient(0,0,0,512);
+  sky.addColorStop(0,'#304c78');sky.addColorStop(.38,'#8ea9c4');sky.addColorStop(.68,'#f1c9a7');sky.addColorStop(1,'#627d8d');
+  ctx.fillStyle=sky;ctx.fillRect(0,0,1024,512);
+  const sun=ctx.createRadialGradient(710,245,8,710,245,220);
+  sun.addColorStop(0,'rgba(255,239,207,0.95)');sun.addColorStop(.22,'rgba(255,221,177,0.3)');sun.addColorStop(1,'rgba(255,221,177,0)');
+  ctx.fillStyle=sun;ctx.fillRect(450,0,520,512);
+  for(let i=0;i<34;i++){
+    const y=160+(i%9)*28,x=(i*137)%1024,w=50+(i*41)%180;
+    ctx.fillStyle=i%2?'rgba(255,245,227,.055)':'rgba(38,59,85,.045)';
+    ctx.beginPath();ctx.ellipse(x,y,w,7+(i%4)*3,0,0,Math.PI*2);ctx.fill();
+  }
+  const tex=new THREE.CanvasTexture(canvas);tex.mapping=THREE.EquirectangularReflectionMapping;tex.colorSpace=THREE.SRGBColorSpace;return tex;
+}
+const environmentMap=createEnvironmentMap();
+
 function createScene(el) {
   if (!el || el.dataset.mounted === "1") return;
   el.dataset.mounted = "1";
@@ -340,6 +367,7 @@ function createScene(el) {
 
   const scene=new THREE.Scene();
   scene.background=new THREE.Color("#91a8c7");
+  scene.environment=environmentMap;scene.environmentIntensity=0.7;
   scene.fog=new THREE.Fog("#9eb2c9",30,72);
   const camera=new THREE.PerspectiveCamera(38,1,0.1,120);
   const isPreview=el.dataset.preview||"";
@@ -485,7 +513,8 @@ function createScene(el) {
     renderer.domElement.removeEventListener("pointermove",pointerTrackMove);
     renderer.domElement.removeEventListener("pointerup",pointerTrackUp);
     renderer.domElement.removeEventListener("pointercancel",pointerTrackUp);
-    scene.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material.dispose();}});
+    const sharedMaterials=new Set(Object.values(materials));
+    scene.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){const list=Array.isArray(o.material)?o.material:[o.material];list.forEach(m=>{if(!sharedMaterials.has(m)){Object.values(m).forEach(v=>{if(v&&v.isTexture)v.dispose();});m.dispose();}});}});
     renderer.dispose();renderer.domElement.remove();
   };
   scenes.set(el,dispose);
