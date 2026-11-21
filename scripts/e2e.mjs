@@ -1,0 +1,88 @@
+import { chromium } from "playwright";
+
+const browser = await chromium.launch({
+  headless: true,
+  args: [
+    "--enable-webgl",
+    "--use-gl=angle",
+    "--use-angle=swiftshader",
+    "--disable-dev-shm-usage"
+  ]
+});
+
+const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+const page = await context.newPage();
+const runtimeErrors = [];
+const failedResponses = [];
+
+page.on("pageerror", (error) => runtimeErrors.push(error.message));
+page.on("response", (response) => {
+  if (response.status() >= 400 && !response.url().endsWith("/favicon.ico")) {
+    failedResponses.push({ status: response.status(), url: response.url() });
+  }
+});
+
+await page.addInitScript(() => {
+  localStorage.setItem("nightflow:v1:onboarding-complete", "true");
+  localStorage.setItem("nightflow:v1:settings", JSON.stringify({
+    locale: "ja",
+    schedule: { routineStart: "23:50", studyStart: "23:55", closingStart: "23:58", bedTime: "23:59" },
+    timers: { brushingSeconds: 180 },
+    study: { defaultTargetQuestions: 20 },
+    guard: { enabled: true, returnThresholdSeconds: 15, guardSeconds: 5, exemptionExpiryHours: 2 },
+    display: { monochromeEnabled: true, reduceAnimation: true }
+  }));
+});
+
+try {
+  await page.goto("http://127.0.0.1:4173/", { waitUntil: "domcontentloaded" });
+  await page.waitForSelector("#main .page", { timeout: 15000 });
+  await page.waitForSelector(".island-3d-scene", { timeout: 15000 });
+  await page.waitForFunction(
+    () => !!document.querySelector(".island-3d-scene canvas") ||
+      !!document.querySelector(".island-webgl-fallback"),
+    { timeout: 15000 }
+  );
+
+  const campaignVisible = await page.locator("#main .campaign-card").first().isVisible();
+  if (!campaignVisible) throw new Error("Main campaign card was not visible on the home screen.");
+
+  await page.locator("#nav-roadmap").click();
+  await page.waitForSelector("#plannerExamDate", { timeout: 10000 });
+
+  const futureDate = new Date();
+  futureDate.setDate(futureDate.getDate() + 45);
+  const yyyy = futureDate.getFullYear();
+  const mm = String(futureDate.getMonth() + 1).padStart(2, "0");
+  const dd = String(futureDate.getDate()).padStart(2, "0");
+  await page.locator("#plannerExamDate").fill(`${yyyy}-${mm}-${dd}`);
+  await page.locator("#plannerMinutes").fill("35");
+  await page.locator("#plannerQuestions").fill("20");
+  await page.locator('[data-action="roadmap-generate"]').click();
+
+  await page.waitForSelector(".gantt-week .gantt-task", { timeout: 10000 });
+  const taskCount = await page.locator(".gantt-week .gantt-task").count();
+  if (taskCount < 1) throw new Error("The Gantt chart was generated without any daily tasks.");
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.waitForTimeout(250);
+  const ganttVisibleOnMobile = await page.locator(".gantt-week").isVisible();
+  const mobileOverflow = await page.evaluate(() => {
+    const main = document.querySelector("#main");
+    return main.scrollWidth > window.innerWidth + 4;
+  });
+  if (!ganttVisibleOnMobile) throw new Error("Gantt chart was not visible at mobile viewport width.");
+  if (runtimeErrors.length) throw new Error(`Runtime errors: ${runtimeErrors.join(" | ")}`);
+  if (failedResponses.length) throw new Error(`Failed requests: ${JSON.stringify(failedResponses)}`);
+
+  console.log(JSON.stringify({
+    result: "passed",
+    campaignVisible,
+    webglCanvas: await page.locator(".island-3d-scene canvas").count() > 0,
+    ganttTasksThisWeek: taskCount,
+    ganttVisibleOnMobile,
+    mobileHorizontalOverflow: mobileOverflow
+  }));
+} finally {
+  await browser.close();
+}
