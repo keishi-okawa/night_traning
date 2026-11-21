@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - main
-      - feature/real-3d-campaign-gantt-planner
-      - preview/try-night-flow
   workflow_dispatch:
 permissions:
   contents: read
