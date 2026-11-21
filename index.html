@@ -538,9 +538,10 @@ function createAutoPlan(config){
   const today=new Date();today.setHours(0,0,0,0);
   const start=new Date(today);start.setDate(start.getDate()+1);
   if(exam<start)throw new Error('試験日は明日以降の日付にしてください。');
+  const maxMinutes=Math.min(120,Math.max(20,toMinutes(settings.schedule.closingStart)-toMinutes(settings.schedule.studyStart)));
   if(!Array.isArray(config.studyDays)||!config.studyDays.length)throw new Error('学習する曜日を1日以上選択してください。');
   const minutes=Number(config.dailyMinutes),questions=Number(config.targetQuestions);
-  if(!Number.isInteger(minutes)||minutes<20||minutes>120)throw new Error('1日の学習時間は20〜120分で設定してください。');
+  if(!Number.isInteger(minutes)||minutes<20||minutes>maxMinutes)throw new Error(`1日の学習時間は20〜${maxMinutes}分で設定してください。夜の勉強枠を超える時間は指定できません。`);
   if(!Number.isInteger(questions)||questions<1||questions>100)throw new Error('問題数は1〜100問で設定してください。');
   const queues=getNextStudyUnits(),dates=[];
   for(let d=new Date(start);d<=exam;d.setDate(d.getDate()+1)){
@@ -602,6 +603,7 @@ function renderRoadmap(){
   const cfg=getPlannerConfig(),plan=getAutoPlan();
   const minDate=dateKeyLocal(new Date(Date.now()+86400000));
   const days=['日','月','火','水','木','金','土'];
+  const maxDailyMinutes=Math.min(120,Math.max(20,toMinutes(settings.schedule.closingStart)-toMinutes(settings.schedule.studyStart)));
   const weekdayControls=days.map((d,i)=>`<label><input type="checkbox" name="plannerDay" value="${i}" ${cfg.studyDays.includes(i)?'checked':''}> ${d}</label>`).join('');
   let gantt='';
   if(plan&&plan.sessions?.length){
@@ -623,7 +625,7 @@ function renderRoadmap(){
       <div class="card"><div class="between"><strong>シラバスの割当状況</strong><strong>${coverage}%</strong></div><div class="progress" style="margin:9px 0"><span style="width:${Math.min(100,coverage)}%"></span></div><div class="small">学習可能日 ${plan.sessions.length}日 / 対象未習得単元 ${plan.totalUnits}件</div>${plan.unplannedUnits?'<div class="notice warn" style="margin-top:10px">試験日までの日数ではすべての未習得単元を割り当てられません。学習曜日を増やすか、1日の学習時間を調整してください。</div>':'<div class="notice success" style="margin-top:10px">現在の未習得単元は、設定した学習日に割り当てられています。</div>'}</div>`;
   }
   return `<div class="page"><div class="screen-title"><div class="eyebrow">AUTO STUDY PLAN · FE CURRENT SYLLABUS</div><h1 class="h1">学習ロードマップ</h1><p class="lead">試験日から逆算して、科目Aを優先しながら科目Bも織り込んだ日別学習計画を自動作成します。学習する曜日と1日の時間は自分の生活に合わせて調整できます。</p></div>
-    <section class="card"><div class="eyebrow">PLAN BUILDER</div><h2 class="h2" style="margin:5px 0 12px">試験日と学習時間を設定</h2><div class="gantt-toolbar"><div class="field"><label for="plannerExamDate">目標試験日</label><input class="input" type="date" id="plannerExamDate" min="${minDate}" value="${escapeHTML(cfg.examDate||'')}"></div><div class="field"><label for="plannerMinutes">1日の学習時間</label><input class="input" type="number" id="plannerMinutes" min="20" max="120" step="5" value="${cfg.dailyMinutes}"></div><div class="field"><label for="plannerQuestions">1日の問題数</label><input class="input" type="number" id="plannerQuestions" min="1" max="100" value="${cfg.targetQuestions}"></div><div class="field"><label>学習開始予定</label><div class="input" style="display:flex;align-items:center">${escapeHTML(settings.schedule.studyStart)}</div></div></div><div class="field" style="margin-top:12px"><label>学習する曜日</label><div class="weekday-picks">${weekdayControls}</div><div class="small" style="margin-top:6px">初期設定は月〜金です。土日を追加すると、試験日までの学習範囲を広げられます。</div></div><div class="grid two" style="margin-top:14px"><button class="btn secondary" data-action="roadmap-generate">自動計画を作成・更新</button><button class="btn ghost" data-action="nav" data-screen="plan">今日の学習内容を編集</button></div></section>
+    <section class="card"><div class="eyebrow">PLAN BUILDER</div><h2 class="h2" style="margin:5px 0 12px">試験日と学習時間を設定</h2><div class="gantt-toolbar"><div class="field"><label for="plannerExamDate">目標試験日</label><input class="input" type="date" id="plannerExamDate" min="${minDate}" value="${escapeHTML(cfg.examDate||'')}"></div><div class="field"><label for="plannerMinutes">1日の学習時間</label><input class="input" type="number" id="plannerMinutes" min="20" max="${maxDailyMinutes}" step="5" value="${Math.min(maxDailyMinutes,cfg.dailyMinutes)}"></div><div class="field"><label for="plannerQuestions">1日の問題数</label><input class="input" type="number" id="plannerQuestions" min="1" max="100" value="${cfg.targetQuestions}"></div><div class="field"><label>学習開始予定</label><div class="input" style="display:flex;align-items:center">${escapeHTML(settings.schedule.studyStart)}</div></div></div><div class="field" style="margin-top:12px"><label>学習する曜日</label><div class="weekday-picks">${weekdayControls}</div><div class="small" style="margin-top:6px">初期設定は月〜金です。土日を追加すると、試験日までの学習範囲を広げられます。</div></div><div class="grid two" style="margin-top:14px"><button class="btn secondary" data-action="roadmap-generate">自動計画を作成・更新</button><button class="btn ghost" data-action="nav" data-screen="plan">今日の学習内容を編集</button></div></section>
     ${gantt||'<div class="card plan-empty section"><div style="font-size:34px">▥</div><h2 class="h2">まだ学習計画がありません</h2><p class="small">試験日と学習できる曜日を設定し、「自動計画を作成」を押してください。日ごとの単元・所要時間・問題数をガントチャートにします。</p></div>'}
     <section class="section card"><h2 class="h2">自動計画のルール</h2><div class="list-row"><span class="small">学習範囲</span><strong>IPAシラバス Ver.9.2 全分類</strong></div><div class="list-row"><span class="small">科目配分</span><strong>科目A優先・科目Bを定期挿入</strong></div><div class="list-row"><span class="small">復習</span><strong>5学習回ごとに直近単元を確認</strong></div><div class="small">各日の40分（初期値）は、復習・要点確認・過去問演習に分割します。学習の進捗や単元の習得状況に応じて、計画を再生成できます。</div></section></div>`;
 }
@@ -634,6 +636,7 @@ function saveAutoPlan(){
   const config={examDate,studyDays,dailyMinutes,targetQuestions,createdAt:new Date().toISOString()};
   try{
     const plan=createAutoPlan(config);
+    config.dailyMinutes=plan.dailyMinutes;
     Store.write('auto-plan-config',config);Store.write('auto-plan-generated',plan);roadmapWeekIndex=0;
     toast(`学習計画を作成しました。全${plan.sessions.length}回の学習予定です。`);
     render();
@@ -889,12 +892,12 @@ function startProject(id){
   if(w.resources.developmentMaterials<p.cost){toast('資材が足りません。');return;}
   if(w.buildings[p.building].status!=='built'){toast('前提施設を修復してください。');return;}
   w.resources.developmentMaterials-=p.cost;
+  const completedPrior=Object.values(w.projects).filter(x=>x.completed).length;
   w.projects[id]={completed:true,completedAt:new Date().toISOString(),unlock:p.unlock};
   if(id==='library_restoration'){w.features.knowledgeArchive=true;w.resources.developmentMaterials+=2;}
   if(id==='outer_island_scout'){if(!w.world.unlockedAreas.includes('outer_island'))w.world.unlockedAreas.push('outer_island');w.features.outerIslandUnlocked=true;w.resources.expeditionTickets=Math.min(3,(w.resources.expeditionTickets||0)+1);}
   if(id==='habitat_garden'){w.companion.speciesId='island_spirit';w.companion.growthStage=Math.max(1,w.companion.growthStage||0);w.companion.growthPoints=w.companion.growthPoints||0;w.features.companionUnlocked=true;}
-  const completedBefore=Object.values(w.projects).filter(x=>x.completed).length;
-  if(completedBefore<2){w.resources.developmentMaterials+=completedBefore===0?3:5;w.mainQuest.claimedMilestones.push('project-'+id);}
+  if(completedPrior<2){w.resources.developmentMaterials+=completedPrior===0?3:5;w.mainQuest.claimedMilestones.push('project-'+id);}
   w.world.visualStage=Math.min(5,(w.world.visualStage||0)+1);w.world.pendingProjectNotice=true;w.decisions.push({type:'COMPLETE_PROJECT',projectId:id,at:new Date().toISOString()});Store.write('game-world',w);
   const reward=id==='library_restoration'?'知識アーカイブと資材2個':id==='outer_island_scout'?'新しい島と遠征券1枚':'仲間の生息地';
   toast(`${p.name}完了！ ${reward}を獲得しました。`);render();
