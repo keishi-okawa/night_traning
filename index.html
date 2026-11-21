@@ -413,10 +413,11 @@ function render(){
     else if(p==='CLOSING')main.innerHTML=renderClosing();
     else if(p==='WIND_DOWN')main.innerHTML=renderWindDown();
     else main.innerHTML=renderCompleted();
+    window.NightFlow3D?.mountAll();
     return;
   }
   main.classList.remove('mono');
-  if(currentMode==='COMPLETED'){main.innerHTML=renderCompleted();return;}
+  if(currentMode==='COMPLETED'){main.innerHTML=renderCompleted();window.NightFlow3D?.mountAll();return;}
   const pages={home:renderHome,plan:renderPlan,roadmap:renderRoadmap,world:renderWorld,facility:renderFacility,project:renderProjects,progress:renderProgress,settings:renderSettings};
   main.innerHTML=(pages[screen]||renderHome)();
   window.NightFlow3D?.mountAll();
