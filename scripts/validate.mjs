@@ -19,6 +19,8 @@ if (!sw.includes("assets/vendor/three.module.js") || !sw.includes("assets/vendor
 if (!html.includes("function renderRoadmap") || !html.includes("data-screen=\"roadmap\"")) throw new Error("Gantt planner screen/navigation missing");
 if (!html.includes("function getMainQuestState") || !html.includes("beacon_reignition")) throw new Error("Main campaign objective missing");
 if (!html.includes("data-island3d")) throw new Error("3D island host missing");
+if (!html.includes('src="assets/js/island-3d.js"')) throw new Error("3D module script tag missing");
+if (!scene.includes("mountAll();")) throw new Error("3D scene auto-mount missing");
 
 for (const script of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
   const attrs = script[1] || "";
