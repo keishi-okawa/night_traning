@@ -348,7 +348,8 @@ function renderIslandScene(w,compact=false,preview=''){
   const stage=Math.max(0,Math.min(5,w.world.visualStage||0));
   const attrs=['researchLab','explorationDock','habitat'].map(id=>`data-${id.toLowerCase()}="${w.buildings[id]?.status==='built'?'built':'ruin'}"`).join(' ');
   const previewAttr=preview?`data-preview="${preview}"`:'';
-  return `<div class="island-3d-scene ${compact?'compact':''} ${preview?'facility-focus':''}" data-island3d data-stage="${stage}" ${attrs} ${previewAttr} aria-label="3D浮遊島。ドラッグして視点を回転できます。"><div class="island-3d-hud"><span class="hud-chip">${escapeHTML(w.world.name||'はじまりの島')} · 開拓段階 ${stage}</span><span class="hud-chip">ドラッグで回転 · ピンチで拡大</span></div></div>`;
+  const lighthouseAttr=`data-lighthouse="${w.world.lighthouseLit?'lit':'dark'}"`;
+  return `<div class="island-3d-scene ${compact?'compact':''} ${preview?'facility-focus':''}" data-island3d data-stage="${stage}" ${attrs} ${lighthouseAttr} ${previewAttr} aria-label="3D浮遊島。ドラッグして視点を回転できます。"><div class="island-3d-hud"><span class="hud-chip">${escapeHTML(w.world.name||'はじまりの島')} · ${w.world.lighthouseLit?'灯台点灯':'灯台は未点灯'} · 開拓段階 ${stage}</span><span class="hud-chip">ドラッグで回転 · ピンチで拡大</span></div></div>`;
 }
 function tutorialStepHtml(index){
   const steps=[
