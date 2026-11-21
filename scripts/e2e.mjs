@@ -155,7 +155,7 @@ try {
     return !!registration.active;
   });
   if (!serviceWorkerActive) throw new Error("Service Worker did not become active.");
-  const shellCached = await page.evaluate(async () => (await caches.keys()).includes("night-flow-shell-v3"));
+  const shellCached = await page.evaluate(async () => (await caches.keys()).includes("night-flow-shell-v4"));
   if (!shellCached) throw new Error("PWA app shell was not cached.");
   await page.reload({ waitUntil: "domcontentloaded" });
   // The last user destination was the roadmap screen; reload must restore it,
