@@ -527,5 +527,6 @@ function mountAll() {
   document.querySelectorAll("[data-island3d]").forEach(createScene);
 }
 window.NightFlow3D={mountAll};
+mountAll();
 window.dispatchEvent(new CustomEvent("nightflow-3d-ready"));
 window.addEventListener("pagehide",()=>{for(const dispose of scenes.values())dispose();scenes.clear();});
