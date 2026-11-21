@@ -5,12 +5,13 @@ on:
       - main
   workflow_dispatch:
 permissions:
+  actions: read
   contents: read
   pages: write
   id-token: write
 concurrency:
-  group: github-pages
-  cancel-in-progress: true
+  group: pages
+  cancel-in-progress: false
 jobs:
   deploy:
     environment:
@@ -28,4 +29,4 @@ jobs:
           path: .
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
