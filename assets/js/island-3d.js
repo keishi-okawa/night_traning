@@ -451,9 +451,9 @@ function createScene(el) {
   const dust=new THREE.Points(dustGeo,dustMat);world.add(dust);
 
   // Preview focuses on a specific facility; overview remains freely orbitable.
-  if(isPreview==="researchLab")target.set(-4,1.3,-1.6);
-  if(isPreview==="explorationDock")target.set(4,2.5,1.5);
-  if(isPreview==="habitat")target.set(0,1.5,4);
+  if(isPreview==="researchLab"){target.set(-4,1.3,-1.6);radius=19;}
+  if(isPreview==="explorationDock"){target.set(4,2.5,1.5);radius=19;}
+  if(isPreview==="habitat"){target.set(0,1.5,4);radius=19;}
   placeCamera();
 
   const clock=new THREE.Clock();
