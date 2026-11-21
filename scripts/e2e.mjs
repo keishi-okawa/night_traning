@@ -60,6 +60,7 @@ try {
     mainHtml: document.querySelector("#main")?.innerHTML.slice(0, 1600) || "",
     moduleLoaded: !!window.NightFlow3D
   }));
+  console.log("INITIAL_DIAGNOSTICS " + JSON.stringify(initialDiagnostics));
   if (!initialDiagnostics.sceneCount) {
     throw new Error("Initial home did not render the 3D island: " + JSON.stringify(initialDiagnostics));
   }
