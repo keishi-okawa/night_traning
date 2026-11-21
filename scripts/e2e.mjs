@@ -48,6 +48,21 @@ try {
     previewMode = "FREE";
     syncMode();
   });
+  await page.waitForTimeout(500);
+  const initialDiagnostics = await page.evaluate(() => ({
+    previewMode: typeof previewMode === "undefined" ? "unavailable" : previewMode,
+    screen: typeof screen === "undefined" ? "unavailable" : screen,
+    currentMode: typeof currentMode === "undefined" ? "unavailable" : currentMode,
+    phase: typeof getPhase === "function" ? getPhase() : "unavailable",
+    sceneCount: document.querySelectorAll(".island-3d-scene").length,
+    mainClass: document.querySelector("#main .page")?.className || null,
+    mainText: document.querySelector("#main")?.innerText.slice(0, 600) || "",
+    mainHtml: document.querySelector("#main")?.innerHTML.slice(0, 1600) || "",
+    moduleLoaded: !!window.NightFlow3D
+  }));
+  if (!initialDiagnostics.sceneCount) {
+    throw new Error("Initial home did not render the 3D island: " + JSON.stringify(initialDiagnostics));
+  }
   await page.waitForSelector(".island-3d-scene", { timeout: 15000 });
   await page.waitForTimeout(3000);
   const sceneDiagnostics = await page.evaluate(() => ({
