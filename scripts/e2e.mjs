@@ -64,7 +64,43 @@ try {
   if (!initialDiagnostics.sceneCount) {
     throw new Error("Initial home did not render the 3D island: " + JSON.stringify(initialDiagnostics));
   }
-  await page.waitForSelector(".island-3d-scene", { timeout: 15000 });
+  const sceneLocator = page.locator(".island-3d-scene").first();
+  await sceneLocator.waitFor({ state: "attached", timeout: 15000 });
+  await page.waitForTimeout(500);
+  const sceneLayout = await sceneLocator.evaluate(el => {
+    const rect = el.getBoundingClientRect();
+    const style = getComputedStyle(el);
+    const ancestors = [];
+    for (let node = el; node && node !== document.body; node = node.parentElement) {
+      const current = getComputedStyle(node);
+      const box = node.getBoundingClientRect();
+      ancestors.push({
+        tag: node.tagName,
+        id: node.id || "",
+        className: typeof node.className === "string" ? node.className : "",
+        display: current.display,
+        visibility: current.visibility,
+        opacity: current.opacity,
+        width: Math.round(box.width),
+        height: Math.round(box.height)
+      });
+      if (node.id === "main") break;
+    }
+    return {
+      display: style.display,
+      visibility: style.visibility,
+      opacity: style.opacity,
+      width: Math.round(rect.width),
+      height: Math.round(rect.height),
+      canvasWidth: el.querySelector("canvas")?.width || 0,
+      canvasHeight: el.querySelector("canvas")?.height || 0,
+      ancestors
+    };
+  });
+  console.log("SCENE_LAYOUT " + JSON.stringify(sceneLayout));
+  if (sceneLayout.display === "none" || sceneLayout.visibility !== "visible" || sceneLayout.width < 100 || sceneLayout.height < 100) {
+    throw new Error("3D island container is not visibly laid out: " + JSON.stringify(sceneLayout));
+  }
   await page.waitForTimeout(3000);
   const sceneDiagnostics = await page.evaluate(() => ({
     moduleLoaded: !!window.NightFlow3D,
