@@ -1,0 +1,26 @@
+name: Validate Night Flow
+on:
+  push:
+    branches:
+      - feature/real-3d-campaign-gantt-planner
+  pull_request:
+    branches:
+      - main
+      - repair/dynamic-island-onboarding-rewards
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check application JavaScript
+        run: node scripts/validate.mjs
+      - name: Check 3D ES modules
+        run: |
+          node --input-type=module --check < assets/js/island-3d.js
+          node --input-type=module --check < assets/vendor/three.module.js
+          node --input-type=module --check < assets/vendor/three.core.js
+      - name: Check service worker
+        run: node --check sw.js
